@@ -96,4 +96,289 @@
   .dir-name { font-size: 15px; font-weight: 600; color: var(--text-dark); }
   .dir-bungalow { display: inline-block; margin-top: 2px; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; background: var(--green-deep); color: white; padding: 2px 8px; border-radius: 4px; }
   .dir-details { border-top: 1px solid var(--border); padding-top: 12px; }
-  .dir-row { display
+  .dir-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; font-size: 13px; color: var(--text-mid); }
+  .dir-row span:first-child { color: var(--text-muted); min-width: 60px; font-size: 12px; }
+  .dir-count { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+ 
+  /* FOOTER & MODALS */
+  footer { background: var(--green-deep); color: rgba(255,255,255,0.65); text-align: center; padding: 32px 24px; font-size: 13px; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--white); border-radius: 16px; padding: 36px; max-width: 460px; width: 92%; position: relative; }
+  .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green-deep); margin-bottom: 6px; }
+  .form-row { margin-bottom: 16px; }
+  .form-row label { display: block; font-size: 13px; font-weight: 500; color: var(--text-mid); margin-bottom: 6px; }
+  .form-row input, .form-row select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; background: var(--cream); }
+  .form-submit { width: 100%; padding: 12px; background: var(--green-deep); color: white; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+  
+  /* Loading text */
+  .loading-text { text-align: center; padding: 40px; color: var(--text-muted); width: 100%; }
+</style>
+</head>
+<body>
+ 
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <div class="crest">SC</div>
+      <span>Sind Cooperative<small>Housing Society</small></span>
+    </a>
+    <div class="nav-links">
+      <a href="#notices-section" class="active">Notices</a>
+      <a href="#grounds-section">Sports Grounds</a>
+      <a href="#directory-section">Directory</a>
+    </div>
+  </div>
+</nav>
+ 
+<section class="hero">
+  <div class="hero-tag">Est. Aundh, Pune</div>
+  <h1>Sind Cooperative<br>Housing Society</h1>
+  <p>Building a stronger community — one neighbourhood at a time.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">500+</div><div class="lbl">Bungalows</div></div>
+    <div class="hero-stat"><div class="num">3</div><div class="lbl">Sports Grounds</div></div>
+    <div class="hero-stat"><div class="num">2400+</div><div class="lbl">Residents</div></div>
+  </div>
+</section>
+ 
+<div id="notices-section">
+  <div class="notices-wrap">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-eyebrow">Community Board</div>
+        <div class="section-title">Notices & Announcements</div>
+      </div>
+    </div>
+    
+    <div class="notice-filters">
+      <button class="filter-btn active" onclick="filterNotices(this,'all')">All</button>
+      <button class="filter-btn" onclick="filterNotices(this,'urgent')">Urgent</button>
+      <button class="filter-btn" onclick="filterNotices(this,'general')">General</button>
+      <button class="filter-btn" onclick="filterNotices(this,'info')">Info</button>
+    </div>
+    
+    <div id="loadingNotices" class="loading-text">Loading latest notices from database...</div>
+    <div class="notice-grid" id="noticeGrid"></div>
+  </div>
+</div>
+ 
+<hr class="section-divider">
+ 
+<div id="grounds-section">
+<div class="section" style="background: var(--cream);">
+  <div class="section-header">
+    <div class="section-title-group">
+      <div class="section-eyebrow">Facilities</div>
+      <div class="section-title">Sports Grounds</div>
+    </div>
+  </div>
+ 
+  <div class="grounds-grid" id="groundsGrid">
+      <div id="loadingFacilities" class="loading-text">Loading facilities...</div>
+  </div>
+</div>
+</div>
+ 
+<hr class="section-divider">
+ 
+<div id="directory-section">
+<div class="dir-wrap">
+  <div class="section-header">
+    <div class="section-title-group">
+      <div class="section-eyebrow">Residents</div>
+      <div class="section-title">Society Directory</div>
+    </div>
+  </div>
+ 
+  <div class="dir-search-bar">
+    <input type="text" id="dirSearch" placeholder="Search by name, bungalow number…" oninput="filterDirectory()">
+    <select id="dirBlock" onchange="filterDirectory()">
+      <option value="">All Blocks</option>
+      <option value="A">Block A</option>
+      <option value="B">Block B</option>
+      <option value="C">Block C</option>
+      <option value="D">Block D</option>
+    </select>
+  </div>
+ 
+  <div class="dir-count" id="dirCount">Loading residents...</div>
+  <div class="dir-grid" id="dirGrid"></div>
+</div>
+</div>
+ 
+<footer>
+  <strong>Sind Cooperative Housing Society</strong> &mdash; Aundh, Pune, Maharashtra, India<br>
+  <span style="margin-top:6px;display:block;">Office: +91-20-2569-XXXX &nbsp;|&nbsp; Email: info@sindchs-aundh.org.in</span>
+</footer>
+ 
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeBooking()">✕</button>
+    <div id="bookingForm">
+      <div class="modal-title">Book a Ground</div>
+      <div class="form-row">
+          <label>Name</label>
+          <input type="text" id="bkName" placeholder="Your full name">
+      </div>
+      <div class="form-row">
+          <label>Date</label>
+          <input type="date" id="bkDate">
+      </div>
+      <div class="form-row">
+          <label>Ground / Facility</label>
+          <select id="bkGround">
+              </select>
+      </div>
+      <button class="form-submit" onclick="submitBookingRequest()">Confirm Booking</button>
+    </div>
+  </div>
+</div>
+ 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
+    authDomain: "sind-society.firebaseapp.com",
+    projectId: "sind-society",
+    storageBucket: "sind-society.firebasestorage.app",
+    messagingSenderId: "821689204364",
+    appId: "1:821689204364:web:68aa0db383e84b051145a9",
+    measurementId: "G-WC6BCC1490"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // GLOBALS for UI Filtering
+  window.allResidents = [];
+
+  // --- 1. FETCH NOTICES ---
+  async function fetchNotices() {
+    try {
+      const snap = await getDocs(collection(db, "notices"));
+      const grid = document.getElementById('noticeGrid');
+      document.getElementById('loadingNotices').style.display = 'none';
+      if (snap.empty) { grid.innerHTML = "<p style='color:#777; text-align:center;'>No notices currently posted.</p>"; return; }
+      
+      let html = "";
+      snap.forEach(doc => {
+        const d = doc.data();
+        let icon = d.type === "urgent" ? "🚨" : d.type === "info" ? "🎉" : "📋";
+        html += `<div class="notice-card ${d.type}" data-type="${d.type}">
+          <div class="notice-icon ${d.type}">${icon}</div>
+          <div class="notice-body">
+            <div class="notice-meta"><span class="notice-badge ${d.type}">${d.type.toUpperCase()}</span><span class="notice-date">${d.date||''}</span></div>
+            <div class="notice-title">${d.title}</div><div class="notice-desc">${d.description}</div>
+          </div></div>`;
+      });
+      grid.innerHTML = html;
+    } catch (e) {
+      document.getElementById('loadingNotices').innerText = "Error loading notices.";
+    }
+  }
+
+  // --- 2. FETCH FACILITIES (SPORTS COURTS) ---
+  async function fetchFacilities() {
+    try {
+      const snap = await getDocs(collection(db, "facilities"));
+      const grid = document.getElementById('groundsGrid');
+      const bookingDropdown = document.getElementById('bkGround'); 
+      grid.innerHTML = ''; bookingDropdown.innerHTML = '';
+      
+      if (snap.empty) { grid.innerHTML = "<p style='color:#777; text-align:center; width:100%;'>No facilities currently added.</p>"; return; }
+
+      snap.forEach(doc => {
+        const d = doc.data();
+        grid.innerHTML += `
+        <div class="ground-card">
+          <div class="ground-card-img" style="background:linear-gradient(135deg, #1e6b3a, #2d9c55); font-size: 64px;">${d.icon}</div>
+          <div class="ground-info">
+            <div class="ground-name">${d.name}</div>
+            <div class="ground-desc">${d.description}</div>
+            <button class="ground-book-btn" onclick="openBooking('${d.name}')">Book Now</button>
+          </div>
+        </div>`;
+        bookingDropdown.innerHTML += `<option value="${d.name}">${d.name}</option>`;
+      });
+    } catch (e) {
+      document.getElementById('groundsGrid').innerHTML = "<p class='loading-text'>Error loading facilities.</p>";
+    }
+  }
+
+  // --- 3. FETCH RESIDENTS DIRECTORY ---
+  const avatarColors = ['av-green','av-gold','av-blue','av-pink'];
+  window.getInitials = (name) => name ? name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : 'UI';
+
+  window.renderDirectory = function(data) {
+    const grid = document.getElementById('dirGrid');
+    document.getElementById('dirCount').textContent = `Showing ${data.length} resident(s)`;
+    if(data.length === 0) { grid.innerHTML = "<p style='color:#777;'>No residents found.</p>"; return; }
+
+    grid.innerHTML = data.map((r, i) => `
+      <div class="dir-card">
+        <div class="dir-card-head">
+          <div class="dir-avatar ${avatarColors[i % avatarColors.length]}">${getInitials(r.name)}</div>
+          <div><div class="dir-name">${r.name}</div><span class="dir-bungalow">${r.bungalow}</span></div>
+        </div>
+        <div class="dir-details">
+          <div class="dir-row"><span>Phone</span><span>${r.phone || 'N/A'}</span></div>
+          <div class="dir-row"><span>Job</span><span>${r.occupation || 'N/A'}</span></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function fetchResidents() {
+    try {
+      const snap = await getDocs(collection(db, "residents"));
+      window.allResidents = [];
+      snap.forEach(doc => window.allResidents.push(doc.data()));
+      window.renderDirectory(window.allResidents);
+    } catch (e) {
+      document.getElementById('dirCount').textContent = "Error loading directory.";
+    }
+  }
+
+  // --- 4. SUBMIT BOOKING ---
+  window.submitBookingRequest = async function() {
+    try {
+      const n = document.getElementById('bkName').value;
+      const date = document.getElementById('bkDate').value;
+      const fac = document.getElementById('bkGround').value;
+      
+      if(!n || !date) return alert("Please enter name and date.");
+      
+      await addDoc(collection(db, "bookings"), { userName: n, date: date, facility: fac });
+      alert("Booking sent to committee successfully!");
+      closeBooking();
+    } catch (e) {
+      alert("Error submitting booking: " + e.message);
+    }
+  }
+
+  // Initialize Data Load
+  fetchNotices(); fetchFacilities(); fetchResidents();
+
+  // --- UI EVENT HANDLERS ---
+  window.filterNotices = function(btn, type) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+    document.querySelectorAll('.notice-card').forEach(card => card.style.display = (type === 'all' || card.dataset.type === type) ? 'flex' : 'none');
+  };
+  window.filterDirectory = function() {
+    const q = document.getElementById('dirSearch').value.toLowerCase(), block = document.getElementById('dirBlock').value;
+    const filtered = window.allResidents.filter(r => (r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q)) && (!block || r.block === block));
+    window.renderDirectory(filtered);
+  };
+  window.openBooking = function(groundName) { 
+    if(groundName) document.getElementById('bkGround').value = groundName;
+    document.getElementById('bookingModal').classList.add('open'); 
+  };
+  window.closeBooking = function() { document.getElementById('bookingModal').classList.remove('open'); };
+
+</script>
+</body>
+</html>
