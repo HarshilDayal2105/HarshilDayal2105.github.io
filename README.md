@@ -1,1 +1,947 @@
 # HarshilDayal2105.github.io
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sind Cooperative Housing Society, Aundh</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #0a3d2b;
+    --green-mid: #14573d;
+    --green-bright: #1d8a5e;
+    --green-light: #e6f5ee;
+    --gold: #c9993a;
+    --gold-light: #f5e9cc;
+    --cream: #faf8f3;
+    --text-dark: #1a1a1a;
+    --text-mid: #444;
+    --text-muted: #777;
+    --border: #ddd8cc;
+    --white: #ffffff;
+    --danger: #c0392b;
+    --danger-light: #fdecea;
+    --info-light: #e8f4fd;
+    --info: #1a6fa0;
+    --radius: 12px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  }
+ 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    line-height: 1.6;
+  }
+ 
+  /* ── NAV ── */
+  nav {
+    background: var(--green-deep);
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 3px solid var(--gold);
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 64px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none;
+  }
+  .nav-logo .crest {
+    width: 40px; height: 40px;
+    background: var(--gold); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; color: var(--green-deep); font-weight: 700;
+  }
+  .nav-logo span {
+    font-family: 'Playfair Display', serif;
+    color: var(--white); font-size: 15px; font-weight: 600;
+    line-height: 1.3;
+  }
+  .nav-logo small { display: block; font-family: 'DM Sans', sans-serif; font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 300; }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a {
+    color: rgba(255,255,255,0.75); text-decoration: none;
+    padding: 8px 16px; border-radius: 6px;
+    font-size: 14px; font-weight: 500;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    background: rgba(255,255,255,0.12); color: #fff;
+  }
+ 
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 60%, var(--green-bright) 100%);
+    color: white; text-align: center; padding: 72px 24px 56px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-tag {
+    display: inline-block; background: var(--gold); color: var(--green-deep);
+    font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+    padding: 5px 16px; border-radius: 20px; margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700;
+    line-height: 1.15; margin-bottom: 16px;
+  }
+  .hero p { color: rgba(255,255,255,0.7); font-size: 16px; max-width: 480px; margin: 0 auto 32px; }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+    margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.15);
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num { font-size: 28px; font-weight: 700; font-family: 'Playfair Display', serif; color: var(--gold); }
+  .hero-stat .lbl { font-size: 12px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+ 
+  /* ── SECTIONS ── */
+  .section { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+  .section-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 36px; padding-bottom: 16px;
+    border-bottom: 2px solid var(--green-light);
+  }
+  .section-title-group {}
+  .section-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--green-bright); margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; color: var(--green-deep);
+  }
+  .section-action {
+    background: var(--green-deep); color: white;
+    border: none; padding: 10px 22px; border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .section-action:hover { background: var(--green-mid); }
+  .section-action.gold { background: var(--gold); color: var(--green-deep); }
+  .section-action.gold:hover { background: #b8862e; }
+ 
+  /* ── DIVIDER ── */
+  .section-divider {
+    background: var(--green-light); height: 1px; margin: 0; border: none;
+  }
+ 
+  /* ── NOTICES ── */
+  #notices { background: var(--white); border-radius: var(--radius); margin: 0 auto; }
+  .notices-wrap { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+ 
+  .notice-filters {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px;
+  }
+  .filter-btn {
+    padding: 6px 18px; border-radius: 20px; border: 1.5px solid var(--border);
+    background: transparent; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; cursor: pointer; transition: all 0.2s; color: var(--text-mid);
+  }
+  .filter-btn.active, .filter-btn:hover {
+    border-color: var(--green-deep); background: var(--green-deep); color: white;
+  }
+ 
+  .notice-grid { display: grid; gap: 16px; }
+ 
+  .notice-card {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px 24px; background: var(--white);
+    display: flex; gap: 20px; align-items: flex-start;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    cursor: pointer;
+  }
+  .notice-card:hover { box-shadow: var(--shadow); border-color: #bbb; }
+  .notice-card.urgent { border-left: 4px solid var(--danger); background: var(--danger-light); }
+  .notice-card.general { border-left: 4px solid var(--green-bright); }
+  .notice-card.info { border-left: 4px solid var(--info); background: var(--info-light); }
+ 
+  .notice-icon {
+    width: 40px; height: 40px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .notice-icon.urgent { background: #f5c6c3; }
+  .notice-icon.general { background: var(--green-light); }
+  .notice-icon.info { background: #cce5f7; }
+ 
+  .notice-body { flex: 1; }
+  .notice-meta {
+    display: flex; gap: 12px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;
+  }
+  .notice-badge {
+    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+    padding: 3px 10px; border-radius: 10px;
+  }
+  .notice-badge.urgent { background: #f5c6c3; color: var(--danger); }
+  .notice-badge.general { background: var(--green-light); color: var(--green-deep); }
+  .notice-badge.info { background: #cce5f7; color: var(--info); }
+  .notice-date { font-size: 12px; color: var(--text-muted); }
+ 
+  .notice-title { font-size: 15px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+  .notice-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+ 
+  /* ── GROUNDS ── */
+  #grounds { background: var(--cream); }
+  .grounds-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px; margin-bottom: 48px;
+  }
+  .ground-card {
+    background: var(--white); border-radius: var(--radius);
+    border: 1px solid var(--border); overflow: hidden;
+    box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .ground-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .ground-card-img {
+    height: 160px; display: flex; align-items: center; justify-content: center;
+    font-size: 64px; position: relative;
+  }
+  .ground-card-img.cricket { background: linear-gradient(135deg, #1e6b3a, #2d9c55); }
+  .ground-card-img.tennis { background: linear-gradient(135deg, #1a5c8a, #2980b9); }
+  .ground-card-img.multi { background: linear-gradient(135deg, #7d3c98, #9b59b6); }
+  .ground-availability {
+    position: absolute; top: 12px; right: 12px;
+    padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .avail-open { background: rgba(255,255,255,0.9); color: #1d8a5e; }
+  .avail-busy { background: rgba(255,255,255,0.9); color: var(--danger); }
+ 
+  .ground-info { padding: 20px; }
+  .ground-name { font-size: 17px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+  .ground-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+  .ground-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .ground-tag {
+    font-size: 11px; padding: 3px 10px; border-radius: 10px;
+    background: var(--green-light); color: var(--green-deep); font-weight: 500;
+  }
+  .ground-book-btn {
+    width: 100%; padding: 10px; border: none; border-radius: 8px;
+    background: var(--green-deep); color: white; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s;
+  }
+  .ground-book-btn:hover { background: var(--green-mid); }
+ 
+  /* Schedule */
+  .schedule-section { background: var(--white); border-radius: var(--radius); padding: 28px; border: 1px solid var(--border); }
+  .schedule-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green-deep); margin-bottom: 20px; }
+  .schedule-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .sched-tab {
+    padding: 7px 18px; border-radius: 8px; border: 1px solid var(--border);
+    background: transparent; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; cursor: pointer; transition: all 0.2s; color: var(--text-mid);
+  }
+  .sched-tab.active { background: var(--green-deep); color: white; border-color: var(--green-deep); }
+  .sched-tab:hover:not(.active) { border-color: var(--green-bright); color: var(--green-bright); }
+ 
+  .schedule-grid {
+    display: grid; grid-template-columns: 80px repeat(7, 1fr);
+    gap: 2px; font-size: 12px;
+  }
+  .sched-head {
+    background: var(--green-deep); color: white;
+    padding: 8px 4px; text-align: center; font-weight: 600;
+    border-radius: 4px; font-size: 11px;
+  }
+  .sched-time {
+    background: var(--green-light); color: var(--green-deep);
+    padding: 8px 4px; text-align: right; font-weight: 500;
+    border-radius: 4px; padding-right: 8px;
+  }
+  .sched-slot {
+    border-radius: 4px; padding: 8px 4px; text-align: center;
+    cursor: pointer; transition: all 0.15s; font-size: 11px; font-weight: 500;
+  }
+  .sched-slot.free { background: #e6f5ee; color: var(--green-deep); }
+  .sched-slot.free:hover { background: var(--green-bright); color: white; }
+  .sched-slot.booked { background: #fdecea; color: var(--danger); cursor: default; }
+  .sched-slot.mine { background: #fffbe6; color: #b7860b; }
+ 
+  /* Booking modal */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 200;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--white); border-radius: 16px; padding: 36px;
+    max-width: 460px; width: 92%; box-shadow: var(--shadow-lg);
+    position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 16px; right: 20px;
+    background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted);
+  }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green-deep); margin-bottom: 6px; }
+  .modal-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .form-row { margin-bottom: 16px; }
+  .form-row label { display: block; font-size: 13px; font-weight: 500; color: var(--text-mid); margin-bottom: 6px; }
+  .form-row input, .form-row select {
+    width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+    border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px;
+    outline: none; transition: border-color 0.2s; background: var(--cream);
+  }
+  .form-row input:focus, .form-row select:focus { border-color: var(--green-bright); }
+  .form-submit {
+    width: 100%; padding: 12px; background: var(--green-deep); color: white;
+    border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 8px;
+  }
+  .form-submit:hover { background: var(--green-mid); }
+  .form-success {
+    display: none; text-align: center; padding: 20px;
+    color: var(--green-deep); font-weight: 600; font-size: 15px;
+  }
+  .success-icon { font-size: 40px; margin-bottom: 12px; }
+ 
+  /* ── DIRECTORY ── */
+  #directory { background: var(--white); }
+  .dir-wrap { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+ 
+  .dir-search-bar {
+    display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap;
+  }
+  .dir-search-bar input {
+    flex: 1; min-width: 200px; padding: 10px 16px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none;
+    background: var(--cream); transition: border-color 0.2s;
+  }
+  .dir-search-bar input:focus { border-color: var(--green-bright); }
+  .dir-search-bar select {
+    padding: 10px 16px; border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; background: var(--cream);
+  }
+ 
+  .dir-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+ 
+  .dir-card {
+    border: 1px solid var(--border); border-radius: var(--radius); padding: 20px;
+    background: var(--cream); transition: box-shadow 0.2s, border-color 0.2s;
+    cursor: pointer;
+  }
+  .dir-card:hover { box-shadow: var(--shadow); border-color: #bbb; background: var(--white); }
+ 
+  .dir-card-head {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+  }
+  .dir-avatar {
+    width: 46px; height: 46px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; flex-shrink: 0;
+  }
+  .av-green { background: var(--green-light); color: var(--green-deep); }
+  .av-gold { background: var(--gold-light); color: #8a6020; }
+  .av-blue { background: #d6eaf8; color: #154360; }
+  .av-pink { background: #fdedee; color: #922b21; }
+ 
+  .dir-name { font-size: 15px; font-weight: 600; color: var(--text-dark); }
+  .dir-bungalow {
+    display: inline-block; margin-top: 2px;
+    font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    background: var(--green-deep); color: white; padding: 2px 8px; border-radius: 4px;
+  }
+  .dir-details { border-top: 1px solid var(--border); padding-top: 12px; }
+  .dir-row {
+    display: flex; gap: 8px; align-items: center; margin-bottom: 6px;
+    font-size: 13px; color: var(--text-mid);
+  }
+  .dir-row span:first-child { color: var(--text-muted); min-width: 60px; font-size: 12px; }
+  .dir-count { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+ 
+  /* ── FOOTER ── */
+  footer {
+    background: var(--green-deep); color: rgba(255,255,255,0.65);
+    text-align: center; padding: 32px 24px;
+    font-size: 13px;
+  }
+  footer strong { color: var(--gold); }
+ 
+  /* responsive */
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .hero-stats { gap: 24px; }
+    .schedule-grid { grid-template-columns: 60px repeat(4, 1fr); }
+    .schedule-grid .sched-head:nth-child(n+6),
+    .schedule-grid .sched-slot:nth-child(7n-1),
+    .schedule-grid .sched-slot:nth-child(7n),
+    .schedule-grid .sched-slot:nth-child(7n+1) { display: none; }
+  }
+</style>
+</head>
+<body>
+ 
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <div class="crest">SC</div>
+      <span>Sind Cooperative<small>Housing Society</small></span>
+    </a>
+    <div class="nav-links">
+      <a href="#notices-section" class="active">Notices</a>
+      <a href="#grounds-section">Sports Grounds</a>
+      <a href="#directory-section">Directory</a>
+    </div>
+  </div>
+</nav>
+ 
+<section class="hero">
+  <div class="hero-tag">Est. Aundh, Pune</div>
+  <h1>Sind Cooperative<br>Housing Society</h1>
+  <p>Building a stronger community — one neighbourhood at a time.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">500+</div><div class="lbl">Bungalows</div></div>
+    <div class="hero-stat"><div class="num">3</div><div class="lbl">Sports Grounds</div></div>
+    <div class="hero-stat"><div class="num">2400+</div><div class="lbl">Residents</div></div>
+    <div class="hero-stat"><div class="num">30+</div><div class="lbl">Years</div></div>
+  </div>
+</section>
+ 
+<div id="notices-section">
+<div class="notices-wrap">
+  <div class="section-header">
+    <div class="section-title-group">
+      <div class="section-eyebrow">Community Board</div>
+      <div class="section-title">Notices & Announcements</div>
+    </div>
+    <button class="section-action" onclick="openNoticeModal()">+ Post Notice</button>
+  </div>
+ 
+  <div class="notice-filters">
+    <button class="filter-btn active" onclick="filterNotices(this,'all')">All</button>
+    <button class="filter-btn" onclick="filterNotices(this,'urgent')">Urgent</button>
+    <button class="filter-btn" onclick="filterNotices(this,'general')">General</button>
+    <button class="filter-btn" onclick="filterNotices(this,'info')">Info</button>
+  </div>
+ 
+  <div class="notice-grid" id="noticeGrid">
+ 
+    <div class="notice-card urgent" data-type="urgent">
+      <div class="notice-icon urgent">🚨</div>
+      <div class="notice-body">
+        <div class="notice-meta">
+          <span class="notice-badge urgent">Urgent</span>
+          <span class="notice-date">April 2, 2026</span>
+        </div>
+        <div class="notice-title">Water Supply Interruption — Block C & D</div>
+        <div class="notice-desc">PMC water supply will be suspended on April 4th from 8 AM to 5 PM for pipeline maintenance. Please store adequate water. We apologize for the inconvenience.</div>
+      </div>
+    </div>
+ 
+    <div class="notice-card urgent" data-type="urgent">
+      <div class="notice-icon urgent">⚠️</div>
+      <div class="notice-body">
+        <div class="notice-meta">
+          <span class="notice-badge urgent">Urgent</span>
+          <span class="notice-date">March 30, 2026</span>
+        </div>
+        <div class="notice-title">Security Alert — Main Gate CCTV Maintenance</div>
+        <div class="notice-desc">Main gate CCTV cameras will be non-operational on April 5th. All residents are requested to cooperate with security guards for manual entry/exit logs during this period.</div>
+      </div>
+    </div>
+ 
+    <div class="notice-card general" data-type="general">
+      <div class="notice-icon general">📋</div>
+      <div class="notice-body">
+        <div class="notice-meta">
+          <span class="notice-badge general">General</span>
+          <span class="notice-date">March 28, 2026</span>
+        </div>
+        <div class="notice-title">Monthly Maintenance Fee Due — April 2026</div>
+        <div class="notice-desc">Kindly submit your monthly maintenance fee of ₹5,000 before April 10th. Late payments will incur a surcharge of ₹500. Contact the office for UPI payment options.</div>
+      </div>
+    </div>
+ 
+    <div class="notice-card general" data-type="general">
+      <div class="notice-icon general">🏛️</div>
+      <div class="notice-body">
+        <div class="notice-meta">
+          <span class="notice-badge general">General</span>
+          <span class="notice-date">March 25, 2026</span>
+        </div>
+        <div class="notice-title">Annual General Meeting — April 15, 2026</div>
+        <div class="notice-desc">The AGM will be held on April 15th at 6:00 PM in the Society Club House. Agenda includes election of new committee members and budget review. All households must send at least one representative.</div>
+      </div>
+    </div>
+ 
+    <div class="notice-card info" data-type="info">
+      <div class="notice-icon info">🎉</div>
+      <div class="notice-body">
+        <div class="notice-meta">
+          <span class="notice-badge info">Info</span>
+          <span class="notice-date">March 20, 2026</span>
+        </div>
+        <div class="notice-title">Maharashtra Day Celebration — May 1st</div>
+        <div class="notice-desc">Join us for the annual Maharashtra Day celebration on May 1st at the main ground. Cultural performances, flag hoisting, and a community potluck from 9 AM onwards. All residents welcome!</div>
+      </div>
+    </div>
+ 
+    <div class="notice-card info" data-type="info">
+      <div class="notice-icon info">🌿</div>
+      <div class="notice-body">
+        <div class="notice-meta">
+          <span class="notice-badge info">Info</span>
+          <span class="notice-date">March 15, 2026</span>
+        </div>
+        <div class="notice-title">Tree Plantation Drive — Volunteers Needed</div>
+        <div class="notice-desc">The society is organizing a tree plantation drive this Sunday in collaboration with Pune Municipal Corporation. We need 30 volunteers. Please register on the society WhatsApp group.</div>
+      </div>
+    </div>
+ 
+  </div>
+</div>
+</div>
+ 
+<hr class="section-divider">
+ 
+<div id="grounds-section">
+<div class="section" style="background: var(--cream);">
+  <div class="section-header">
+    <div class="section-title-group">
+      <div class="section-eyebrow">Facilities</div>
+      <div class="section-title">Sports Grounds</div>
+    </div>
+  </div>
+ 
+  <div class="grounds-grid">
+    <div class="ground-card">
+      <div class="ground-card-img cricket">
+        🏏
+        <span class="ground-availability avail-open">Available</span>
+      </div>
+      <div class="ground-info">
+        <div class="ground-name">Main Cricket Ground</div>
+        <div class="ground-desc">Full-size cricket pitch with matting. Floodlights available for evening sessions.</div>
+        <div class="ground-tags">
+          <span class="ground-tag">Cricket</span>
+          <span class="ground-tag">Floodlit</span>
+          <span class="ground-tag">6 AM – 10 PM</span>
+        </div>
+        <button class="ground-book-btn" onclick="openBooking('Main Cricket Ground')">Book Now</button>
+      </div>
+    </div>
+ 
+    <div class="ground-card">
+      <div class="ground-card-img tennis">
+        🎾
+        <span class="ground-availability avail-busy">Booked Today</span>
+      </div>
+      <div class="ground-info">
+        <div class="ground-name">Tennis Courts (2)</div>
+        <div class="ground-desc">Two hard-surface tennis courts. Rackets available on loan from the office.</div>
+        <div class="ground-tags">
+          <span class="ground-tag">Tennis</span>
+          <span class="ground-tag">2 Courts</span>
+          <span class="ground-tag">6 AM – 9 PM</span>
+        </div>
+        <button class="ground-book-btn" onclick="openBooking('Tennis Courts')">Book Now</button>
+      </div>
+    </div>
+ 
+    <div class="ground-card">
+      <div class="ground-card-img multi">
+        🏀
+        <span class="ground-availability avail-open">Available</span>
+      </div>
+      <div class="ground-info">
+        <div class="ground-name">Multi-Purpose Court</div>
+        <div class="ground-desc">Suitable for basketball, volleyball and badminton. Indoor seating for spectators.</div>
+        <div class="ground-tags">
+          <span class="ground-tag">Basketball</span>
+          <span class="ground-tag">Volleyball</span>
+          <span class="ground-tag">7 AM – 10 PM</span>
+        </div>
+        <button class="ground-book-btn" onclick="openBooking('Multi-Purpose Court')">Book Now</button>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="schedule-section">
+    <div class="schedule-title">Weekly Schedule — Current Week</div>
+    <div class="schedule-tabs">
+      <button class="sched-tab active" onclick="switchGround(this,'cricket')">Main Cricket</button>
+      <button class="sched-tab" onclick="switchGround(this,'tennis')">Tennis Courts</button>
+      <button class="sched-tab" onclick="switchGround(this,'multi')">Multi-Purpose</button>
+    </div>
+ 
+    <div id="scheduleGrid"></div>
+    <div style="display:flex; gap:16px; margin-top:14px; font-size:12px; flex-wrap:wrap;">
+      <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#e6f5ee;display:inline-block;border:1px solid #bde0cc;"></span> Available — click to book</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#fdecea;display:inline-block;border:1px solid #f5c6c3;"></span> Booked</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#fffbe6;display:inline-block;border:1px solid #f5e4a0;"></span> My booking</span>
+    </div>
+  </div>
+</div>
+</div>
+ 
+<hr class="section-divider">
+ 
+<div id="directory-section">
+<div class="dir-wrap">
+  <div class="section-header">
+    <div class="section-title-group">
+      <div class="section-eyebrow">Residents</div>
+      <div class="section-title">Society Directory</div>
+    </div>
+    <button class="section-action gold" onclick="openAddResident()">+ Add Resident</button>
+  </div>
+ 
+  <div class="dir-search-bar">
+    <input type="text" id="dirSearch" placeholder="Search by name, bungalow number…" oninput="filterDirectory()">
+    <select id="dirBlock" onchange="filterDirectory()">
+      <option value="">All Blocks</option>
+      <option value="A">Block A</option>
+      <option value="B">Block B</option>
+      <option value="C">Block C</option>
+      <option value="D">Block D</option>
+    </select>
+  </div>
+ 
+  <div class="dir-count" id="dirCount">Showing 12 residents</div>
+  <div class="dir-grid" id="dirGrid"></div>
+</div>
+</div>
+ 
+<footer>
+  <strong>Sind Cooperative Housing Society</strong> &mdash; Aundh, Pune, Maharashtra, India<br>
+  <span style="margin-top:6px;display:block;">Office: +91-20-2569-XXXX &nbsp;|&nbsp; Email: info@sindchs-aundh.org.in &nbsp;|&nbsp; Office Hours: Mon–Sat, 9 AM – 5 PM</span>
+</footer>
+ 
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeBooking()">✕</button>
+    <div id="bookingForm">
+      <div class="modal-title">Book a Ground</div>
+      <div class="modal-sub" id="bookingGroundName">Select your preferred date and time</div>
+      <div class="form-row">
+        <label>Your Name</label>
+        <input type="text" placeholder="Full name" id="bkName">
+      </div>
+      <div class="form-row">
+        <label>Bungalow Number</label>
+        <input type="text" placeholder="e.g. A-42" id="bkBung">
+      </div>
+      <div class="form-row">
+        <label>Date</label>
+        <input type="date" id="bkDate">
+      </div>
+      <div class="form-row">
+        <label>Time Slot</label>
+        <select id="bkTime">
+          <option>6:00 AM – 7:00 AM</option>
+          <option>7:00 AM – 8:00 AM</option>
+          <option>8:00 AM – 9:00 AM</option>
+          <option>9:00 AM – 10:00 AM</option>
+          <option>4:00 PM – 5:00 PM</option>
+          <option>5:00 PM – 6:00 PM</option>
+          <option>6:00 PM – 7:00 PM</option>
+          <option>7:00 PM – 8:00 PM</option>
+          <option>8:00 PM – 9:00 PM</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Ground</label>
+        <select id="bkGround">
+          <option>Main Cricket Ground</option>
+          <option>Tennis Courts</option>
+          <option>Multi-Purpose Court</option>
+        </select>
+      </div>
+      <button class="form-submit" onclick="submitBooking()">Confirm Booking</button>
+    </div>
+    <div class="form-success" id="bookingSuccess">
+      <div class="success-icon">✅</div>
+      <div>Booking Confirmed!</div>
+      <div style="font-size:13px;color:#555;font-weight:400;margin-top:8px;">You'll receive confirmation at your registered contact. Show this at the ground office.</div>
+    </div>
+  </div>
+</div>
+ 
+<div class="modal-overlay" id="noticeModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeNoticeModal()">✕</button>
+    <div class="modal-title">Post a Notice</div>
+    <div class="modal-sub">Submit notices for committee review</div>
+    <div class="form-row">
+      <label>Your Name & Bungalow</label>
+      <input type="text" placeholder="e.g. Amit Deshmukh — B-17" id="notName">
+    </div>
+    <div class="form-row">
+      <label>Notice Title</label>
+      <input type="text" placeholder="Brief title" id="notTitle">
+    </div>
+    <div class="form-row">
+      <label>Category</label>
+      <select id="notCat">
+        <option>General</option>
+        <option>Urgent</option>
+        <option>Info</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Description</label>
+      <input type="text" placeholder="Brief description" id="notDesc">
+    </div>
+    <button class="form-submit" onclick="submitNotice()">Submit for Approval</button>
+  </div>
+</div>
+ 
+<div class="modal-overlay" id="residentModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeResidentModal()">✕</button>
+    <div id="residentForm">
+      <div class="modal-title">Add Resident</div>
+      <div class="modal-sub">Add a new entry to the society directory</div>
+      <div class="form-row"><label>Full Name</label><input type="text" id="resName" placeholder="Full name"></div>
+      <div class="form-row"><label>Bungalow No.</label><input type="text" id="resBung" placeholder="e.g. A-42"></div>
+      <div class="form-row"><label>Phone</label><input type="text" id="resPhone" placeholder="+91-98XXX-XXXXX"></div>
+      <div class="form-row"><label>Occupation</label><input type="text" id="resOcc" placeholder="Profession"></div>
+      <div class="form-row"><label>Block</label>
+        <select id="resBlock"><option value="A">Block A</option><option value="B">Block B</option><option value="C">Block C</option><option value="D">Block D</option></select>
+      </div>
+      <button class="form-submit" onclick="submitResident()">Add to Directory</button>
+    </div>
+    <div class="form-success" id="residentSuccess" style="display:none;">
+      <div class="success-icon">🏠</div>
+      <div>Resident Added!</div>
+      <div style="font-size:13px;color:#555;font-weight:400;margin-top:8px;">The entry has been added to the directory and is pending admin verification.</div>
+    </div>
+  </div>
+</div>
+ 
+<script>
+// ── DATA ──
+const residents = [
+  { name: 'Amit Deshmukh', bungalow: 'A-01', phone: '+91-98220-12345', occupation: 'Engineer', block: 'A' },
+  { name: 'Priya Kulkarni', bungalow: 'A-07', phone: '+91-98221-76543', occupation: 'Doctor', block: 'A' },
+  { name: 'Rahul Joshi', bungalow: 'A-14', phone: '+91-98222-98765', occupation: 'Businessman', block: 'A' },
+  { name: 'Zainab Hussain', bungalow: 'B-03', phone: '+91-98223-45612', occupation: 'Teacher', block: 'B' },
+  { name: 'Sanjay Patil', bungalow: 'B-11', phone: '+91-98224-65498', occupation: 'Lawyer', block: 'B' },
+  { name: 'Sana Sheikh', bungalow: 'B-19', phone: '+91-98225-33344', occupation: 'Accountant', block: 'B' },
+  { name: 'Vikram Gokhale', bungalow: 'C-02', phone: '+91-98226-22233', occupation: 'Banker', block: 'C' },
+  { name: 'Rukhsana Baig', bungalow: 'C-08', phone: '+91-98227-55566', occupation: 'Retired', block: 'C' },
+  { name: 'Rohan Shah', bungalow: 'C-15', phone: '+91-98228-77788', occupation: 'Software Developer', block: 'C' },
+  { name: 'Neha Kale', bungalow: 'D-04', phone: '+91-98229-99900', occupation: 'Architect', block: 'D' },
+  { name: 'Nasir Javed', bungalow: 'D-12', phone: '+91-98230-11122', occupation: 'Professor', block: 'D' },
+  { name: 'Aditi Sharma', bungalow: 'D-21', phone: '+91-98231-44455', occupation: 'Pharmacist', block: 'D' },
+];
+ 
+const avatarColors = ['av-green','av-gold','av-blue','av-pink'];
+ 
+function getInitials(name) {
+  return name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+}
+ 
+function renderDirectory(data) {
+  const grid = document.getElementById('dirGrid');
+  const count = document.getElementById('dirCount');
+  count.textContent = `Showing ${data.length} resident${data.length!==1?'s':''}`;
+  grid.innerHTML = data.map((r, i) => `
+    <div class="dir-card">
+      <div class="dir-card-head">
+        <div class="dir-avatar ${avatarColors[i % avatarColors.length]}">${getInitials(r.name)}</div>
+        <div>
+          <div class="dir-name">${r.name}</div>
+          <span class="dir-bungalow">${r.bungalow}</span>
+        </div>
+      </div>
+      <div class="dir-details">
+        <div class="dir-row"><span>Phone</span><span>${r.phone}</span></div>
+        <div class="dir-row"><span>Block</span><span>Block ${r.block}</span></div>
+        <div class="dir-row"><span>Job</span><span>${r.occupation}</span></div>
+      </div>
+    </div>
+  `).join('');
+}
+ 
+function filterDirectory() {
+  const q = document.getElementById('dirSearch').value.toLowerCase();
+  const block = document.getElementById('dirBlock').value;
+  const filtered = residents.filter(r => {
+    const match = r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q) || r.occupation.toLowerCase().includes(q);
+    const blockMatch = !block || r.block === block;
+    return match && blockMatch;
+  });
+  renderDirectory(filtered);
+}
+ 
+renderDirectory(residents);
+ 
+// ── SCHEDULE ──
+const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const times = ['6 AM','7 AM','8 AM','9 AM','5 PM','6 PM','7 PM','8 PM','9 PM'];
+ 
+const scheduleData = {
+  cricket: [
+    ['free','booked','free','free','free','booked','free'],
+    ['free','free','booked','free','free','free','free'],
+    ['booked','free','free','booked','free','free','mine'],
+    ['free','free','free','free','booked','free','free'],
+    ['free','booked','free','free','free','free','booked'],
+    ['booked','free','free','free','free','booked','free'],
+    ['free','free','booked','free','free','free','free'],
+    ['free','free','free','booked','free','free','free'],
+    ['booked','free','free','free','booked','free','free'],
+  ],
+  tennis: [
+    ['booked','free','free','booked','free','free','free'],
+    ['free','booked','free','free','free','booked','free'],
+    ['free','free','free','free','booked','free','booked'],
+    ['booked','free','booked','free','free','free','free'],
+    ['free','free','free','booked','free','booked','free'],
+    ['free','booked','free','free','booked','free','free'],
+    ['booked','free','booked','free','free','free','mine'],
+    ['free','free','free','free','free','booked','free'],
+    ['free','booked','free','booked','free','free','free'],
+  ],
+  multi: [
+    ['free','free','booked','free','free','free','free'],
+    ['booked','free','free','free','free','mine','free'],
+    ['free','booked','free','free','booked','free','free'],
+    ['free','free','free','booked','free','free','booked'],
+    ['booked','free','free','free','free','booked','free'],
+    ['free','free','booked','free','booked','free','free'],
+    ['free','booked','free','free','free','free','free'],
+    ['booked','free','free','booked','free','free','free'],
+    ['free','free','booked','free','free','booked','free'],
+  ]
+};
+ 
+let activeGround = 'cricket';
+ 
+function renderSchedule(ground) {
+  const data = scheduleData[ground];
+  let html = '<div class="schedule-grid">';
+  html += '<div class="sched-head" style="background:transparent;"></div>';
+  days.forEach(d => html += `<div class="sched-head">${d}</div>`);
+  data.forEach((row, ti) => {
+    html += `<div class="sched-time">${times[ti]}</div>`;
+    row.forEach((slot, di) => {
+      const label = slot === 'booked' ? 'Booked' : slot === 'mine' ? 'Mine' : 'Free';
+      html += `<div class="sched-slot ${slot}" title="${label}" onclick="slotClick(this,'${slot}','${times[ti]}','${days[di]}')">
+        ${slot === 'booked' ? '✕' : slot === 'mine' ? '★' : ''}
+      </div>`;
+    });
+  });
+  html += '</div>';
+  document.getElementById('scheduleGrid').innerHTML = html;
+}
+ 
+function slotClick(el, type, time, day) {
+  if (type === 'free') {
+    document.getElementById('bkTime').value = time + ' – ' + (parseInt(time)+1) + ' AM';
+    openBooking(activeGround === 'cricket' ? 'Main Cricket Ground' : activeGround === 'tennis' ? 'Tennis Courts' : 'Multi-Purpose Court');
+  }
+}
+ 
+function switchGround(btn, ground) {
+  document.querySelectorAll('.sched-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeGround = ground;
+  renderSchedule(ground);
+}
+ 
+renderSchedule('cricket');
+ 
+// ── NOTICE FILTER ──
+function filterNotices(btn, type) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.notice-card').forEach(card => {
+    card.style.display = (type === 'all' || card.dataset.type === type) ? 'flex' : 'none';
+  });
+}
+ 
+// ── MODALS ──
+function openBooking(ground) {
+  document.getElementById('bookingGroundName').textContent = ground;
+  document.getElementById('bkGround').value = ground;
+  document.getElementById('bookingForm').style.display = '';
+  document.getElementById('bookingSuccess').style.display = 'none';
+  document.getElementById('bookingModal').classList.add('open');
+}
+function closeBooking() { document.getElementById('bookingModal').classList.remove('open'); }
+ 
+function submitBooking() {
+  const name = document.getElementById('bkName').value;
+  const bung = document.getElementById('bkBung').value;
+  if (!name || !bung) { alert('Please fill in your name and bungalow number.'); return; }
+  document.getElementById('bookingForm').style.display = 'none';
+  document.getElementById('bookingSuccess').style.display = 'block';
+  setTimeout(() => closeBooking(), 3000);
+}
+ 
+function openNoticeModal() {
+  document.getElementById('noticeModal').classList.add('open');
+}
+function closeNoticeModal() { document.getElementById('noticeModal').classList.remove('open'); }
+ 
+function submitNotice() {
+  const t = document.getElementById('notTitle').value;
+  const n = document.getElementById('notName').value;
+  if (!t || !n) { alert('Please fill in all fields.'); return; }
+  alert('Notice submitted for committee review. Thank you!');
+  closeNoticeModal();
+}
+ 
+function openAddResident() {
+  document.getElementById('residentForm').style.display = '';
+  document.getElementById('residentSuccess').style.display = 'none';
+  document.getElementById('residentModal').classList.add('open');
+}
+function closeResidentModal() { document.getElementById('residentModal').classList.remove('open'); }
+ 
+function submitResident() {
+  const name = document.getElementById('resName').value;
+  const bung = document.getElementById('resBung').value;
+  const phone = document.getElementById('resPhone').value;
+  const occ = document.getElementById('resOcc').value;
+  const block = document.getElementById('resBlock').value;
+  if (!name || !bung) { alert('Please fill in at least name and bungalow number.'); return; }
+  residents.push({ name, bungalow: bung, phone: phone||'—', occupation: occ||'—', block });
+  renderDirectory(residents);
+  document.getElementById('residentForm').style.display = 'none';
+  document.getElementById('residentSuccess').style.display = 'block';
+  setTimeout(() => closeResidentModal(), 3000);
+}
+ 
+// smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const el = document.querySelector(a.getAttribute('href'));
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+ 
+// close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
