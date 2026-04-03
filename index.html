@@ -19,7 +19,7 @@
   .page-section.active { display: block; }
   .booking-panel { background: white; padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 30px; }
   .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 15px; }
-  input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+  input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
   .btn-primary { background: var(--green-deep); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
   .schedule-container { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; min-width: 1300px; }
@@ -28,9 +28,10 @@
   .booked { background: #fdecea; color: var(--danger); font-weight: 700; }
   .available { color: #2d9c55; font-weight: 700; }
   .cancel-link { display: block; margin-top: 5px; color: var(--danger); font-size: 10px; cursor: pointer; text-decoration: underline; border: none; background: none; width: 100%; }
-  .grid-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
-  .card { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); }
-  .pdf-btn { display: block; margin-top: 10px; background: var(--gold); color: white; text-align: center; padding: 10px; text-decoration: none; border-radius: 6px; font-weight: bold; }
+  .grid-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); }
+  .card { background: white; padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+  .pdf-btn { display: inline-block; margin-top: 15px; background: var(--gold); color: white; text-align: center; padding: 10px 15px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 13px; }
+  .notice-date { font-size: 11px; font-weight: bold; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; display: block; }
 </style>
 </head>
 <body>
@@ -68,11 +69,11 @@
 </div>
 
 <div id="page-notices" class="page-section">
-  <div id="noticeGrid" class="grid-grid"></div>
+  <div id="noticeGrid" class="grid-grid">Loading notices...</div>
 </div>
 
 <div id="page-directory" class="page-section">
-  <input type="text" id="dirSearch" placeholder="Search residents by name or bungalow..." oninput="filterDirectory()" style="width:100%; max-width:400px; padding:12px; border-radius:30px; border:1px solid #ccc; margin-bottom:20px;">
+  <input type="text" id="dirSearch" placeholder="Search residents..." oninput="filterDirectory()" style="width:100%; max-width:400px; padding:12px; border-radius:30px; border:1px solid #ccc; margin-bottom:20px;">
   <div id="dirGrid" class="grid-grid"></div>
 </div>
 
@@ -93,11 +94,10 @@
   const db = getFirestore(app);
   
   const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
-  
-  // Set dates and headers
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('inDate').value = today; 
   document.getElementById('viewDateFilter').value = today;
+  
   times.forEach(t => { 
     document.getElementById('inTime').innerHTML += `<option value="${t}">${t}</option>`; 
     document.getElementById('tableHead').innerHTML += `<th>${t}</th>`; 
@@ -107,15 +107,20 @@
     const vDate = document.getElementById('viewDateFilter').value; 
     document.getElementById('viewingDateText').innerText = vDate;
 
-    // Load Notices
+    // Load Notices Safely
     try {
       const notes = await getDocs(collection(db, "notices"));
-      document.getElementById('noticeGrid').innerHTML = '';
+      const grid = document.getElementById('noticeGrid');
+      grid.innerHTML = '';
       notes.forEach(d => {
         const n = d.data();
-        document.getElementById('noticeGrid').innerHTML += `<div class="card"><h3>${n.title}</h3>${n.pdfUrl ? `<a href="${n.pdfUrl}" target="_blank" class="pdf-btn">📄 View PDF Notice</a>` : `<p>${n.description || ''}</p>`}</div>`;
+        let html = `<div class="card"><span class="notice-date">${n.date || ''}</span><h3>${n.title}</h3>`;
+        if(n.description) html += `<p style="font-size:14px; margin-top:10px; white-space:pre-wrap;">${n.description}</p>`;
+        if(n.pdfUrl) html += `<a href="${n.pdfUrl}" target="_blank" class="pdf-btn">📄 View PDF Notice</a>`;
+        html += `</div>`;
+        grid.innerHTML += html;
       });
-    } catch (e) { document.getElementById('noticeGrid').innerHTML = `<p style="color:red;">Error loading notices: ${e.message}</p>`; }
+    } catch(e) { console.error(e); }
 
     // Load Sports Schedule
     try {
@@ -137,7 +142,7 @@
         });
         body.innerHTML += row + '</tr>';
       });
-    } catch (e) { document.getElementById('tableBody').innerHTML = `<tr><td colspan="19" style="color:red;">Error: ${e.message}</td></tr>`; }
+    } catch (e) { console.error(e); }
 
     // Load Directory
     try {
@@ -145,39 +150,26 @@
       window.residents = []; 
       res.forEach(d => window.residents.push(d.data())); 
       renderDir(window.residents);
-    } catch (e) { document.getElementById('dirGrid').innerHTML = `<p style="color:red;">Error: ${e.message}</p>`; }
+    } catch (e) { console.error(e); }
   }
 
   function renderDir(data) { document.getElementById('dirGrid').innerHTML = data.map(r => `<div class="card"><strong>${r.name}</strong><br>Bungalow: ${r.bungalow}</div>`).join(''); }
-  
-  window.filterDirectory = () => { 
-    const q = document.getElementById('dirSearch').value.toLowerCase(); 
-    renderDir(window.residents.filter(r => r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q))); 
-  };
+  window.filterDirectory = () => { const q = document.getElementById('dirSearch').value.toLowerCase(); renderDir(window.residents.filter(r => r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q))); };
 
   window.handleBooking = async () => {
     const d = document.getElementById('inDate').value, f = document.getElementById('inFac').value, t = document.getElementById('inTime').value, n = document.getElementById('inName').value, b = document.getElementById('inBung').value;
-    if(!n || !b) return alert("Enter all details");
-    
-    const checkSnap = await getDocs(query(collection(db, "bookings"), where("date", "==", d), where("facility", "==", f), where("time", "==", t)));
-    if(!checkSnap.empty) return alert("This slot was just booked by someone else!");
-
-    try {
-      await addDoc(collection(db, "bookings"), { facility: f, time: t, userName: n, bungalow: b, date: d });
-      alert("Booked Successfully!"); 
-      loadAll();
-    } catch (e) { alert("Error: " + e.message); }
+    if(!n || !b) return alert("Enter details");
+    await addDoc(collection(db, "bookings"), { facility: f, time: t, userName: n, bungalow: b, date: d });
+    alert("Booked!"); loadAll();
   };
 
-  window.cancelBooking = async (id) => { if(confirm("Cancel this booking?")) { await deleteDoc(doc(db, "bookings", id)); loadAll(); } };
-  
+  window.cancelBooking = async (id) => { if(confirm("Cancel?")) { await deleteDoc(doc(db, "bookings", id)); loadAll(); } };
   window.showPage = (id) => { 
     document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active')); 
     document.querySelectorAll('.nav-links button').forEach(btn => btn.classList.remove('active'));
     document.getElementById('page-'+id).classList.add('active'); 
     document.getElementById('nav-'+id).classList.add('active');
   };
-
   window.loadAll = loadAll;
   loadAll();
 </script>
