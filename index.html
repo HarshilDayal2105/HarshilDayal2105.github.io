@@ -1,117 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sind Cooperative Housing Society, Aundh</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --green-deep: #0a3d2b; --green-mid: #14573d; --green-bright: #1d8a5e; --green-light: #e6f5ee;
-    --gold: #c9993a; --gold-light: #f5e9cc; --cream: #faf8f3;
-    --text-dark: #1a1a1a; --text-mid: #444; --text-muted: #777; --border: #ddd8cc; --white: #ffffff;
-    --danger: #c0392b; --danger-light: #fdecea; --info-light: #e8f4fd; --info: #1a6fa0;
-    --radius: 12px; --shadow: 0 2px 12px rgba(0,0,0,0.08); --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-dark); line-height: 1.6; min-height: 100vh; }
-  
-  /* NAV */
-  nav { background: var(--green-deep); position: sticky; top: 0; z-index: 100; border-bottom: 3px solid var(--gold); }
-  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; }
-  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; }
-  .nav-logo .crest { width: 40px; height: 40px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 16px; color: var(--green-deep); font-weight: 700; }
-  .nav-links { display: flex; gap: 4px; }
-  .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 14px; transition: 0.2s; }
-  .nav-links a:hover, .nav-links a.active { background: rgba(255,255,255,0.12); color: #fff; }
-
-  /* HERO */
-  .hero { background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 60%, var(--green-bright) 100%); color: white; text-align: center; padding: 72px 24px; position: relative; }
-  .hero h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 16px; }
-  .hero-stats { display: flex; justify-content: center; gap: 40px; margin-top: 30px; }
-  .num { font-size: 24px; color: var(--gold); font-weight: bold; }
-
-  /* CONTENT */
-  .section { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
-  .notice-grid, .grounds-grid, .dir-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
-  
-  .notice-card { border: 1px solid var(--border); padding: 20px; border-radius: var(--radius); background: white; border-left: 5px solid var(--green-deep); }
-  .notice-card.urgent { border-left-color: var(--danger); }
-  
-  .dir-card { background: white; border: 1px solid var(--border); padding: 20px; border-radius: var(--radius); }
-  .ground-card { background: white; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
-  .ground-card-img { height: 150px; background: #2d9c55; display: flex; align-items: center; justify-content: center; font-size: 50px; }
-
-  /* MODALS */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 400px; }
-  input, select { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; }
-  .form-submit { background: var(--green-deep); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; }
-
-  .loading-text { text-align: center; color: #888; padding: 20px; grid-column: 1 / -1; }
-</style>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard | Sind Society</title>
+  <style>
+    :root { --primary: #0a3d2b; --bg: #faf8f3; --border: #ddd; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 0; }
+    
+    /* Login Screen */
+    #loginSection { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
+    #loginSection input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; }
+    #loginSection button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    
+    /* Dashboard Layout */
+    #dashboardSection { display: none; display: flex; height: 100vh; }
+    .sidebar { width: 250px; background: var(--primary); color: white; display: flex; flex-direction: column; }
+    .sidebar h2 { padding: 20px; margin: 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 18px;}
+    .tab-btn { background: none; border: none; color: rgba(255,255,255,0.7); padding: 15px 20px; text-align: left; font-size: 16px; cursor: pointer; transition: 0.2s; }
+    .tab-btn:hover, .tab-btn.active { background: rgba(255,255,255,0.1); color: white; border-left: 4px solid #c9993a; }
+    .logout-btn { margin-top: auto; background: #c0392b; color: white; border: none; padding: 15px; cursor: pointer; font-weight: bold; }
+    
+    .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+    .tab-content { display: none; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .tab-content.active { display: block; }
+    
+    /* Forms & Tables */
+    h3 { margin-top: 0; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+    .form-grid.full { grid-template-columns: 1fr; }
+    input, select, textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-family: inherit;}
+    .submit-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: #f4f4f4; color: var(--primary); }
+    .delete-btn { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    
+    .hidden { display: none !important; }
+  </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-inner">
-    <a class="nav-logo" href="#">
-      <div class="crest">SC</div>
-      <span>Sind Society</span>
-    </a>
-    <div class="nav-links">
-      <a href="#notices-section">Notices</a>
-      <a href="#grounds-section">Grounds</a>
-      <a href="#directory-section">Directory</a>
+<div id="loginSection">
+  <h2>Sind Society Admin</h2>
+  <input type="email" id="email" placeholder="Admin Email">
+  <input type="password" id="password" placeholder="Password">
+  <button id="loginBtn">Log In</button>
+</div>
+
+<div id="dashboardSection" class="hidden">
+  <div class="sidebar">
+    <h2>Admin Portal</h2>
+    <button class="tab-btn active" onclick="switchTab('notices')">📢 Notices</button>
+    <button class="tab-btn" onclick="switchTab('residents')">👥 Residents</button>
+    <button class="tab-btn" onclick="switchTab('facilities')">🏆 Add Any Sport</button>
+    <button class="tab-btn" onclick="switchTab('bookings')">📅 Bookings</button>
+    <button id="logoutBtn" class="logout-btn">Log Out</button>
+  </div>
+
+  <div class="main-content">
+    
+    <div id="tab-notices" class="tab-content active">
+      <h3>Post a New Notice</h3>
+      <div class="form-grid">
+        <input type="text" id="notTitle" placeholder="Notice Title">
+        <select id="notType">
+          <option value="general">General</option>
+          <option value="urgent">Urgent</option>
+          <option value="info">Info</option>
+        </select>
+      </div>
+      <textarea id="notDesc" placeholder="Description" rows="3"></textarea><br><br>
+      <button class="submit-btn" onclick="addNotice()">Post Notice</button>
+      
+      <h3 style="margin-top: 40px;">Active Notices</h3>
+      <table>
+        <thead><tr><th>Date</th><th>Title</th><th>Action</th></tr></thead>
+        <tbody id="noticesTable"></tbody>
+      </table>
     </div>
-  </div>
-</nav>
 
-<section class="hero">
-  <h1>Sind Society, Aundh</h1>
-  <p>Community Portal</p>
-  <div class="hero-stats">
-    <div><div class="num">500+</div>Bungalows</div>
-    <div><div class="num">3</div>Grounds</div>
-  </div>
-</section>
+    <div id="tab-residents" class="tab-content">
+      <h3>Add New Resident</h3>
+      <div class="form-grid">
+        <input type="text" id="resName" placeholder="Full Name">
+        <input type="text" id="resBung" placeholder="Bungalow No.">
+        <input type="text" id="resPhone" placeholder="Phone">
+        <select id="resBlock"><option value="A">Block A</option><option value="B">Block B</option></select>
+      </div>
+      <button class="submit-btn" onclick="addResident()">Add Resident</button>
+      <h3 style="margin-top: 40px;">Directory</h3>
+      <table>
+        <thead><tr><th>Name</th><th>Bungalow</th><th>Action</th></tr></thead>
+        <tbody id="residentsTable"></tbody>
+      </table>
+    </div>
 
-<div class="section" id="notices-section">
-  <h2>Notices</h2>
-  <div id="noticeGrid" class="notice-grid">
-    <p class="loading-text">Loading notices...</p>
+    <div id="tab-facilities" class="tab-content">
+      <h3>Add Any Sport or Facility</h3>
+      <p style="font-size: 13px; color: #666;">Enter the name of the sport and pick an emoji to represent it.</p>
+      <div class="form-grid">
+        <input type="text" id="facName" placeholder="Sport Name (e.g. Pickleball Court)">
+        <select id="facIcon">
+          <option value="🎾">Tennis 🎾</option>
+          <option value="🏏">Cricket 🏏</option>
+          <option value="🏀">Basketball 🏀</option>
+          <option value="🏸">Badminton 🏸</option>
+          <option value="🏊">Swimming 🏊</option>
+          <option value="⚽">Football ⚽</option>
+          <option value="🏓">Table Tennis 🏓</option>
+          <option value="🏋️">Gym 🏋️</option>
+          <option value="♟️">Chess Room ♟️</option>
+          <option value="🏢">Clubhouse 🏢</option>
+        </select>
+      </div>
+      <input type="text" id="facDesc" placeholder="Facility description (e.g. Open 6am-9pm)"><br><br>
+      <button class="submit-btn" onclick="addFacility()">Add Facility</button>
+
+      <h3 style="margin-top: 40px;">Current Facilities</h3>
+      <table>
+        <thead><tr><th>Icon</th><th>Name</th><th>Description</th><th>Action</th></tr></thead>
+        <tbody id="facilitiesTable"></tbody>
+      </table>
+    </div>
+
+    <div id="tab-bookings" class="tab-content">
+      <h3>Resident Bookings</h3>
+      <table>
+        <thead><tr><th>Resident</th><th>Sport</th><th>Date</th><th>Action</th></tr></thead>
+        <tbody id="bookingsTable"></tbody>
+      </table>
+    </div>
+
   </div>
 </div>
 
-<div class="section" id="grounds-section">
-  <h2>Sports Grounds</h2>
-  <div id="groundsGrid" class="grounds-grid">
-    <p class="loading-text">Loading facilities...</p>
-  </div>
-</div>
-
-<div class="section" id="directory-section">
-  <h2>Directory</h2>
-  <div id="dirGrid" class="dir-grid">
-    <p class="loading-text">Loading residents...</p>
-  </div>
-</div>
-
-<div class="modal-overlay" id="bookingModal">
-  <div class="modal">
-    <h3>Book Facility</h3>
-    <input type="text" id="bkName" placeholder="Your Name">
-    <input type="date" id="bkDate">
-    <select id="bkGround"></select>
-    <button class="form-submit" onclick="submitBookingRequest()">Confirm</button>
-    <button style="background:none; border:none; margin-top:10px; cursor:pointer;" onclick="closeBooking()">Cancel</button>
-  </div>
-</div>
+<script>
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+</script>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
@@ -124,81 +160,79 @@
   };
 
   const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // --- FETCH NOTICES ---
-  async function loadNotices() {
-    const grid = document.getElementById('noticeGrid');
-    try {
-      const snap = await getDocs(collection(db, "notices"));
-      grid.innerHTML = '';
-      if(snap.empty) grid.innerHTML = '<p>No notices.</p>';
-      snap.forEach(doc => {
-        const d = doc.data();
-        grid.innerHTML += `<div class="notice-card ${d.type}">
-          <strong>${d.title}</strong><br><small>${d.date}</small>
-          <p>${d.description}</p>
-        </div>`;
-      });
-    } catch(e) { grid.innerHTML = 'Error loading notices.'; }
-  }
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById('loginSection').classList.add('hidden');
+      document.getElementById('dashboardSection').classList.remove('hidden');
+      loadAllData();
+    } else {
+      document.getElementById('loginSection').classList.remove('hidden');
+      document.getElementById('dashboardSection').classList.add('hidden');
+    }
+  });
 
-  // --- FETCH FACILITIES ---
-  async function loadFacilities() {
-    const grid = document.getElementById('groundsGrid');
-    const dropdown = document.getElementById('bkGround');
-    try {
-      const snap = await getDocs(collection(db, "facilities"));
-      grid.innerHTML = ''; dropdown.innerHTML = '';
-      snap.forEach(doc => {
-        const d = doc.data();
-        grid.innerHTML += `<div class="ground-card">
-          <div class="ground-card-img">${d.icon || '🎾'}</div>
-          <div style="padding:15px;">
-            <strong>${d.name}</strong><p>${d.description}</p>
-            <button class="form-submit" onclick="openBooking('${d.name}')">Book</button>
-          </div>
-        </div>`;
-        dropdown.innerHTML += `<option value="${d.name}">${d.name}</option>`;
-      });
-    } catch(e) { grid.innerHTML = 'Error loading facilities.'; }
-  }
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    const e = document.getElementById('email').value, p = document.getElementById('password').value;
+    signInWithEmailAndPassword(auth, e, p).catch(err => alert(err.message));
+  });
+  document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
-  // --- FETCH DIRECTORY ---
-  async function loadResidents() {
-    const grid = document.getElementById('dirGrid');
-    try {
-      const snap = await getDocs(collection(db, "residents"));
-      grid.innerHTML = '';
-      snap.forEach(doc => {
-        const d = doc.data();
-        grid.innerHTML += `<div class="dir-card">
-          <strong>${d.name}</strong><br>
-          Bungalow: ${d.bungalow}<br>
-          Phone: ${d.phone}
-        </div>`;
-      });
-    } catch(e) { grid.innerHTML = 'Error loading residents.'; }
-  }
+  window.addNotice = async () => {
+    await addDoc(collection(db, "notices"), { title: document.getElementById('notTitle').value, description: document.getElementById('notDesc').value, type: document.getElementById('notType').value, date: new Date().toLocaleDateString() });
+    alert("Notice Added"); loadAllData();
+  };
 
-  // --- BOOKING LOGIC ---
-  window.openBooking = (val) => { 
-    document.getElementById('bkGround').value = val;
-    document.getElementById('bookingModal').classList.add('open'); 
-  }
-  window.closeBooking = () => { document.getElementById('bookingModal').classList.remove('open'); }
-  
-  window.submitBookingRequest = async () => {
-    const n = document.getElementById('bkName').value;
-    const d = document.getElementById('bkDate').value;
-    const g = document.getElementById('bkGround').value;
-    if(!n || !d) return alert("Fill all fields");
-    await addDoc(collection(db, "bookings"), { userName: n, date: d, facility: g });
-    alert("Booking sent!");
-    closeBooking();
-  }
+  window.addResident = async () => {
+    await addDoc(collection(db, "residents"), { name: document.getElementById('resName').value, bungalow: document.getElementById('resBung').value, phone: document.getElementById('resPhone').value, block: document.getElementById('resBlock').value });
+    alert("Resident Added"); loadAllData();
+  };
 
-  loadNotices(); loadFacilities(); loadResidents();
+  window.addFacility = async () => {
+    const name = document.getElementById('facName').value;
+    if(!name) return alert("Please enter a name");
+    await addDoc(collection(db, "facilities"), { name: name, description: document.getElementById('facDesc').value, icon: document.getElementById('facIcon').value });
+    alert("Sport Added Successfully!");
+    document.getElementById('facName').value = '';
+    loadAllData();
+  };
+
+  window.deleteRecord = async (col, id) => {
+    if(confirm("Delete this?")) { await deleteDoc(doc(db, col, id)); loadAllData(); }
+  };
+
+  async function loadAllData() {
+    // Load Facilities
+    const facSnap = await getDocs(collection(db, "facilities"));
+    document.getElementById('facilitiesTable').innerHTML = '';
+    facSnap.forEach(d => {
+      const data = d.data();
+      document.getElementById('facilitiesTable').innerHTML += `<tr><td>${data.icon}</td><td>${data.name}</td><td>${data.description}</td><td><button class="delete-btn" onclick="deleteRecord('facilities', '${d.id}')">Remove</button></td></tr>`;
+    });
+
+    // Load Notices
+    const notSnap = await getDocs(collection(db, "notices"));
+    document.getElementById('noticesTable').innerHTML = '';
+    notSnap.forEach(d => {
+      document.getElementById('noticesTable').innerHTML += `<tr><td>${d.data().date}</td><td>${d.data().title}</td><td><button class="delete-btn" onclick="deleteRecord('notices', '${d.id}')">Delete</button></td></tr>`;
+    });
+
+    // Load Residents
+    const resSnap = await getDocs(collection(db, "residents"));
+    document.getElementById('residentsTable').innerHTML = '';
+    resSnap.forEach(d => {
+      document.getElementById('residentsTable').innerHTML += `<tr><td>${d.data().name}</td><td>${d.data().bungalow}</td><td><button class="delete-btn" onclick="deleteRecord('residents', '${d.id}')">Delete</button></td></tr>`;
+    });
+
+    // Load Bookings
+    const bookSnap = await getDocs(collection(db, "bookings"));
+    document.getElementById('bookingsTable').innerHTML = '';
+    bookSnap.forEach(d => {
+      document.getElementById('bookingsTable').innerHTML += `<tr><td>${d.data().userName}</td><td>${d.data().facility}</td><td>${d.data().date}</td><td><button class="delete-btn" onclick="deleteRecord('bookings', '${d.id}')">Cancel</button></td></tr>`;
+    });
+  }
 </script>
 </body>
 </html>
