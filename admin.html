@@ -1,51 +1,242 @@
-<div class="admin-card">
-  <h3>Post PDF Notice</h3>
-  <input type="text" id="notTitle" placeholder="Notice Title">
-  <input type="file" id="notFile" accept="application/pdf" style="margin: 10px 0;">
-  <button class="btn btn-save" id="uploadNoticeBtn" onclick="uploadPDFNotice()">Upload & Post Notice</button>
-  <p id="uploadStatus" style="font-size: 12px; color: var(--gold);"></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Portal | Sind Society Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #0a3d2b; --bg: #faf8f3; --border: #ddd; --danger: #c0392b; --gold: #c9993a; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); margin: 0; padding: 0; }
+    
+    /* Login */
+    #loginSection { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
+    #loginSection input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 6px; }
+    #loginSection button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+
+    /* Dashboard Layout */
+    #dashboardSection { display: none; display: flex; height: 100vh; }
+    .sidebar { width: 260px; background: var(--primary); color: white; display: flex; flex-direction: column; flex-shrink: 0; }
+    .sidebar h2 { padding: 25px; margin: 0; font-size: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .tab-btn { background: none; border: none; color: rgba(255,255,255,0.7); padding: 18px 25px; text-align: left; font-size: 15px; cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; }
+    .tab-btn:hover, .tab-btn.active { background: rgba(255,255,255,0.1); color: white; border-left-color: var(--gold); }
+    
+    .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Cards & UI */
+    .admin-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 30px; }
+    h3 { margin-top: 0; color: var(--primary); border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; margin-bottom: 20px; }
+    
+    .schedule-wrapper { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; min-width: 1200px; font-size: 12px; }
+    th, td { border: 1px solid #eee; padding: 10px; text-align: center; }
+    th { background: #f4f4f4; color: var(--primary); }
+    .fac-col { background: #fafafa; font-weight: bold; text-align: left; border-right: 2px solid var(--border); width: 180px; }
+    
+    .status-booked { background: #fdecea; color: var(--danger); font-weight: bold; cursor: pointer; }
+    .status-maint { background: #333; color: white; cursor: pointer; }
+    .status-free { background: #e6f5ee; color: #2d9c55; cursor: pointer; font-weight: bold; }
+
+    .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+    .btn-save { background: var(--primary); color: white; }
+    .btn-danger { background: none; border: 1px solid var(--danger); color: var(--danger); padding: 5px 10px; font-size: 12px; border-radius: 4px; }
+    
+    input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; margin-bottom: 10px; }
+    .hidden { display: none !important; }
+    .fac-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+  </style>
+</head>
+<body>
+
+<div id="loginSection">
+  <h2>Sind Admin Portal</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button id="loginBtn">Login</button>
+</div>
+
+<div id="dashboardSection">
+  <div class="sidebar">
+    <h2>Management</h2>
+    <button class="tab-btn active" onclick="switchTab('sports')">🏆 Sports Master</button>
+    <button class="tab-btn" onclick="switchTab('facilities')">🏗️ Facility Manager</button>
+    <button class="tab-btn" onclick="switchTab('notices')">📢 PDF Notices</button>
+    <button class="tab-btn" onclick="switchTab('residents')">👥 Residents</button>
+    <button id="logoutBtn" class="tab-btn" style="margin-top:auto; color: #ff9999;">Logout</button>
+  </div>
+
+  <div class="main-content">
+
+    <div id="tab-sports" class="tab-content active">
+      <div class="admin-card">
+        <h3>Live Schedule Grid</h3>
+        <div style="display:flex; gap:15px; align-items:center; margin-bottom:15px;">
+            <label>View Date:</label>
+            <input type="date" id="adminDateView" style="width:180px;" onchange="loadAdminSchedule()">
+        </div>
+        <div class="schedule-wrapper">
+          <table>
+            <thead><tr id="adminHead"><th>Facility</th></tr></thead>
+            <tbody id="adminBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-facilities" class="tab-content">
+      <div class="admin-card">
+        <h3>Add New Sports Ground</h3>
+        <div style="display:flex; gap:10px;">
+          <input type="text" id="facName" placeholder="e.g. Squash Court">
+          <button class="btn btn-save" onclick="addFacility()">Add</button>
+        </div>
+        <h3 style="margin-top:30px;">Active Facilities</h3>
+        <div id="facilityList"></div>
+      </div>
+    </div>
+
+    <div id="tab-notices" class="tab-content">
+      <div class="admin-card">
+        <h3>Post New PDF Notice</h3>
+        <input type="text" id="notTitle" placeholder="Notice Title">
+        <label style="font-size:12px; color:#666;">Choose PDF File:</label>
+        <input type="file" id="notFile" accept="application/pdf">
+        <button class="btn btn-save" id="uploadBtn" onclick="uploadPDFNotice()">Upload & Post</button>
+        <p id="uploadStatus" style="font-size:12px; margin-top:10px;"></p>
+      </div>
+    </div>
+
+    <div id="tab-residents" class="tab-content">
+      <div class="admin-card">
+        <h3>Add to Directory</h3>
+        <input type="text" id="resName" placeholder="Resident Name">
+        <input type="text" id="resBung" placeholder="Bungalow No.">
+        <button class="btn btn-save" onclick="addResident()">Add Resident</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script type="module">
-  // ADD THESE TO YOUR IMPORTS AT THE TOP
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-storage.js";
-  
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
+    authDomain: "sind-society.firebaseapp.com",
+    projectId: "sind-society",
+    storageBucket: "sind-society.firebasestorage.app",
+    messagingSenderId: "821689204364",
+    appId: "1:821689204364:web:68aa0db383e84b051145a9"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
   const storage = getStorage(app);
 
-  window.uploadPDFNotice = async () => {
-    const title = document.getElementById('notTitle').value;
-    const file = document.getElementById('notFile').files[0];
-    const status = document.getElementById('uploadStatus');
+  const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
+  
+  document.getElementById('adminDateView').value = new Date().toISOString().split('T')[0];
+  times.forEach(t => document.getElementById('adminHead').innerHTML += `<th>${t}</th>`);
 
-    if (!title || !file) return alert("Please provide a title and select a PDF file.");
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById('loginSection').classList.add('hidden');
+      document.getElementById('dashboardSection').style.display = 'flex';
+      loadAdminSchedule(); loadFacilities();
+    } else {
+      document.getElementById('loginSection').classList.remove('hidden');
+      document.getElementById('dashboardSection').style.display = 'none';
+    }
+  });
 
-    try {
-      status.innerText = "Uploading PDF... please wait.";
-      document.getElementById('uploadNoticeBtn').disabled = true;
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value).catch(err => alert(err.message));
+  });
+  document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
-      // 1. Upload to Firebase Storage
-      const storageRef = ref(storage, 'notices/' + file.name + "_" + Date.now());
-      const snapshot = await uploadBytes(storageRef, file);
-      
-      // 2. Get the public link
-      const downloadURL = await getDownloadURL(snapshot.ref);
+  // --- SCHEDULE LOGIC ---
+  async function loadAdminSchedule() {
+    const date = document.getElementById('adminDateView').value;
+    const facSnap = await getDocs(collection(db, "facilities"));
+    const bookSnap = await getDocs(query(collection(db, "bookings"), where("date", "==", date)));
+    const bMap = {};
+    bookSnap.forEach(d => bMap[`${d.data().facility}-${d.data().time}`] = { id: d.id, ...d.data() });
 
-      // 3. Save to Firestore Notices collection
-      await addDoc(collection(db, "notices"), {
-        title: title,
-        pdfUrl: downloadURL,
-        date: new Date().toLocaleDateString(),
-        type: 'pdf'
+    const body = document.getElementById('adminBody'); body.innerHTML = '';
+    facSnap.forEach(d => {
+      const f = d.data();
+      let row = `<tr><td class="fac-col">${f.name}</td>`;
+      times.forEach(t => {
+        const b = bMap[`${f.name}-${t}`];
+        if(b) {
+          const isM = b.userName === "MAINTENANCE";
+          row += `<td class="${isM ? 'status-maint' : 'status-booked'}" onclick="adminAction('${b.id}', true)">${isM ? 'MAINT' : b.userName}</td>`;
+        } else {
+          row += `<td class="status-free" onclick="adminAction('${f.name}|${t}|${date}', false)">Free</td>`;
+        }
       });
+      body.innerHTML += row + '</tr>';
+    });
+  }
 
-      status.innerText = "Success! Notice posted.";
-      document.getElementById('notTitle').value = "";
-      document.getElementById('notFile').value = "";
-    } catch (e) {
-      console.error(e);
-      alert("Upload failed: " + e.message);
-    } finally {
-      document.getElementById('uploadNoticeBtn').disabled = false;
+  window.adminAction = async (data, exists) => {
+    if(exists) {
+      if(confirm("Cancel booking/maint?")) { await deleteDoc(doc(db, "bookings", data)); loadAdminSchedule(); }
+    } else {
+      if(confirm("Block for MAINTENANCE?")) {
+        const [fac, time, date] = data.split('|');
+        await addDoc(collection(db, "bookings"), { facility: fac, time: time, date: date, userName: "MAINTENANCE", bungalow: "ADMIN" });
+        loadAdminSchedule();
+      }
     }
   };
+
+  // --- FACILITY LOGIC ---
+  async function loadFacilities() {
+    const list = document.getElementById('facilityList'); list.innerHTML = '';
+    const snap = await getDocs(collection(db, "facilities"));
+    snap.forEach(d => list.innerHTML += `<div class="fac-item">${d.data().name} <button class="btn-danger" onclick="delFac('${d.id}')">Remove</button></div>`);
+  }
+
+  window.addFacility = async () => {
+    await addDoc(collection(db, "facilities"), { name: document.getElementById('facName').value });
+    document.getElementById('facName').value = ''; loadFacilities(); loadAdminSchedule();
+  };
+
+  window.delFac = async (id) => { if(confirm("Remove?")) { await deleteDoc(doc(db, "facilities", id)); loadFacilities(); loadAdminSchedule(); } };
+
+  // --- PDF NOTICE LOGIC ---
+  window.uploadPDFNotice = async () => {
+    const title = document.getElementById('notTitle').value, file = document.getElementById('notFile').files[0];
+    if (!title || !file) return alert("Title and PDF required");
+    try {
+      document.getElementById('uploadStatus').innerText = "Uploading...";
+      const storageRef = ref(storage, 'notices/' + Date.now() + "_" + file.name);
+      const snap = await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(snap.ref);
+      await addDoc(collection(db, "notices"), { title: title, pdfUrl: url, date: new Date().toLocaleDateString() });
+      alert("Notice Posted"); document.getElementById('notTitle').value = ""; document.getElementById('notFile').value = "";
+    } catch (e) { alert(e.message); } finally { document.getElementById('uploadStatus').innerText = ""; }
+  };
+
+  window.addResident = async () => {
+    await addDoc(collection(db, "residents"), { name: document.getElementById('resName').value, bungalow: document.getElementById('resBung').value });
+    alert("Added");
+  };
+
+  window.switchTab = (id) => {
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-'+id).classList.add('active'); event.currentTarget.classList.add('active');
+  };
+
+  window.loadAdminSchedule = loadAdminSchedule;
 </script>
+</body>
+</html>
