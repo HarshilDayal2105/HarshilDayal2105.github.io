@@ -13,42 +13,35 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: #1a1a1a; }
   
-  /* NAVIGATION */
   nav { background: var(--green-deep); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--gold); padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
   .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-family: 'Playfair Display', serif; }
   .crest { width: 35px; height: 35px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--green-deep); font-weight: bold; }
   .nav-links button { background: none; border: none; color: rgba(255,255,255,0.6); padding: 8px 16px; cursor: pointer; font-size: 14px; font-weight: 500; transition: 0.3s; }
   .nav-links button.active { color: white; background: rgba(255,255,255,0.1); border-radius: 6px; }
 
-  /* HERO */
   .hero { background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%); color: white; text-align: center; padding: 40px 24px; }
   .page-section { display: none; max-width: 1200px; margin: 0 auto; padding: 40px 24px; animation: fadeIn 0.4s ease; }
   .page-section.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* BOOKING PANEL */
   .booking-panel { background: white; padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
   .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 15px; }
   label { display: block; font-size: 11px; font-weight: bold; color: var(--green-deep); margin-bottom: 5px; text-transform: uppercase; }
   input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; outline: none; background: #fff; }
   .btn-primary { background: var(--green-deep); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s; }
-  .btn-primary:hover { background: var(--green-mid); }
 
-  /* SCHEDULE TABLE */
   .schedule-container { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; min-width: 900px; }
-  th, td { border: 1px solid #eee; padding: 12px; text-align: center; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+  th, td { border: 1px solid #eee; padding: 12px; text-align: center; font-size: 12px; }
   th { background: var(--green-deep); color: white; }
-  .fac-name { background: #f9f9f9; font-weight: bold; text-align: left; border-right: 2px solid var(--border); }
-  .booked { background: #fdecea; color: var(--danger); font-weight: 700; font-size: 11px; }
+  .fac-name { background: #f9f9f9; font-weight: bold; text-align: left; border-right: 2px solid var(--border); min-width: 150px; }
+  .booked { background: #fdecea; color: var(--danger); font-weight: 700; }
   .cancel-btn { display: block; margin-top: 5px; color: var(--danger); font-size: 10px; cursor: pointer; text-decoration: underline; border: none; background: none; width: 100%; }
   .available { color: #2d9c55; font-weight: 700; }
 
-  /* DIRECTORY & NOTICES */
   .grid-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
   .card { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); }
   .search-box { width: 100%; max-width: 400px; padding: 12px; border-radius: 30px; border: 1px solid var(--border); margin-bottom: 20px; }
-
   footer { text-align: center; padding: 40px; color: #999; font-size: 12px; }
 </style>
 </head>
@@ -65,7 +58,7 @@
 
 <section class="hero">
   <h1 id="hero-title">Sports Booking</h1>
-  <p id="hero-desc">Live court availability and schedule.</p>
+  <p id="hero-desc">Daily Master Schedule: 6 AM to 11 PM</p>
 </section>
 
 <div id="page-sports" class="page-section active">
@@ -80,16 +73,13 @@
   </div>
   <div class="schedule-container">
     <table>
-      <thead><tr id="tableHead"><th>Facility</th></tr></thead>
+      <thead><tr id="tableHead"><th class="fac-name">Facility</th></tr></thead>
       <tbody id="tableBody"></tbody>
     </table>
   </div>
 </div>
 
-<div id="page-notices" class="page-section">
-  <div id="noticeGrid" class="grid-grid">Loading notices...</div>
-</div>
-
+<div id="page-notices" class="page-section"><div id="noticeGrid" class="grid-grid">Loading notices...</div></div>
 <div id="page-directory" class="page-section">
   <input type="text" id="dirSearch" class="search-box" placeholder="Search by name or bungalow..." oninput="filterDirectory()">
   <div id="dirGrid" class="grid-grid">Loading residents...</div>
@@ -113,13 +103,17 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM"];
+  // UPDATED TIME ARRAY: 6AM to 11PM
+  const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
   window.allResidents = [];
 
-  // Init UI
+  // Populate UI headers and dropdown
   const timeSelect = document.getElementById('inTime');
-  times.forEach(t => timeSelect.innerHTML += `<option value="${t}">${t}</option>`);
-  times.forEach(t => document.getElementById('tableHead').innerHTML += `<th>${t}</th>`);
+  const tableHead = document.getElementById('tableHead');
+  times.forEach(t => {
+    timeSelect.innerHTML += `<option value="${t}">${t}</option>`;
+    tableHead.innerHTML += `<th>${t}</th>`;
+  });
 
   async function loadAll() {
     const facSnap = await getDocs(collection(db, "facilities"));
@@ -127,11 +121,9 @@
     const noteSnap = await getDocs(collection(db, "notices"));
     const resSnap = await getDocs(collection(db, "residents"));
 
-    // Bookings Map
     const bMap = {};
     bookSnap.forEach(d => { bMap[`${d.data().facility}-${d.data().time}`] = { id: d.id, ...d.data() }; });
 
-    // Table Render
     const facSelect = document.getElementById('inFac'); facSelect.innerHTML = '';
     const body = document.getElementById('tableBody'); body.innerHTML = '';
     facSnap.forEach(d => {
@@ -145,13 +137,11 @@
       body.innerHTML += row + `</tr>`;
     });
 
-    // Notices
     document.getElementById('noticeGrid').innerHTML = '';
     noteSnap.forEach(d => {
       document.getElementById('noticeGrid').innerHTML += `<div class="card"><h3>${d.data().title}</h3><p>${d.data().description}</p></div>`;
     });
 
-    // Directory
     window.allResidents = [];
     resSnap.forEach(d => window.allResidents.push(d.data()));
     renderDir(window.allResidents);
@@ -170,6 +160,13 @@
   window.handleBooking = async () => {
     const f = document.getElementById('inFac').value, t = document.getElementById('inTime').value, n = document.getElementById('inName').value, b = document.getElementById('inBung').value;
     if(!n || !b) return alert("Enter name and bungalow");
+    
+    // Check if slot taken
+    const bookSnap = await getDocs(collection(db, "bookings"));
+    let taken = false;
+    bookSnap.forEach(d => { if(d.data().facility === f && d.data().time === t) taken = true; });
+    if(taken) return alert("This slot is already booked!");
+
     await addDoc(collection(db, "bookings"), { facility: f, time: t, userName: n, bungalow: b, date: new Date().toLocaleDateString() });
     alert("Booked!"); loadAll();
   };
@@ -183,7 +180,7 @@
     document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
     document.getElementById('page-'+id).classList.add('active');
     document.getElementById('nav-'+id).classList.add('active');
-    document.getElementById('hero-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
+    document.getElementById('hero-title').innerText = id === 'sports' ? 'Sports Booking' : id.charAt(0).toUpperCase() + id.slice(1);
   };
 
   loadAll();
