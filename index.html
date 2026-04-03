@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sind Society | Live Master Schedule</title>
+<title>Sind Society | Management Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -11,61 +11,90 @@
     --border: #ddd8cc; --white: #ffffff; --danger: #c0392b; --radius: 12px;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: #1a1a1a; line-height: 1.6; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: #1a1a1a; overflow-x: hidden; }
   
-  nav { background: var(--green-deep); position: sticky; top: 0; z-index: 100; border-bottom: 3px solid var(--gold); padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
-  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-family: 'Playfair Display', serif; }
-  .crest { width: 35px; height: 35px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--green-deep); font-weight: bold; }
+  /* NAVIGATION */
+  nav { background: var(--green-deep); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--gold); padding: 0 24px; height: 70px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-family: 'Playfair Display', serif; font-size: 1.2rem; }
+  .crest { width: 40px; height: 40px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--green-deep); font-weight: bold; }
+  .nav-links { display: flex; gap: 10px; }
+  .nav-links button { background: none; border: none; color: rgba(255,255,255,0.7); padding: 8px 16px; cursor: pointer; font-size: 14px; font-weight: 500; border-radius: 6px; transition: 0.3s; }
+  .nav-links button.active { background: rgba(255,255,255,0.15); color: white; }
 
+  /* HERO */
   .hero { background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%); color: white; text-align: center; padding: 40px 24px; }
-  .section { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
-  h2 { font-family: 'Playfair Display', serif; margin-bottom: 20px; color: var(--green-deep); font-size: 1.8rem; }
-
-  /* Master Schedule Table */
-  .schedule-wrapper { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-  table { width: 100%; border-collapse: collapse; min-width: 1000px; table-layout: fixed; }
-  th, td { border: 1px solid #eee; padding: 12px 8px; text-align: center; font-size: 13px; word-wrap: break-word; }
-  th { background: var(--green-deep); color: white; }
-  .facility-col { background: #f9f9f9; font-weight: bold; color: var(--green-deep); text-align: left; padding-left: 15px; width: 160px; border-right: 2px solid var(--border); }
   
-  .status-booked { background: #fdecea; color: var(--danger); font-weight: 700; border-bottom: 2px solid #f5c6c3; }
-  .resident-label { display: block; font-size: 11px; font-weight: 500; color: #7d2a21; margin-top: 4px; }
-  .bungalow-label { display: block; font-size: 10px; font-weight: 400; color: #922b21; font-style: italic; }
+  /* PAGE SECTIONS */
+  .page-section { display: none; max-width: 1200px; margin: 0 auto; padding: 40px 24px; animation: fadeIn 0.4s ease; }
+  .page-section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-  .status-free { background: #e6f5ee; color: #2d9c55; font-weight: 700; cursor: pointer; transition: 0.2s; }
-  .status-free:hover { background: var(--gold); color: white; }
+  h2 { font-family: 'Playfair Display', serif; margin-bottom: 25px; color: var(--green-deep); font-size: 2rem; border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; }
 
-  /* Grid Layouts */
-  .grid-3 { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-  .card { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); }
+  /* NOTICES */
+  .notice-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); }
+  .notice-card { background: white; padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); border-left: 6px solid var(--green-deep); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+  .notice-card.urgent { border-left-color: var(--danger); }
+  .notice-tag { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin-bottom: 8px; display: block; }
 
-  /* Modal */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
+  /* SPORTS SCHEDULE */
+  .schedule-container { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+  table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+  th, td { border: 1px solid #eee; padding: 15px 10px; text-align: center; font-size: 13px; }
+  th { background: var(--green-deep); color: white; font-weight: 500; }
+  .fac-cell { background: #f9f9f9; font-weight: bold; text-align: left; padding-left: 20px; color: var(--green-deep); border-right: 2px solid var(--border); }
+  .booked { background: #fdecea; color: var(--danger); font-weight: 700; font-size: 11px; line-height: 1.2; }
+  .available { background: #e6f5ee; color: #2d9c55; font-weight: 700; cursor: pointer; transition: 0.2s; }
+  .available:hover { background: var(--gold); color: white; }
+
+  /* DIRECTORY */
+  .search-box { width: 100%; max-width: 500px; padding: 12px 20px; border-radius: 30px; border: 1px solid var(--border); margin-bottom: 30px; font-size: 16px; outline: none; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+  .dir-grid { display: grid; gap: 15px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .dir-card { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); display: flex; align-items: center; gap: 15px; }
+  .avatar { width: 50px; height: 50px; background: var(--green-light, #e6f5ee); color: var(--green-deep); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; flex-shrink: 0; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; }
   .modal-overlay.open { display: flex; }
-  .modal { background: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 400px; }
-  .modal h3 { color: var(--green-deep); margin-bottom: 5px; }
-  input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 15px; }
-  .btn-confirm { background: var(--green-deep); color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; }
+  .modal { background: white; padding: 35px; border-radius: 16px; width: 90%; max-width: 400px; position: relative; }
+  input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; }
+  .btn-book { background: var(--green-deep); color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+  
+  footer { text-align: center; padding: 40px; color: #888; font-size: 13px; }
 </style>
 </head>
 <body>
 
 <nav>
-  <a class="nav-logo" href="#"><div class="crest">SC</div> Sind Society Dashboard</a>
+  <a class="nav-logo" href="#">
+    <div class="crest">SC</div>
+    Sind Society Portal
+  </a>
+  <div class="nav-links">
+    <button id="btn-notices" class="active" onclick="showPage('notices')">📢 Notices</button>
+    <button id="btn-sports" onclick="showPage('sports')">🎾 Sports Booking</button>
+    <button id="btn-directory" onclick="showPage('directory')">👥 Directory</button>
+  </div>
 </nav>
 
 <section class="hero">
-  <h1>Society Sports Schedule</h1>
-  <p id="todayDate"></p>
+  <h1 id="hero-title">Society Announcements</h1>
+  <p id="hero-desc">Stay updated with the latest news from the committee.</p>
 </section>
 
-<div class="section">
-  <h2>Daily Master Schedule</h2>
-  <div class="schedule-wrapper">
-    <table id="masterTable">
+<div id="page-notices" class="page-section active">
+  <h2>Recent Notices</h2>
+  <div id="noticeGrid" class="notice-grid">Loading notices...</div>
+</div>
+
+<div id="page-sports" class="page-section">
+  <h2>Live Master Schedule</h2>
+  <p style="margin-bottom: 20px; color: #666;">Click any <span style="color:#2d9c55; font-weight:bold;">Available</span> slot to reserve your court.</p>
+  <div class="schedule-container">
+    <table>
       <thead>
         <tr id="tableHeader">
-          <th style="width: 160px;">Facility</th>
+          <th style="width: 180px;">Facility</th>
           </tr>
       </thead>
       <tbody id="masterBody"></tbody>
@@ -73,21 +102,24 @@
   </div>
 </div>
 
-<div class="section" style="background: #f1f1f1; max-width: 100%;">
-  <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
-    <h2>Announcements</h2>
-    <div id="noticeGrid" class="grid-3"></div>
-  </div>
+<div id="page-directory" class="page-section">
+  <h2>Residents Directory</h2>
+  <input type="text" id="dirSearch" class="search-box" placeholder="Search by name or bungalow..." oninput="filterDirectory()">
+  <div id="dirGrid" class="dir-grid">Loading residents...</div>
 </div>
+
+<footer>
+  &copy; 2026 Sind Cooperative Housing Society, Aundh, Pune.
+</footer>
 
 <div class="modal-overlay" id="bookingModal">
   <div class="modal">
     <h3 id="modalTitle">Book Slot</h3>
-    <p id="modalInfo" style="color: #666; font-size: 14px;"></p>
-    <input type="text" id="resName" placeholder="Resident Full Name">
-    <input type="text" id="resBung" placeholder="Bungalow No. (e.g. B-12)">
-    <button class="btn-confirm" onclick="confirmBooking()">Confirm Reservation</button>
-    <button style="width:100%; background:none; border:none; margin-top:15px; cursor:pointer; color:#888;" onclick="closeModal()">Cancel</button>
+    <p id="modalTime" style="color: #666; margin-bottom: 15px; font-size: 14px;"></p>
+    <input type="text" id="bkName" placeholder="Resident Name">
+    <input type="text" id="bkBung" placeholder="Bungalow No. (e.g. A-12)">
+    <button class="btn-book" onclick="confirmBooking()">Confirm Reservation</button>
+    <button style="width:100%; background:none; border:none; margin-top:15px; color:#999; cursor:pointer;" onclick="closeModal()">Cancel</button>
   </div>
 </div>
 
@@ -110,83 +142,118 @@
   const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM"];
   let selectedFac = "";
   let selectedTime = "";
+  window.allResidents = [];
 
-  document.getElementById('todayDate').innerText = "Bookings for " + new Date().toDateString();
+  // --- PAGE SWITCHER ---
+  window.showPage = (pageId) => {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+    
+    document.getElementById('page-' + pageId).classList.add('active');
+    document.getElementById('btn-' + pageId).classList.add('active');
 
-  // Load Headers
-  const header = document.getElementById('tableHeader');
-  times.forEach(t => { header.innerHTML += `<th>${t}</th>`; });
+    const titles = { notices: "Society Announcements", sports: "Sports Facilities", directory: "Residents Directory" };
+    const descs = { notices: "Latest news and updates.", sports: "Book your slots for today.", directory: "Connect with your neighbors." };
+    
+    document.getElementById('hero-title').innerText = titles[pageId];
+    document.getElementById('hero-desc').innerText = descs[pageId];
+  };
 
-  async function init() {
-    const facSnap = await getDocs(collection(db, "facilities"));
-    const bookSnap = await getDocs(collection(db, "bookings"));
-    const noticesSnap = await getDocs(collection(db, "notices"));
-
-    // Map bookings
-    const bookedSlots = {};
-    bookSnap.forEach(d => {
-      const b = d.data();
-      bookedSlots[`${b.facility}-${b.time}`] = { name: b.userName, bungalow: b.bungalow };
-    });
-
-    // Master Table
-    const body = document.getElementById('masterBody');
-    body.innerHTML = '';
-    facSnap.forEach(doc => {
-      const f = doc.data();
-      let row = `<tr><td class="facility-col">${f.icon} ${f.name}</td>`;
-      times.forEach(t => {
-        const booking = bookedSlots[`${f.name}-${t}`];
-        if(booking) {
-          row += `<td class="status-booked">Booked
-                    <span class="resident-label">${booking.name}</span>
-                    <span class="bungalow-label">${booking.bungalow}</span>
-                  </td>`;
-        } else {
-          row += `<td class="status-free" onclick="openModal('${f.name}', '${t}')">Available</td>`;
-        }
-      });
-      row += `</tr>`;
-      body.innerHTML += row;
-    });
-
-    // Notices
+  // --- INITIALIZE DATA ---
+  async function loadData() {
+    // 1. Notices
+    const nSnap = await getDocs(collection(db, "notices"));
     const nGrid = document.getElementById('noticeGrid');
     nGrid.innerHTML = '';
-    noticesSnap.forEach(doc => {
+    nSnap.forEach(doc => {
       const n = doc.data();
-      nGrid.innerHTML += `<div class="card"><h3>${n.title}</h3><p>${n.description}</p></div>`;
+      nGrid.innerHTML += `
+        <div class="notice-card ${n.type}">
+          <span class="notice-tag">${n.type}</span>
+          <h3>${n.title}</h3>
+          <p>${n.description}</p>
+        </div>`;
+    });
+
+    // 2. Sports Master Schedule
+    const fSnap = await getDocs(collection(db, "facilities"));
+    const bSnap = await getDocs(collection(db, "bookings"));
+    const booked = {};
+    bSnap.forEach(d => { booked[`${d.data().facility}-${d.data().time}`] = d.data(); });
+
+    const header = document.getElementById('tableHeader');
+    if(header.children.length === 1) times.forEach(t => header.innerHTML += `<th>${t}</th>`);
+
+    const body = document.getElementById('masterBody');
+    body.innerHTML = '';
+    fSnap.forEach(doc => {
+      const f = doc.data();
+      let row = `<tr><td class="fac-cell">${f.icon} ${f.name}</td>`;
+      times.forEach(t => {
+        const b = booked[`${f.name}-${t}`];
+        if(b) {
+          row += `<td class="booked">Booked<br>${b.userName}<br>(${b.bungalow})</td>`;
+        } else {
+          row += `<td class="available" onclick="openModal('${f.name}', '${t}')">Available</td>`;
+        }
+      });
+      body.innerHTML += row + `</tr>`;
+    });
+
+    // 3. Directory
+    const rSnap = await getDocs(collection(db, "residents"));
+    window.allResidents = [];
+    rSnap.forEach(doc => window.allResidents.push(doc.data()));
+    renderDirectory(window.allResidents);
+  }
+
+  // --- DIRECTORY RENDER & SEARCH ---
+  function renderDirectory(data) {
+    const grid = document.getElementById('dirGrid');
+    grid.innerHTML = '';
+    data.forEach(r => {
+      grid.innerHTML += `
+        <div class="dir-card">
+          <div class="avatar">${r.name[0]}</div>
+          <div>
+            <strong>${r.name}</strong><br>
+            <small style="color:#666;">Bungalow ${r.bungalow}</small>
+          </div>
+        </div>`;
     });
   }
 
+  window.filterDirectory = () => {
+    const q = document.getElementById('dirSearch').value.toLowerCase();
+    const filtered = window.allResidents.filter(r => 
+      r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q)
+    );
+    renderDirectory(filtered);
+  }
+
+  // --- BOOKING LOGIC ---
   window.openModal = (fac, time) => {
     selectedFac = fac; selectedTime = time;
-    document.getElementById('modalTitle').innerText = "Booking " + fac;
-    document.getElementById('modalInfo').innerText = "Time: " + time;
+    document.getElementById('modalTitle').innerText = "Book " + fac;
+    document.getElementById('modalTime').innerText = "Slot: " + time + " | Today";
     document.getElementById('bookingModal').classList.add('open');
   };
-
-  window.closeModal = () => { document.getElementById('bookingModal').classList.remove('open'); };
+  window.closeModal = () => document.getElementById('bookingModal').classList.remove('open');
 
   window.confirmBooking = async () => {
-    const name = document.getElementById('resName').value;
-    const bung = document.getElementById('resBung').value;
-    if(!name || !bung) return alert("Both name and bungalow are required!");
+    const name = document.getElementById('bkName').value;
+    const bung = document.getElementById('bkBung').value;
+    if(!name || !bung) return alert("Please enter name and bungalow.");
     
     await addDoc(collection(db, "bookings"), {
-      userName: name,
-      bungalow: bung,
-      facility: selectedFac,
-      time: selectedTime,
-      date: new Date().toLocaleDateString()
+      userName: name, bungalow: bung, facility: selectedFac, time: selectedTime, date: new Date().toLocaleDateString()
     });
-
     alert("Reserved successfully!");
     closeModal();
-    init();
+    loadData(); // Refresh the table
   };
 
-  init();
+  loadData();
 </script>
 </body>
 </html>
