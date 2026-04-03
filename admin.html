@@ -7,43 +7,30 @@
   <style>
     :root { --primary: #0a3d2b; --bg: #faf8f3; --border: #ddd; --danger: #c0392b; --gold: #c9993a; }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); margin: 0; padding: 0; }
-    
-    /* Login Screen */
     #loginSection { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
     #loginSection input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 6px; }
     #loginSection button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-
-    /* Main Dashboard Layout */
     #dashboardSection { display: none; display: flex; height: 100vh; }
     .sidebar { width: 250px; background: var(--primary); color: white; display: flex; flex-direction: column; flex-shrink: 0; }
     .sidebar h2 { padding: 25px; margin: 0; font-size: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
     .sidebar button { background: none; color: rgba(255,255,255,0.7); text-align: left; padding: 15px 25px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; border: none; border-left: 4px solid transparent; transition: 0.2s; }
     .sidebar button:hover, .sidebar button.active { background: rgba(255,255,255,0.1); color: white; border-left-color: var(--gold); }
-    
     .main { flex: 1; padding: 40px; overflow-y: auto; }
     .tab { display: none; } .tab.active { display: block; }
-
-    /* Admin Cards */
     .card { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
     h3 { margin-top: 0; color: var(--primary); border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; margin-bottom: 20px; }
-    
-    /* Schedule Grid Control */
     .schedule-wrapper { overflow-x: auto; margin-top: 15px; }
     table { width: 100%; border-collapse: collapse; min-width: 1200px; font-size: 11px; }
     th, td { border: 1px solid #eee; padding: 10px; text-align: center; }
     th { background: #f4f4f4; color: var(--primary); font-weight: bold; }
     .fac-col { background: #fafafa; font-weight: bold; text-align: left; border-right: 2px solid var(--border); width: 180px; }
-    
     .status-maint { background: #333; color: white; cursor: pointer; font-weight: bold; }
     .status-booked { background: #fdecea; color: var(--danger); font-weight: bold; cursor: pointer; }
     .status-free { background: #e6f5ee; color: #2d9c55; cursor: pointer; font-weight: bold; }
-
-    /* Inputs & Buttons */
     input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; }
     .btn-save { background: var(--primary); color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
     .btn-danger { background: none; border: 1px solid var(--danger); color: var(--danger); padding: 5px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; }
     .btn-danger:hover { background: var(--danger); color: white; }
-    
     .fac-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
     .hidden { display: none !important; }
   </style>
@@ -74,7 +61,7 @@
         <div style="display:flex; align-items:center; gap:15px;">
             <label>View Date:</label>
             <input type="date" id="adminDate" onchange="loadAdmin()" style="width:200px;">
-            <span style="font-size:12px; color:#666;">(Click <b>Free</b> to Block/Maint, click <b>Booked</b> to Cancel)</span>
+            <span style="font-size:12px; color:#666;">(Click <b>Free</b> to Block, click <b>Booked</b> to Cancel)</span>
         </div>
         <div class="schedule-wrapper">
           <table>
@@ -186,7 +173,6 @@
           body.innerHTML += row + '</tr>';
         });
 
-        // Update Facility List Tab too
         const fList = document.getElementById('facList'); fList.innerHTML = ''; 
         facs.forEach(d => fList.innerHTML += `<div class="fac-item"><span>${d.data().name}</span> <button class="btn-danger" onclick="delFac('${d.id}')">Remove</button></div>`);
     } catch (e) { console.error(e); }
