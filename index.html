@@ -257,47 +257,53 @@
 
   // --- 1. FETCH NOTICES ---
   async function fetchNotices() {
-    const snap = await getDocs(collection(db, "notices"));
-    const grid = document.getElementById('noticeGrid');
-    document.getElementById('loadingNotices').style.display = 'none';
-    if (snap.empty) { grid.innerHTML = "<p>No notices yet.</p>"; return; }
-    
-    let html = "";
-    snap.forEach(doc => {
-      const d = doc.data();
-      let icon = d.type === "urgent" ? "🚨" : d.type === "info" ? "🎉" : "📋";
-      html += `<div class="notice-card ${d.type}" data-type="${d.type}">
-        <div class="notice-icon ${d.type}">${icon}</div>
-        <div class="notice-body">
-          <div class="notice-meta"><span class="notice-badge ${d.type}">${d.type.toUpperCase()}</span><span class="notice-date">${d.date||''}</span></div>
-          <div class="notice-title">${d.title}</div><div class="notice-desc">${d.description}</div>
-        </div></div>`;
-    });
-    grid.innerHTML = html;
+    try {
+      const snap = await getDocs(collection(db, "notices"));
+      const grid = document.getElementById('noticeGrid');
+      document.getElementById('loadingNotices').style.display = 'none';
+      if (snap.empty) { grid.innerHTML = "<p>No notices yet.</p>"; return; }
+      
+      let html = "";
+      snap.forEach(doc => {
+        const d = doc.data();
+        let icon = d.type === "urgent" ? "🚨" : d.type === "info" ? "🎉" : "📋";
+        html += `<div class="notice-card ${d.type}" data-type="${d.type}">
+          <div class="notice-icon ${d.type}">${icon}</div>
+          <div class="notice-body">
+            <div class="notice-meta"><span class="notice-badge ${d.type}">${d.type.toUpperCase()}</span><span class="notice-date">${d.date||''}</span></div>
+            <div class="notice-title">${d.title}</div><div class="notice-desc">${d.description}</div>
+          </div></div>`;
+      });
+      grid.innerHTML = html;
+    } catch (e) {
+      document.getElementById('loadingNotices').innerText = "Error loading notices.";
+    }
   }
 
   // --- 2. FETCH FACILITIES (SPORTS COURTS) ---
   async function fetchFacilities() {
-    const snap = await getDocs(collection(db, "facilities"));
-    const grid = document.querySelector('.grounds-grid');
-    const bookingDropdown = document.getElementById('bkGround'); // For the modal
-    grid.innerHTML = ''; bookingDropdown.innerHTML = '';
-    
-    snap.forEach(doc => {
-      const d = doc.data();
-      // Add to public display
-      grid.innerHTML += `
-      <div class="ground-card">
-        <div class="ground-card-img" style="background:linear-gradient(135deg, #1e6b3a, #2d9c55); font-size: 64px;">${d.icon}</div>
-        <div class="ground-info">
-          <div class="ground-name">${d.name}</div>
-          <div class="ground-desc">${d.description}</div>
-          <button class="ground-book-btn" onclick="openBooking('${d.name}')">Book Now</button>
-        </div>
-      </div>`;
-      // Add to booking modal dropdown
-      bookingDropdown.innerHTML += `<option value="${d.name}">${d.name}</option>`;
-    });
+    try {
+      const snap = await getDocs(collection(db, "facilities"));
+      const grid = document.querySelector('.grounds-grid');
+      const bookingDropdown = document.getElementById('bkGround'); 
+      grid.innerHTML = ''; bookingDropdown.innerHTML = '';
+      
+      snap.forEach(doc => {
+        const d = doc.data();
+        grid.innerHTML += `
+        <div class="ground-card">
+          <div class="ground-card-img" style="background:linear-gradient(135deg, #1e6b3a, #2d9c55); font-size: 64px;">${d.icon}</div>
+          <div class="ground-info">
+            <div class="ground-name">${d.name}</div>
+            <div class="ground-desc">${d.description}</div>
+            <button class="ground-book-btn" onclick="openBooking('${d.name}')">Book Now</button>
+          </div>
+        </div>`;
+        bookingDropdown.innerHTML += `<option value="${d.name}">${d.name}</option>`;
+      });
+    } catch (e) {
+      document.querySelector('.grounds-grid').innerHTML = "<p>Error loading facilities.</p>";
+    }
   }
 
   // --- 3. FETCH RESIDENTS DIRECTORY ---
@@ -322,29 +328,37 @@
   }
 
   async function fetchResidents() {
-    const snap = await getDocs(collection(db, "residents"));
-    window.allResidents = [];
-    snap.forEach(doc => window.allResidents.push(doc.data()));
-    window.renderDirectory(window.allResidents);
+    try {
+      const snap = await getDocs(collection(db, "residents"));
+      window.allResidents = [];
+      snap.forEach(doc => window.allResidents.push(doc.data()));
+      window.renderDirectory(window.allResidents);
+    } catch (e) {
+      document.getElementById('dirCount').textContent = "Error loading directory.";
+    }
   }
 
   // --- 4. SUBMIT BOOKING ---
   window.submitBookingRequest = async function() {
-    const n = document.getElementById('bkName').value;
-    const date = document.getElementById('bkDate').value;
-    const fac = document.getElementById('bkGround').value;
-    
-    if(!n || !date) return alert("Please enter name and date.");
-    
-    await addDoc(collection(db, "bookings"), { userName: n, date: date, facility: fac });
-    alert("Booking sent to committee!");
-    closeBooking();
+    try {
+      const n = document.getElementById('bkName').value;
+      const date = document.getElementById('bkDate').value;
+      const fac = document.getElementById('bkGround').value;
+      
+      if(!n || !date) return alert("Please enter name and date.");
+      
+      await addDoc(collection(db, "bookings"), { userName: n, date: date, facility: fac });
+      alert("Booking sent to committee successfully!");
+      closeBooking();
+    } catch (e) {
+      alert("Error submitting booking: " + e.message);
+    }
   }
 
-  // Initialize
+  // Initialize Data Load
   fetchNotices(); fetchFacilities(); fetchResidents();
 
-  // Expose UI functions to window for onclick handlers
+  // --- UI EVENT HANDLERS ---
   window.filterNotices = function(btn, type) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
     document.querySelectorAll('.notice-card').forEach(card => card.style.display = (type === 'all' || card.dataset.type === type) ? 'flex' : 'none');
