@@ -31,7 +31,7 @@
     .btn-save { background: var(--primary); color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
     .btn-danger { background: none; border: 1px solid var(--danger); color: var(--danger); padding: 5px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; }
     .btn-danger:hover { background: var(--danger); color: white; }
-    .fac-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+    .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 10px; border-bottom: 1px solid #eee; }
     .hidden { display: none !important; }
   </style>
 </head>
@@ -55,6 +55,7 @@
   </div>
 
   <div class="main">
+    
     <div id="tab-sports" class="tab active">
       <div class="card">
         <h3>Master Schedule Control</h3>
@@ -94,6 +95,10 @@
         <input type="file" id="nFile" accept="application/pdf">
         <button class="btn-save" id="upBtn" onclick="postNotice()" style="margin-top:10px;">Post to Society Board</button>
       </div>
+      <div class="card">
+        <h3>Active Announcements</h3>
+        <div id="noticeList">Loading...</div>
+      </div>
     </div>
 
     <div id="tab-res" class="tab">
@@ -102,6 +107,10 @@
         <input type="text" id="rName" placeholder="Full Name">
         <input type="text" id="rBung" placeholder="Bungalow No. (e.g. B-12)">
         <button class="btn-save" onclick="addRes()">Add Resident</button>
+      </div>
+      <div class="card">
+        <h3>Directory Management</h3>
+        <div id="resList">Loading...</div>
       </div>
     </div>
 
@@ -114,6 +123,7 @@
   import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-storage.js";
 
+  // REPLACE THESE KEYS WITH YOUR ACTUAL FIREBASE CONFIG
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
     authDomain: "sind-society.firebaseapp.com",
@@ -142,12 +152,14 @@
       document.getElementById('loginSection').classList.add('hidden'); 
       document.getElementById('dashboardSection').style.display='flex'; 
       loadAdmin(); 
+      loadExtras(); // Loads notices and residents
     } else { 
       document.getElementById('loginSection').classList.remove('hidden'); 
       document.getElementById('dashboardSection').style.display='none'; 
     } 
   });
 
+  // --- SPORTS & FACILITIES ---
   async function loadAdmin() {
     const d = document.getElementById('adminDate').value;
     try {
@@ -174,7 +186,7 @@
         });
 
         const fList = document.getElementById('facList'); fList.innerHTML = ''; 
-        facs.forEach(d => fList.innerHTML += `<div class="fac-item"><span>${d.data().name}</span> <button class="btn-danger" onclick="delFac('${d.id}')">Remove</button></div>`);
+        facs.forEach(d => fList.innerHTML += `<div class="list-item"><span>${d.data().name}</span> <button class="btn-danger" onclick="delFac('${d.id}')">Remove</button></div>`);
     } catch (e) { console.error(e); }
   }
 
@@ -199,9 +211,44 @@
   
   window.delFac = async (id) => { if(confirm("Remove this facility entirely?")) { await deleteDoc(doc(db, "facilities", id)); loadAdmin(); } };
   
+  // --- NOTICES & RESIDENTS (VIEW & DELETE) ---
+  async function loadExtras() {
+    // Load Notices List
+    const nList = document.getElementById('noticeList'); nList.innerHTML = '';
+    const nSnap = await getDocs(collection(db, "notices"));
+    if(nSnap.empty) nList.innerHTML = '<p style="font-size:12px; color:#666;">No active notices.</p>';
+    nSnap.forEach(d => {
+      const n = d.data();
+      nList.innerHTML += `
+        <div class="list-item">
+          <div>
+            <strong>${n.title}</strong><br>
+            <span style="font-size:11px; color:#888;">${n.date || ''} ${n.pdfUrl ? '📎 PDF Attached' : ''}</span>
+          </div>
+          <button class="btn-danger" onclick="delNotice('${d.id}')">Delete</button>
+        </div>`;
+    });
+
+    // Load Residents List
+    const rList = document.getElementById('resList'); rList.innerHTML = '';
+    const rSnap = await getDocs(collection(db, "residents"));
+    if(rSnap.empty) rList.innerHTML = '<p style="font-size:12px; color:#666;">Directory is empty.</p>';
+    rSnap.forEach(d => {
+      const r = d.data();
+      rList.innerHTML += `
+        <div class="list-item">
+          <div><strong>${r.name}</strong> <span style="font-size:12px; color:#666;">(${r.bungalow})</span></div>
+          <button class="btn-danger" onclick="delRes('${d.id}')">Remove</button>
+        </div>`;
+    });
+  }
+
+  window.delNotice = async (id) => { if(confirm("Delete this notice permanently?")) { await deleteDoc(doc(db, "notices", id)); loadExtras(); } };
+  window.delRes = async (id) => { if(confirm("Remove this resident from the directory?")) { await deleteDoc(doc(db, "residents", id)); loadExtras(); } };
+
   window.addRes = async () => {
     await addDoc(collection(db, "residents"), { name: document.getElementById('rName').value, bungalow: document.getElementById('rBung').value });
-    alert("Added to Directory"); document.getElementById('rName').value=''; document.getElementById('rBung').value='';
+    alert("Added to Directory"); document.getElementById('rName').value=''; document.getElementById('rBung').value=''; loadExtras();
   };
 
   window.postNotice = async () => {
@@ -216,9 +263,10 @@
       }
       await addDoc(collection(db, "notices"), { title: title, description: desc, pdfUrl: url, date: new Date().toLocaleDateString() });
       alert("Notice Posted Successfully"); 
-      document.getElementById('nTitle').value=''; document.getElementById('nDesc').value=''; document.getElementById('nFile').value=''; loadAdmin();
+      document.getElementById('nTitle').value=''; document.getElementById('nDesc').value=''; document.getElementById('nFile').value=''; 
+      loadExtras();
     } catch(e) { alert("Failed: " + e.message); }
-    document.getElementById('upBtn').innerText = "Post Notice";
+    document.getElementById('upBtn').innerText = "Post to Society Board";
   };
 
   window.switchTab = (id) => { 
