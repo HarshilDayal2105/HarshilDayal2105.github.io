@@ -59,12 +59,20 @@
     <h2>Schedule: <span id="viewingDateText">Today</span></h2>
     <input type="date" id="viewDateFilter" onchange="loadAll()" style="width:150px; padding:5px;">
   </div>
-  <div class="schedule-container"><table><thead><tr id="tableHead"><th style="width:150px; background:#f9f9f9; color:#333;">Facility</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+  <div class="schedule-container">
+    <table>
+      <thead><tr id="tableHead"><th style="width:150px; background:#f9f9f9; color:#333;">Facility</th></tr></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
 </div>
 
-<div id="page-notices" class="page-section"><div id="noticeGrid" class="grid-grid"></div></div>
+<div id="page-notices" class="page-section">
+  <div id="noticeGrid" class="grid-grid"></div>
+</div>
+
 <div id="page-directory" class="page-section">
-  <input type="text" id="dirSearch" placeholder="Search residents..." oninput="filterDirectory()" style="width:100%; max-width:400px; padding:12px; border-radius:30px; border:1px solid #ccc; margin-bottom:20px;">
+  <input type="text" id="dirSearch" placeholder="Search residents by name or bungalow..." oninput="filterDirectory()" style="width:100%; max-width:400px; padding:12px; border-radius:30px; border:1px solid #ccc; margin-bottom:20px;">
   <div id="dirGrid" class="grid-grid"></div>
 </div>
 
@@ -72,56 +80,105 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
   import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-  const firebaseConfig = { apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU", authDomain: "sind-society.firebaseapp.com", projectId: "sind-society", storageBucket: "sind-society.firebasestorage.app", messagingSenderId: "821689204364", appId: "1:821689204364:web:68aa0db383e84b051145a9" };
-  const app = initializeApp(firebaseConfig); const db = getFirestore(app);
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig); 
+  const db = getFirestore(app);
+  
   const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
   
+  // Set dates and headers
   const today = new Date().toISOString().split('T')[0];
-  document.getElementById('inDate').value = today; document.getElementById('viewDateFilter').value = today;
-  times.forEach(t => { document.getElementById('inTime').innerHTML += `<option value="${t}">${t}</option>`; document.getElementById('tableHead').innerHTML += `<th>${t}</th>`; });
+  document.getElementById('inDate').value = today; 
+  document.getElementById('viewDateFilter').value = today;
+  times.forEach(t => { 
+    document.getElementById('inTime').innerHTML += `<option value="${t}">${t}</option>`; 
+    document.getElementById('tableHead').innerHTML += `<th>${t}</th>`; 
+  });
 
   async function loadAll() {
-    const vDate = document.getElementById('viewDateFilter').value; document.getElementById('viewingDateText').innerText = vDate;
-    const facs = await getDocs(collection(db, "facilities"));
-    const books = await getDocs(query(collection(db, "bookings"), where("date", "==", vDate)));
-    const notes = await getDocs(collection(db, "notices"));
-    const res = await getDocs(collection(db, "residents"));
+    const vDate = document.getElementById('viewDateFilter').value; 
+    document.getElementById('viewingDateText').innerText = vDate;
 
-    const bMap = {}; books.forEach(d => bMap[`${d.data().facility}-${d.data().time}`] = { id: d.id, ...d.data() });
-    
-    const fSel = document.getElementById('inFac'); fSel.innerHTML = '';
-    const body = document.getElementById('tableBody'); body.innerHTML = '';
-    facs.forEach(d => {
-      const f = d.data(); fSel.innerHTML += `<option value="${f.name}">${f.name}</option>`;
-      let row = `<tr><td style="text-align:left; font-weight:bold; background:#f9f9f9;">${f.name}</td>`;
-      times.forEach(t => {
-        const b = bMap[`${f.name}-${t}`];
-        row += b ? `<td class="booked">${b.userName}<br>(${b.bungalow})<button class="cancel-link" onclick="cancelBooking('${b.id}')">Cancel</button></td>` : `<td class="available">Available</td>`;
+    // Load Notices
+    try {
+      const notes = await getDocs(collection(db, "notices"));
+      document.getElementById('noticeGrid').innerHTML = '';
+      notes.forEach(d => {
+        const n = d.data();
+        document.getElementById('noticeGrid').innerHTML += `<div class="card"><h3>${n.title}</h3>${n.pdfUrl ? `<a href="${n.pdfUrl}" target="_blank" class="pdf-btn">📄 View PDF Notice</a>` : `<p>${n.description || ''}</p>`}</div>`;
       });
-      body.innerHTML += row + '</tr>';
-    });
+    } catch (e) { document.getElementById('noticeGrid').innerHTML = `<p style="color:red;">Error loading notices: ${e.message}</p>`; }
 
-    document.getElementById('noticeGrid').innerHTML = '';
-    notes.forEach(d => {
-      const n = d.data();
-      document.getElementById('noticeGrid').innerHTML += `<div class="card"><h3>${n.title}</h3>${n.pdfUrl ? `<a href="${n.pdfUrl}" target="_blank" class="pdf-btn">📄 View PDF Notice</a>` : `<p>${n.description || ''}</p>`}</div>`;
-    });
+    // Load Sports Schedule
+    try {
+      const facs = await getDocs(collection(db, "facilities"));
+      const books = await getDocs(query(collection(db, "bookings"), where("date", "==", vDate)));
+      const bMap = {}; 
+      books.forEach(d => bMap[`${d.data().facility}-${d.data().time}`] = { id: d.id, ...d.data() });
+      
+      const fSel = document.getElementById('inFac'); fSel.innerHTML = '';
+      const body = document.getElementById('tableBody'); body.innerHTML = '';
+      
+      facs.forEach(d => {
+        const f = d.data(); 
+        fSel.innerHTML += `<option value="${f.name}">${f.name}</option>`;
+        let row = `<tr><td style="text-align:left; font-weight:bold; background:#f9f9f9;">${f.name}</td>`;
+        times.forEach(t => {
+          const b = bMap[`${f.name}-${t}`];
+          row += b ? `<td class="booked">${b.userName}<br>(${b.bungalow})<button class="cancel-link" onclick="cancelBooking('${b.id}')">Cancel</button></td>` : `<td class="available">Available</td>`;
+        });
+        body.innerHTML += row + '</tr>';
+      });
+    } catch (e) { document.getElementById('tableBody').innerHTML = `<tr><td colspan="19" style="color:red;">Error: ${e.message}</td></tr>`; }
 
-    window.residents = []; res.forEach(d => window.residents.push(d.data())); renderDir(window.residents);
+    // Load Directory
+    try {
+      const res = await getDocs(collection(db, "residents"));
+      window.residents = []; 
+      res.forEach(d => window.residents.push(d.data())); 
+      renderDir(window.residents);
+    } catch (e) { document.getElementById('dirGrid').innerHTML = `<p style="color:red;">Error: ${e.message}</p>`; }
   }
 
   function renderDir(data) { document.getElementById('dirGrid').innerHTML = data.map(r => `<div class="card"><strong>${r.name}</strong><br>Bungalow: ${r.bungalow}</div>`).join(''); }
-  window.filterDirectory = () => { const q = document.getElementById('dirSearch').value.toLowerCase(); renderDir(window.residents.filter(r => r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q))); };
+  
+  window.filterDirectory = () => { 
+    const q = document.getElementById('dirSearch').value.toLowerCase(); 
+    renderDir(window.residents.filter(r => r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q))); 
+  };
 
   window.handleBooking = async () => {
     const d = document.getElementById('inDate').value, f = document.getElementById('inFac').value, t = document.getElementById('inTime').value, n = document.getElementById('inName').value, b = document.getElementById('inBung').value;
-    if(!n || !b) return alert("Enter details");
-    await addDoc(collection(db, "bookings"), { facility: f, time: t, userName: n, bungalow: b, date: d });
-    alert("Booked!"); loadAll();
+    if(!n || !b) return alert("Enter all details");
+    
+    const checkSnap = await getDocs(query(collection(db, "bookings"), where("date", "==", d), where("facility", "==", f), where("time", "==", t)));
+    if(!checkSnap.empty) return alert("This slot was just booked by someone else!");
+
+    try {
+      await addDoc(collection(db, "bookings"), { facility: f, time: t, userName: n, bungalow: b, date: d });
+      alert("Booked Successfully!"); 
+      loadAll();
+    } catch (e) { alert("Error: " + e.message); }
   };
 
-  window.cancelBooking = async (id) => { if(confirm("Cancel?")) { await deleteDoc(doc(db, "bookings", id)); loadAll(); } };
-  window.showPage = (id) => { document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active')); document.getElementById('page-'+id).classList.add('active'); };
+  window.cancelBooking = async (id) => { if(confirm("Cancel this booking?")) { await deleteDoc(doc(db, "bookings", id)); loadAll(); } };
+  
+  window.showPage = (id) => { 
+    document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active')); 
+    document.querySelectorAll('.nav-links button').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('page-'+id).classList.add('active'); 
+    document.getElementById('nav-'+id).classList.add('active');
+  };
+
+  window.loadAll = loadAll;
   loadAll();
 </script>
 </body>
