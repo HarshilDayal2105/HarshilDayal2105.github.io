@@ -1,113 +1,125 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Admin Portal | Sind Society</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #faf8f3; padding: 40px; }
-    .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    input, button, select { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
-    button { background: #0a3d2b; color: white; cursor: pointer; font-weight: bold; border: none; font-size: 16px; transition: background 0.2s;}
-    button:hover { background: #14573d; }
-    .hidden { display: none; }
-    hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
-  </style>
-</head>
-<body>
-
-<div class="container">
-  <div id="loginSection">
-    <h2>Admin Login</h2>
-    <input type="email" id="email" placeholder="Admin Email">
-    <input type="password" id="password" placeholder="Password">
-    <button id="loginBtn">Log In</button>
-  </div>
-
-  <div id="dashboardSection" class="hidden">
-    <h2>Welcome, Admin</h2>
-    <button id="logoutBtn" style="background: #c0392b;">Log Out</button>
-    <hr>
-    
-    <h3>Post a Notice</h3>
-    <input type="text" id="noticeTitle" placeholder="Notice Title">
-    <select id="noticeType">
-      <option value="general">General</option>
-      <option value="urgent">Urgent</option>
-      <option value="info">Info</option>
-    </select>
-    <input type="text" id="noticeDesc" placeholder="Description">
-    <button id="addNoticeBtn">Post Notice to Website</button>
-  </div>
-</div>
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-  // Your Firebase Configuration
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
     authDomain: "sind-society.firebaseapp.com",
     projectId: "sind-society",
     storageBucket: "sind-society.firebasestorage.app",
     messagingSenderId: "821689204364",
-    appId: "1:821689204364:web:68aa0db383e84b051145a9",
-    measurementId: "G-WC6BCC1490"
+    appId: "1:821689204364:web:68aa0db383e84b051145a9"
   };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // HTML Elements
-  const loginSection = document.getElementById('loginSection');
-  const dashboardSection = document.getElementById('dashboardSection');
+  // GLOBALS for UI Filtering
+  window.allResidents = [];
 
-  // Monitor Login State
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      loginSection.classList.add('hidden');
-      dashboardSection.classList.remove('hidden');
-    } else {
-      loginSection.classList.remove('hidden');
-      dashboardSection.classList.add('hidden');
-    }
-  });
-
-  // Login Logic
-  document.getElementById('loginBtn').addEventListener('click', () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    signInWithEmailAndPassword(auth, email, password).catch(err => alert(err.message));
-  });
-
-  // Logout Logic
-  document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
-
-  // Add Notice to Firestore
-  document.getElementById('addNoticeBtn').addEventListener('click', async () => {
-    const title = document.getElementById('noticeTitle').value;
-    const type = document.getElementById('noticeType').value;
-    const desc = document.getElementById('noticeDesc').value;
+  // --- 1. FETCH NOTICES ---
+  async function fetchNotices() {
+    const snap = await getDocs(collection(db, "notices"));
+    const grid = document.getElementById('noticeGrid');
+    document.getElementById('loadingNotices').style.display = 'none';
+    if (snap.empty) { grid.innerHTML = "<p>No notices yet.</p>"; return; }
     
-    if(!title || !desc) return alert("Fill all fields");
+    let html = "";
+    snap.forEach(doc => {
+      const d = doc.data();
+      let icon = d.type === "urgent" ? "🚨" : d.type === "info" ? "🎉" : "📋";
+      html += `<div class="notice-card ${d.type}" data-type="${d.type}">
+        <div class="notice-icon ${d.type}">${icon}</div>
+        <div class="notice-body">
+          <div class="notice-meta"><span class="notice-badge ${d.type}">${d.type.toUpperCase()}</span><span class="notice-date">${d.date||''}</span></div>
+          <div class="notice-title">${d.title}</div><div class="notice-desc">${d.description}</div>
+        </div></div>`;
+    });
+    grid.innerHTML = html;
+  }
 
-    try {
-      await addDoc(collection(db, "notices"), {
-        title: title,
-        type: type,
-        description: desc,
-        date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-      });
-      
-      alert("Notice successfully posted!");
-      document.getElementById('noticeTitle').value = '';
-      document.getElementById('noticeDesc').value = '';
-    } catch (e) {
-      alert("Error adding notice: " + e.message);
-    }
-  });
+  // --- 2. FETCH FACILITIES (SPORTS COURTS) ---
+  async function fetchFacilities() {
+    const snap = await getDocs(collection(db, "facilities"));
+    const grid = document.querySelector('.grounds-grid');
+    const bookingDropdown = document.getElementById('bkGround'); // For the modal
+    grid.innerHTML = ''; bookingDropdown.innerHTML = '';
+    
+    snap.forEach(doc => {
+      const d = doc.data();
+      // Add to public display
+      grid.innerHTML += `
+      <div class="ground-card">
+        <div class="ground-card-img" style="background:linear-gradient(135deg, #1e6b3a, #2d9c55); font-size: 64px;">${d.icon}</div>
+        <div class="ground-info">
+          <div class="ground-name">${d.name}</div>
+          <div class="ground-desc">${d.description}</div>
+          <button class="ground-book-btn" onclick="openBooking('${d.name}')">Book Now</button>
+        </div>
+      </div>`;
+      // Add to booking modal dropdown
+      bookingDropdown.innerHTML += `<option value="${d.name}">${d.name}</option>`;
+    });
+  }
+
+  // --- 3. FETCH RESIDENTS DIRECTORY ---
+  const avatarColors = ['av-green','av-gold','av-blue','av-pink'];
+  window.getInitials = (name) => name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+  window.renderDirectory = function(data) {
+    const grid = document.getElementById('dirGrid');
+    document.getElementById('dirCount').textContent = `Showing ${data.length} resident(s)`;
+    grid.innerHTML = data.map((r, i) => `
+      <div class="dir-card">
+        <div class="dir-card-head">
+          <div class="dir-avatar ${avatarColors[i % avatarColors.length]}">${getInitials(r.name)}</div>
+          <div><div class="dir-name">${r.name}</div><span class="dir-bungalow">${r.bungalow}</span></div>
+        </div>
+        <div class="dir-details">
+          <div class="dir-row"><span>Phone</span><span>${r.phone}</span></div>
+          <div class="dir-row"><span>Job</span><span>${r.occupation}</span></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function fetchResidents() {
+    const snap = await getDocs(collection(db, "residents"));
+    window.allResidents = [];
+    snap.forEach(doc => window.allResidents.push(doc.data()));
+    window.renderDirectory(window.allResidents);
+  }
+
+  // --- 4. SUBMIT BOOKING ---
+  window.submitBookingRequest = async function() {
+    const n = document.getElementById('bkName').value;
+    const date = document.getElementById('bkDate').value;
+    const fac = document.getElementById('bkGround').value;
+    
+    if(!n || !date) return alert("Please enter name and date.");
+    
+    await addDoc(collection(db, "bookings"), { userName: n, date: date, facility: fac });
+    alert("Booking sent to committee!");
+    closeBooking();
+  }
+
+  // Initialize
+  fetchNotices(); fetchFacilities(); fetchResidents();
+
+  // Expose UI functions to window for onclick handlers
+  window.filterNotices = function(btn, type) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+    document.querySelectorAll('.notice-card').forEach(card => card.style.display = (type === 'all' || card.dataset.type === type) ? 'flex' : 'none');
+  };
+  window.filterDirectory = function() {
+    const q = document.getElementById('dirSearch').value.toLowerCase(), block = document.getElementById('dirBlock').value;
+    const filtered = window.allResidents.filter(r => (r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q)) && (!block || r.block === block));
+    window.renderDirectory(filtered);
+  };
+  window.openBooking = function(groundName) { 
+    if(groundName) document.getElementById('bkGround').value = groundName;
+    document.getElementById('bookingModal').classList.add('open'); 
+  };
+  window.closeBooking = function() { document.getElementById('bookingModal').classList.remove('open'); };
+
 </script>
-</body>
-</html>
