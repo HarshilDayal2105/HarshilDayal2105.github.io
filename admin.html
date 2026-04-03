@@ -2,39 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard | Sind Society</title>
+  <title>Admin Portal | Sind Society Sports</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    :root { --primary: #0a3d2b; --bg: #faf8f3; --border: #ddd; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 0; }
+    :root { --primary: #0a3d2b; --bg: #faf8f3; --border: #ddd; --danger: #c0392b; --gold: #c9993a; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); margin: 0; padding: 0; }
     
-    /* Login Screen */
+    /* Login */
     #loginSection { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
-    #loginSection input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; }
+    #loginSection input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 6px; }
     #loginSection button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-    
+
     /* Dashboard Layout */
     #dashboardSection { display: none; display: flex; height: 100vh; }
-    .sidebar { width: 250px; background: var(--primary); color: white; display: flex; flex-direction: column; }
-    .sidebar h2 { padding: 20px; margin: 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 18px;}
-    .tab-btn { background: none; border: none; color: rgba(255,255,255,0.7); padding: 15px 20px; text-align: left; font-size: 16px; cursor: pointer; transition: 0.2s; }
-    .tab-btn:hover, .tab-btn.active { background: rgba(255,255,255,0.1); color: white; border-left: 4px solid #c9993a; }
-    .logout-btn { margin-top: auto; background: #c0392b; color: white; border: none; padding: 15px; cursor: pointer; font-weight: bold; }
+    .sidebar { width: 260px; background: var(--primary); color: white; display: flex; flex-direction: column; flex-shrink: 0; }
+    .sidebar h2 { padding: 25px; margin: 0; font-size: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .tab-btn { background: none; border: none; color: rgba(255,255,255,0.7); padding: 18px 25px; text-align: left; font-size: 15px; cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; }
+    .tab-btn:hover, .tab-btn.active { background: rgba(255,255,255,0.1); color: white; border-left-color: var(--gold); }
     
     .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-    .tab-content { display: none; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .tab-content { display: none; }
     .tab-content.active { display: block; }
+
+    /* UI Cards */
+    .admin-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    h3 { margin-top: 0; color: var(--primary); border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; margin-bottom: 20px; }
     
-    /* Forms & Tables */
-    h3 { margin-top: 0; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 10px; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-    .form-grid.full { grid-template-columns: 1fr; }
-    input, select, textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-family: inherit;}
-    .submit-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    input, select, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; }
+    .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+    .btn-save { background: var(--primary); color: white; }
+    .btn-block { background: var(--danger); color: white; }
     
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
-    th { background: #f4f4f4; color: var(--primary); }
-    .delete-btn { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    /* Table Styles */
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+    th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+    th { background: #f8f9fa; color: var(--primary); font-weight: 700; }
+    .del-btn { color: var(--danger); background: none; border: 1px solid var(--danger); padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    .del-btn:hover { background: var(--danger); color: white; }
     
     .hidden { display: none !important; }
   </style>
@@ -42,112 +47,88 @@
 <body>
 
 <div id="loginSection">
-  <h2>Sind Society Admin</h2>
-  <input type="email" id="email" placeholder="Admin Email">
+  <h2>Sind Admin Login</h2>
+  <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Password">
-  <button id="loginBtn">Log In</button>
+  <button id="loginBtn">Access Dashboard</button>
 </div>
 
-<div id="dashboardSection" class="hidden">
+<div id="dashboardSection">
   <div class="sidebar">
-    <h2>Admin Portal</h2>
-    <button class="tab-btn active" onclick="switchTab('notices')">📢 Notices</button>
+    <h2>Management</h2>
+    <button class="tab-btn active" onclick="switchTab('sports')">🏆 Sports Manager</button>
+    <button class="tab-btn" onclick="switchTab('notices')">📢 Notice Board</button>
     <button class="tab-btn" onclick="switchTab('residents')">👥 Residents</button>
-    <button class="tab-btn" onclick="switchTab('facilities')">🏆 Add Any Sport</button>
-    <button class="tab-btn" onclick="switchTab('bookings')">📅 Bookings</button>
-    <button id="logoutBtn" class="logout-btn">Log Out</button>
+    <button id="logoutBtn" class="tab-btn" style="margin-top:auto; color: #ff9999;">🚪 Log Out</button>
   </div>
 
   <div class="main-content">
-    
-    <div id="tab-notices" class="tab-content active">
-      <h3>Post a New Notice</h3>
-      <div class="form-grid">
-        <input type="text" id="notTitle" placeholder="Notice Title">
-        <select id="notType">
-          <option value="general">General</option>
-          <option value="urgent">Urgent</option>
-          <option value="info">Info</option>
-        </select>
+
+    <div id="tab-sports" class="tab-content active">
+      <div class="admin-card">
+        <h3>Block Slots (Maintenance)</h3>
+        <p style="font-size:13px; color:#666; margin-bottom:15px;">Use this to prevent residents from booking a specific ground during maintenance or private events.</p>
+        <div class="form-row form-grid">
+          <div><label>Date</label><input type="date" id="blockDate"></div>
+          <div><label>Ground</label><select id="blockFac"></select></div>
+          <div><label>Time Slot</label><select id="blockTime"></select></div>
+        </div>
+        <button class="btn btn-block" onclick="blockSlot()">Mark as Maintenance</button>
       </div>
-      <textarea id="notDesc" placeholder="Description" rows="3"></textarea><br><br>
-      <button class="submit-btn" onclick="addNotice()">Post Notice</button>
-      
-      <h3 style="margin-top: 40px;">Active Notices</h3>
-      <table>
-        <thead><tr><th>Date</th><th>Title</th><th>Action</th></tr></thead>
-        <tbody id="noticesTable"></tbody>
-      </table>
+
+      <div class="admin-card">
+        <h3>Live Bookings & Maintenance</h3>
+        <table id="bookingsTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Ground</th>
+              <th>Time</th>
+              <th>Resident / Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="bookingsBody"></tbody>
+        </table>
+      </div>
+
+      <div class="admin-card">
+        <h3>Configure Grounds</h3>
+        <div class="form-grid">
+          <input type="text" id="facName" placeholder="New Facility Name">
+          <input type="text" id="facIcon" placeholder="Emoji (e.g. 🎾)">
+        </div>
+        <button class="btn btn-save" onclick="addFacility()">Add New Facility</button>
+      </div>
+    </div>
+
+    <div id="tab-notices" class="tab-content">
+      <div class="admin-card">
+        <h3>Post Notice</h3>
+        <input type="text" id="notTitle" placeholder="Title" style="margin-bottom:10px;">
+        <textarea id="notDesc" placeholder="Description" rows="3"></textarea><br><br>
+        <button class="btn btn-save" onclick="addNotice()">Post to Board</button>
+      </div>
     </div>
 
     <div id="tab-residents" class="tab-content">
-      <h3>Add New Resident</h3>
-      <div class="form-grid">
-        <input type="text" id="resName" placeholder="Full Name">
-        <input type="text" id="resBung" placeholder="Bungalow No.">
-        <input type="text" id="resPhone" placeholder="Phone">
-        <select id="resBlock"><option value="A">Block A</option><option value="B">Block B</option></select>
+      <div class="admin-card">
+        <h3>Add Resident</h3>
+        <div class="form-grid">
+          <input type="text" id="resName" placeholder="Name">
+          <input type="text" id="resBung" placeholder="Bungalow No.">
+        </div>
+        <button class="btn btn-save" onclick="addResident()">Add to Directory</button>
       </div>
-      <button class="submit-btn" onclick="addResident()">Add Resident</button>
-      <h3 style="margin-top: 40px;">Directory</h3>
-      <table>
-        <thead><tr><th>Name</th><th>Bungalow</th><th>Action</th></tr></thead>
-        <tbody id="residentsTable"></tbody>
-      </table>
-    </div>
-
-    <div id="tab-facilities" class="tab-content">
-      <h3>Add Any Sport or Facility</h3>
-      <p style="font-size: 13px; color: #666;">Enter the name of the sport and pick an emoji to represent it.</p>
-      <div class="form-grid">
-        <input type="text" id="facName" placeholder="Sport Name (e.g. Pickleball Court)">
-        <select id="facIcon">
-          <option value="🎾">Tennis 🎾</option>
-          <option value="🏏">Cricket 🏏</option>
-          <option value="🏀">Basketball 🏀</option>
-          <option value="🏸">Badminton 🏸</option>
-          <option value="🏊">Swimming 🏊</option>
-          <option value="⚽">Football ⚽</option>
-          <option value="🏓">Table Tennis 🏓</option>
-          <option value="🏋️">Gym 🏋️</option>
-          <option value="♟️">Chess Room ♟️</option>
-          <option value="🏢">Clubhouse 🏢</option>
-        </select>
-      </div>
-      <input type="text" id="facDesc" placeholder="Facility description (e.g. Open 6am-9pm)"><br><br>
-      <button class="submit-btn" onclick="addFacility()">Add Facility</button>
-
-      <h3 style="margin-top: 40px;">Current Facilities</h3>
-      <table>
-        <thead><tr><th>Icon</th><th>Name</th><th>Description</th><th>Action</th></tr></thead>
-        <tbody id="facilitiesTable"></tbody>
-      </table>
-    </div>
-
-    <div id="tab-bookings" class="tab-content">
-      <h3>Resident Bookings</h3>
-      <table>
-        <thead><tr><th>Resident</th><th>Sport</th><th>Date</th><th>Action</th></tr></thead>
-        <tbody id="bookingsTable"></tbody>
-      </table>
     </div>
 
   </div>
 </div>
-
-<script>
-  function switchTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById('tab-' + tabId).classList.add('active');
-    event.currentTarget.classList.add('active');
-  }
-</script>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
@@ -155,22 +136,27 @@
     projectId: "sind-society",
     storageBucket: "sind-society.firebasestorage.app",
     messagingSenderId: "821689204364",
-    appId: "1:821689204364:web:68aa0db383e84b051145a9",
-    measurementId: "G-WC6BCC1490"
+    appId: "1:821689204364:web:68aa0db383e84b051145a9"
   };
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
 
+  const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
+
+  // Populate Times
+  times.forEach(t => document.getElementById('blockTime').innerHTML += `<option value="${t}">${t}</option>`);
+
+  // Auth Logic
   onAuthStateChanged(auth, (user) => {
     if (user) {
       document.getElementById('loginSection').classList.add('hidden');
-      document.getElementById('dashboardSection').classList.remove('hidden');
-      loadAllData();
+      document.getElementById('dashboardSection').style.display = 'flex';
+      loadData();
     } else {
       document.getElementById('loginSection').classList.remove('hidden');
-      document.getElementById('dashboardSection').classList.add('hidden');
+      document.getElementById('dashboardSection').style.display = 'none';
     }
   });
 
@@ -180,59 +166,78 @@
   });
   document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
-  window.addNotice = async () => {
-    await addDoc(collection(db, "notices"), { title: document.getElementById('notTitle').value, description: document.getElementById('notDesc').value, type: document.getElementById('notType').value, date: new Date().toLocaleDateString() });
-    alert("Notice Added"); loadAllData();
+  // --- DATA LOADING ---
+  async function loadData() {
+    const facSnap = await getDocs(collection(db, "facilities"));
+    const bookSnap = await getDocs(query(collection(db, "bookings"), orderBy("date", "desc")));
+    
+    // Fill Grounds Select
+    const blockFac = document.getElementById('blockFac');
+    blockFac.innerHTML = '';
+    facSnap.forEach(d => blockFac.innerHTML += `<option value="${d.data().name}">${d.data().name}</option>`);
+
+    // Fill Bookings Table
+    const body = document.getElementById('bookingsBody');
+    body.innerHTML = '';
+    bookSnap.forEach(d => {
+      const b = d.data();
+      const isMaint = b.userName === "MAINTENANCE";
+      body.innerHTML += `
+        <tr style="${isMaint ? 'background:#fff8f8' : ''}">
+          <td>${b.date}</td>
+          <td>${b.facility}</td>
+          <td>${b.time}</td>
+          <td><strong style="color:${isMaint ? 'var(--danger)' : '#333'}">${isMaint ? '⚠️ MAINTENANCE' : b.userName + ' (' + b.bungalow + ')'}</strong></td>
+          <td><button class="del-btn" onclick="deleteBooking('${d.id}')">${isMaint ? 'Unlock' : 'Cancel'}</button></td>
+        </tr>`;
+    });
+  }
+
+  // --- ADMIN ACTIONS ---
+  window.blockSlot = async () => {
+    const d = document.getElementById('blockDate').value;
+    const f = document.getElementById('blockFac').value;
+    const t = document.getElementById('blockTime').value;
+    if(!d) return alert("Select a date");
+
+    await addDoc(collection(db, "bookings"), {
+      facility: f, time: t, date: d, userName: "MAINTENANCE", bungalow: "ADMIN"
+    });
+    alert("Slot Blocked for Residents");
+    loadData();
   };
 
-  window.addResident = async () => {
-    await addDoc(collection(db, "residents"), { name: document.getElementById('resName').value, bungalow: document.getElementById('resBung').value, phone: document.getElementById('resPhone').value, block: document.getElementById('resBlock').value });
-    alert("Resident Added"); loadAllData();
+  window.deleteBooking = async (id) => {
+    if(confirm("Are you sure?")) {
+      await deleteDoc(doc(db, "bookings", id));
+      loadData();
+    }
   };
 
   window.addFacility = async () => {
-    const name = document.getElementById('facName').value;
-    if(!name) return alert("Please enter a name");
-    await addDoc(collection(db, "facilities"), { name: name, description: document.getElementById('facDesc').value, icon: document.getElementById('facIcon').value });
-    alert("Sport Added Successfully!");
-    document.getElementById('facName').value = '';
-    loadAllData();
+    const n = document.getElementById('facName').value, i = document.getElementById('facIcon').value;
+    await addDoc(collection(db, "facilities"), { name: n, icon: i });
+    alert("Facility Added"); loadData();
   };
 
-  window.deleteRecord = async (col, id) => {
-    if(confirm("Delete this?")) { await deleteDoc(doc(db, col, id)); loadAllData(); }
+  window.addNotice = async () => {
+    await addDoc(collection(db, "notices"), { title: document.getElementById('notTitle').value, description: document.getElementById('notDesc').value, date: new Date().toLocaleDateString(), type: 'general' });
+    alert("Notice Posted");
   };
 
-  async function loadAllData() {
-    // Load Facilities
-    const facSnap = await getDocs(collection(db, "facilities"));
-    document.getElementById('facilitiesTable').innerHTML = '';
-    facSnap.forEach(d => {
-      const data = d.data();
-      document.getElementById('facilitiesTable').innerHTML += `<tr><td>${data.icon}</td><td>${data.name}</td><td>${data.description}</td><td><button class="delete-btn" onclick="deleteRecord('facilities', '${d.id}')">Remove</button></td></tr>`;
-    });
+  window.addResident = async () => {
+    await addDoc(collection(db, "residents"), { name: document.getElementById('resName').value, bungalow: document.getElementById('resBung').value });
+    alert("Resident Added");
+  };
 
-    // Load Notices
-    const notSnap = await getDocs(collection(db, "notices"));
-    document.getElementById('noticesTable').innerHTML = '';
-    notSnap.forEach(d => {
-      document.getElementById('noticesTable').innerHTML += `<tr><td>${d.data().date}</td><td>${d.data().title}</td><td><button class="delete-btn" onclick="deleteRecord('notices', '${d.id}')">Delete</button></td></tr>`;
-    });
+  window.switchTab = (id) => {
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-'+id).classList.add('active');
+    event.currentTarget.classList.add('active');
+  };
 
-    // Load Residents
-    const resSnap = await getDocs(collection(db, "residents"));
-    document.getElementById('residentsTable').innerHTML = '';
-    resSnap.forEach(d => {
-      document.getElementById('residentsTable').innerHTML += `<tr><td>${d.data().name}</td><td>${d.data().bungalow}</td><td><button class="delete-btn" onclick="deleteRecord('residents', '${d.id}')">Delete</button></td></tr>`;
-    });
-
-    // Load Bookings
-    const bookSnap = await getDocs(collection(db, "bookings"));
-    document.getElementById('bookingsTable').innerHTML = '';
-    bookSnap.forEach(d => {
-      document.getElementById('bookingsTable').innerHTML += `<tr><td>${d.data().userName}</td><td>${d.data().facility}</td><td>${d.data().date}</td><td><button class="delete-btn" onclick="deleteRecord('bookings', '${d.id}')">Cancel</button></td></tr>`;
-    });
-  }
+  window.loadData = loadData;
 </script>
 </body>
 </html>
