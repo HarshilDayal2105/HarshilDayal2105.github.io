@@ -10,7 +10,8 @@
     /* Login Screen */
     #loginSection { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
     #loginSection input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; }
-    #loginSection button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    #loginSection button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; transition: background 0.2s;}
+    #loginSection button:hover { background: #14573d; }
     
     /* Dashboard Layout */
     #dashboardSection { display: none; display: flex; height: 100vh; }
@@ -160,7 +161,8 @@
     projectId: "sind-society",
     storageBucket: "sind-society.firebasestorage.app",
     messagingSenderId: "821689204364",
-    appId: "1:821689204364:web:68aa0db383e84b051145a9"
+    appId: "1:821689204364:web:68aa0db383e84b051145a9",
+    measurementId: "G-WC6BCC1490"
   };
 
   const app = initializeApp(firebaseConfig);
