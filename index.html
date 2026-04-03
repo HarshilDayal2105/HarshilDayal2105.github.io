@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sind Society | Live Sports Schedule</title>
+<title>Sind Society | Live Master Schedule</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -23,28 +23,29 @@
 
   /* Master Schedule Table */
   .schedule-wrapper { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-  table { width: 100%; border-collapse: collapse; min-width: 900px; }
-  th, td { border: 1px solid #eee; padding: 10px; text-align: center; font-size: 13px; }
-  th { background: var(--green-deep); color: white; position: sticky; left: 0; }
-  .facility-col { background: #f9f9f9; font-weight: bold; color: var(--green-deep); text-align: left; padding-left: 15px; position: sticky; left: 0; z-index: 5; border-right: 2px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; min-width: 1000px; table-layout: fixed; }
+  th, td { border: 1px solid #eee; padding: 12px 8px; text-align: center; font-size: 13px; word-wrap: break-word; }
+  th { background: var(--green-deep); color: white; }
+  .facility-col { background: #f9f9f9; font-weight: bold; color: var(--green-deep); text-align: left; padding-left: 15px; width: 160px; border-right: 2px solid var(--border); }
   
-  .status-booked { background: #fdecea; color: var(--danger); font-weight: 700; cursor: not-allowed; }
+  .status-booked { background: #fdecea; color: var(--danger); font-weight: 700; border-bottom: 2px solid #f5c6c3; }
+  .resident-label { display: block; font-size: 11px; font-weight: 500; color: #7d2a21; margin-top: 4px; }
+  .bungalow-label { display: block; font-size: 10px; font-weight: 400; color: #922b21; font-style: italic; }
+
   .status-free { background: #e6f5ee; color: #2d9c55; font-weight: 700; cursor: pointer; transition: 0.2s; }
   .status-free:hover { background: var(--gold); color: white; }
 
-  /* Other Sections */
+  /* Grid Layouts */
   .grid-3 { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
   .card { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); }
-  .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; }
-  .badge-urgent { background: var(--danger); color: white; }
-  .badge-info { background: #e8f4fd; color: #1a6fa0; }
 
   /* Modal */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
   .modal-overlay.open { display: flex; }
   .modal { background: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 400px; }
-  input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; }
-  .btn-confirm { background: var(--green-deep); color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
+  .modal h3 { color: var(--green-deep); margin-bottom: 5px; }
+  input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 15px; }
+  .btn-confirm { background: var(--green-deep); color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -54,44 +55,37 @@
 </nav>
 
 <section class="hero">
-  <h1>Society Live Sports Schedule</h1>
+  <h1>Society Sports Schedule</h1>
   <p id="todayDate"></p>
 </section>
 
 <div class="section">
   <h2>Daily Master Schedule</h2>
-  <p style="margin-bottom: 20px; color: #666;">Click on any <span style="color:#2d9c55; font-weight:bold;">Available</span> slot to book instantly.</p>
-  
   <div class="schedule-wrapper">
     <table id="masterTable">
       <thead>
         <tr id="tableHeader">
-          <th style="min-width: 150px;">Facility</th>
+          <th style="width: 160px;">Facility</th>
           </tr>
       </thead>
-      <tbody id="masterBody">
-        </tbody>
+      <tbody id="masterBody"></tbody>
     </table>
   </div>
 </div>
 
 <div class="section" style="background: #f1f1f1; max-width: 100%;">
   <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
-    <h2>Community Announcements</h2>
-    <div id="noticeGrid" class="grid-3">Loading notices...</div>
+    <h2>Announcements</h2>
+    <div id="noticeGrid" class="grid-3"></div>
   </div>
-</div>
-
-<div class="section">
-  <h2>Residents Directory</h2>
-  <div id="dirGrid" class="grid-3">Loading residents...</div>
 </div>
 
 <div class="modal-overlay" id="bookingModal">
   <div class="modal">
     <h3 id="modalTitle">Book Slot</h3>
-    <p id="modalInfo" style="margin-top: 10px; color: #555;"></p>
-    <input type="text" id="resName" placeholder="Enter Full Name">
+    <p id="modalInfo" style="color: #666; font-size: 14px;"></p>
+    <input type="text" id="resName" placeholder="Resident Full Name">
+    <input type="text" id="resBung" placeholder="Bungalow No. (e.g. B-12)">
     <button class="btn-confirm" onclick="confirmBooking()">Confirm Reservation</button>
     <button style="width:100%; background:none; border:none; margin-top:15px; cursor:pointer; color:#888;" onclick="closeModal()">Cancel</button>
   </div>
@@ -99,7 +93,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc, query } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
@@ -117,36 +111,37 @@
   let selectedFac = "";
   let selectedTime = "";
 
-  document.getElementById('todayDate').innerText = "Schedule for " + new Date().toDateString();
+  document.getElementById('todayDate').innerText = "Bookings for " + new Date().toDateString();
 
-  // --- INITIALIZE TABLE HEADERS ---
+  // Load Headers
   const header = document.getElementById('tableHeader');
   times.forEach(t => { header.innerHTML += `<th>${t}</th>`; });
 
-  // --- LOAD EVERYTHING ---
   async function init() {
     const facSnap = await getDocs(collection(db, "facilities"));
     const bookSnap = await getDocs(collection(db, "bookings"));
     const noticesSnap = await getDocs(collection(db, "notices"));
-    const residentsSnap = await getDocs(collection(db, "residents"));
 
     // Map bookings
     const bookedSlots = {};
     bookSnap.forEach(d => {
       const b = d.data();
-      bookedSlots[`${b.facility}-${b.time}`] = b.userName;
+      bookedSlots[`${b.facility}-${b.time}`] = { name: b.userName, bungalow: b.bungalow };
     });
 
-    // Render Master Table
+    // Master Table
     const body = document.getElementById('masterBody');
     body.innerHTML = '';
     facSnap.forEach(doc => {
       const f = doc.data();
       let row = `<tr><td class="facility-col">${f.icon} ${f.name}</td>`;
       times.forEach(t => {
-        const user = bookedSlots[`${f.name}-${t}`];
-        if(user) {
-          row += `<td class="status-booked">Booked<br><span style="font-size:10px; font-weight:400;">${user}</span></td>`;
+        const booking = bookedSlots[`${f.name}-${t}`];
+        if(booking) {
+          row += `<td class="status-booked">Booked
+                    <span class="resident-label">${booking.name}</span>
+                    <span class="bungalow-label">${booking.bungalow}</span>
+                  </td>`;
         } else {
           row += `<td class="status-free" onclick="openModal('${f.name}', '${t}')">Available</td>`;
         }
@@ -155,28 +150,19 @@
       body.innerHTML += row;
     });
 
-    // Render Notices
+    // Notices
     const nGrid = document.getElementById('noticeGrid');
     nGrid.innerHTML = '';
     noticesSnap.forEach(doc => {
       const n = doc.data();
-      nGrid.innerHTML += `<div class="card"><span class="badge ${n.type == 'urgent' ? 'badge-urgent' : 'badge-info'}">${n.type}</span><h3>${n.title}</h3><p>${n.description}</p></div>`;
-    });
-
-    // Render Directory
-    const dGrid = document.getElementById('dirGrid');
-    dGrid.innerHTML = '';
-    residentsSnap.forEach(doc => {
-      const r = doc.data();
-      dGrid.innerHTML += `<div class="card"><strong>${r.name}</strong><p>Bungalow ${r.bungalow}</p></div>`;
+      nGrid.innerHTML += `<div class="card"><h3>${n.title}</h3><p>${n.description}</p></div>`;
     });
   }
 
-  // --- MODAL LOGIC ---
   window.openModal = (fac, time) => {
     selectedFac = fac; selectedTime = time;
     document.getElementById('modalTitle').innerText = "Booking " + fac;
-    document.getElementById('modalInfo').innerText = "Time Slot: " + time + " (Today)";
+    document.getElementById('modalInfo').innerText = "Time: " + time;
     document.getElementById('bookingModal').classList.add('open');
   };
 
@@ -184,18 +170,20 @@
 
   window.confirmBooking = async () => {
     const name = document.getElementById('resName').value;
-    if(!name) return alert("Please enter your name");
+    const bung = document.getElementById('resBung').value;
+    if(!name || !bung) return alert("Both name and bungalow are required!");
     
     await addDoc(collection(db, "bookings"), {
       userName: name,
+      bungalow: bung,
       facility: selectedFac,
       time: selectedTime,
       date: new Date().toLocaleDateString()
     });
 
-    alert("Booking Confirmed!");
+    alert("Reserved successfully!");
     closeModal();
-    init(); // Refresh table
+    init();
   };
 
   init();
