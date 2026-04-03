@@ -8,8 +8,8 @@
     :root { --primary: #0a3d2b; --bg: #faf8f3; --border: #ddd; --danger: #c0392b; --gold: #c9993a; }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); margin: 0; padding: 0; }
     #loginSection { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 8px; }
-    button { padding: 12px; cursor: pointer; border-radius: 8px; border: none; font-weight: bold; }
+    input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; }
+    button { padding: 12px; cursor: pointer; border-radius: 8px; border: none; font-weight: bold; transition: 0.2s; }
     .btn-save { background: var(--primary); color: white; width: 100%; }
     #dashboardSection { display: none; display: flex; height: 100vh; }
     .sidebar { width: 250px; background: var(--primary); color: white; display: flex; flex-direction: column; }
@@ -38,7 +38,7 @@
     <h2 style="padding:20px; margin:0;">Control Panel</h2>
     <button onclick="switchTab('sports')" class="active">🏆 Sports Control</button>
     <button onclick="switchTab('facs')">🏗️ Facility Manager</button>
-    <button onclick="switchTab('notices')">📢 PDF Notices</button>
+    <button onclick="switchTab('notices')">📢 Notice Board</button>
     <button onclick="switchTab('res')">👥 Add Residents</button>
     <button onclick="logout()" style="margin-top:auto; color:#ff9999;">Logout</button>
   </div>
@@ -66,10 +66,15 @@
     
     <div id="tab-notices" class="tab">
       <div class="card">
-        <h3>Post PDF Notice</h3>
-        <input type="text" id="nTitle" placeholder="Title">
+        <h3>Post a Notice</h3>
+        <p style="font-size:12px; color:#666; margin-bottom:15px;">You can write a text message, upload a PDF, or do both!</p>
+        <input type="text" id="nTitle" placeholder="Notice Title (Required)">
+        <textarea id="nDesc" rows="5" placeholder="Write your announcement here..."></textarea>
+        
+        <label style="font-size:12px; font-weight:bold; color:var(--primary); margin-top:10px; display:block;">Attach PDF (Optional):</label>
         <input type="file" id="nFile" accept="application/pdf">
-        <button class="btn-save" id="upBtn" onclick="uploadPDF()">Upload PDF Notice</button>
+        
+        <button class="btn-save" id="upBtn" onclick="postNotice()" style="margin-top: 15px;">Post Notice</button>
       </div>
     </div>
 
@@ -92,12 +97,12 @@
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-storage.js";
 
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
+    authDomain: "sind-society.firebaseapp.com",
+    projectId: "sind-society",
+    storageBucket: "sind-society.firebasestorage.app",
+    messagingSenderId: "821689204364",
+    appId: "1:821689204364:web:68aa0db383e84b051145a9"
   };
 
   const app = initializeApp(firebaseConfig); 
@@ -144,7 +149,7 @@
     });
 
     const fList = document.getElementById('facList'); fList.innerHTML = ''; 
-    facs.forEach(d => fList.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">${d.data().name} <button onclick="delFac('${d.id}')" style="color:red; background:none; border:1px solid red; padding:5px 10px; cursor:pointer;">Delete</button></div>`);
+    facs.forEach(d => fList.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">${d.data().name} <button onclick="delFac('${d.id}')" style="color:red; background:none; border:1px solid red; padding:5px 10px; cursor:pointer; border-radius: 4px;">Remove</button></div>`);
   }
 
   window.adminAct = async (data, exists) => {
@@ -172,20 +177,39 @@
     alert("Resident Added!"); document.getElementById('rName').value=''; document.getElementById('rBung').value='';
   };
 
-  window.uploadPDF = async () => {
-    const file = document.getElementById('nFile').files[0], title = document.getElementById('nTitle').value; 
-    if(!file || !title) return alert("Title and PDF are required");
+  window.postNotice = async () => {
+    const title = document.getElementById('nTitle').value;
+    const desc = document.getElementById('nDesc').value;
+    const file = document.getElementById('nFile').files[0]; 
     
-    document.getElementById('upBtn').innerText = "Uploading... Please wait";
+    if(!title) return alert("A Title is required!");
+    
+    document.getElementById('upBtn').innerText = "Posting... Please wait";
+    
     try {
-      const refS = ref(storage, 'notices/' + Date.now() + '_' + file.name); 
-      await uploadBytes(refS, file);
-      const url = await getDownloadURL(refS); 
-      await addDoc(collection(db, "notices"), { title: title, pdfUrl: url, date: new Date().toLocaleDateString() });
-      alert("Notice Posted Successfully"); 
-      document.getElementById('nTitle').value = ''; document.getElementById('nFile').value = '';
-    } catch (e) { alert("Upload failed: " + e.message); }
-    document.getElementById('upBtn').innerText = "Upload PDF Notice";
+      let url = null;
+      if (file) {
+        const refS = ref(storage, 'notices/' + Date.now() + '_' + file.name); 
+        await uploadBytes(refS, file);
+        url = await getDownloadURL(refS); 
+      }
+      
+      await addDoc(collection(db, "notices"), { 
+        title: title, 
+        description: desc,
+        pdfUrl: url, 
+        date: new Date().toLocaleDateString() 
+      });
+      
+      alert("Notice Posted Successfully!"); 
+      document.getElementById('nTitle').value = ''; 
+      document.getElementById('nDesc').value = '';
+      document.getElementById('nFile').value = '';
+    } catch (e) { 
+      alert("Failed to post: " + e.message); 
+    }
+    
+    document.getElementById('upBtn').innerText = "Post Notice";
   };
 
   window.switchTab = (id) => { 
