@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -152,7 +152,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
@@ -160,8 +160,7 @@
     projectId: "sind-society",
     storageBucket: "sind-society.firebasestorage.app",
     messagingSenderId: "821689204364",
-    appId: "1:821689204364:web:68aa0db383e84b051145a9",
-    measurementId: "G-WC6BCC1490"
+    appId: "1:821689204364:web:68aa0db383e84b051145a9"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -172,8 +171,12 @@
   window.db = db;
   window.deleteRecord = async function(collectionName, docId) {
     if(confirm("Are you sure you want to delete this?")) {
-      await deleteDoc(doc(db, collectionName, docId));
-      loadAllData(); // refresh tables
+      try {
+        await deleteDoc(doc(db, collectionName, docId));
+        loadAllData(); // refresh tables
+      } catch (e) {
+        alert("Error deleting: " + e.message);
+      }
     }
   };
 
@@ -197,86 +200,76 @@
 
   // --- ADD FUNCTIONS ---
   window.addNotice = async function() {
-    const t = document.getElementById('notTitle').value, d = document.getElementById('notDesc').value;
-    if(!t || !d) return alert("Fill all fields");
-    await addDoc(collection(db, "notices"), { title: t, description: d, type: document.getElementById('notType').value, date: new Date().toLocaleDateString() });
-    document.getElementById('notTitle').value = ''; document.getElementById('notDesc').value = '';
-    loadAllData(); alert("Notice Added");
+    try {
+      const t = document.getElementById('notTitle').value, d = document.getElementById('notDesc').value;
+      if(!t || !d) return alert("Fill all fields");
+      await addDoc(collection(db, "notices"), { title: t, description: d, type: document.getElementById('notType').value, date: new Date().toLocaleDateString() });
+      document.getElementById('notTitle').value = ''; document.getElementById('notDesc').value = '';
+      loadAllData(); alert("Notice Added Successfully!");
+    } catch (e) { alert("Error saving data: " + e.message); }
   };
 
   window.addResident = async function() {
     try {
-      const n = document.getElementById('resName').value;
-      const b = document.getElementById('resBung').value;
-      
-      if(!n || !b) {
-        return alert("Name and Bungalow are required!");
-      }
-
+      const n = document.getElementById('resName').value, b = document.getElementById('resBung').value;
+      if(!n || !b) return alert("Name and Bungalow are required!");
       await addDoc(collection(db, "residents"), { 
-        name: n, 
-        bungalow: b, 
-        phone: document.getElementById('resPhone').value, 
-        occupation: document.getElementById('resOcc').value, 
-        block: document.getElementById('resBlock').value 
+        name: n, bungalow: b, phone: document.getElementById('resPhone').value, 
+        occupation: document.getElementById('resOcc').value, block: document.getElementById('resBlock').value 
       });
-      
-      // Clear the form
-      document.getElementById('resName').value = ''; 
-      document.getElementById('resBung').value = '';
-      document.getElementById('resPhone').value = '';
-      document.getElementById('resOcc').value = '';
-      
-      loadAllData(); 
-      alert("Resident Added Successfully!");
-      
-    } catch (error) {
-      console.error("Error adding resident: ", error);
-      alert("Uh oh! Failed to add resident. Error: " + error.message);
-    }
+      document.getElementById('resName').value = ''; document.getElementById('resBung').value = '';
+      document.getElementById('resPhone').value = ''; document.getElementById('resOcc').value = '';
+      loadAllData(); alert("Resident Added Successfully!");
+    } catch (e) { alert("Error saving data: " + e.message); }
   };
 
   window.addFacility = async function() {
-    const n = document.getElementById('facName').value, d = document.getElementById('facDesc').value;
-    if(!n) return alert("Facility name required");
-    await addDoc(collection(db, "facilities"), { name: n, description: d, icon: document.getElementById('facIcon').value });
-    document.getElementById('facName').value = ''; document.getElementById('facDesc').value = '';
-    loadAllData(); alert("Facility Added");
+    try {
+      const n = document.getElementById('facName').value, d = document.getElementById('facDesc').value;
+      if(!n) return alert("Facility name required");
+      await addDoc(collection(db, "facilities"), { name: n, description: d, icon: document.getElementById('facIcon').value });
+      document.getElementById('facName').value = ''; document.getElementById('facDesc').value = '';
+      loadAllData(); alert("Facility Added Successfully!");
+    } catch (e) { alert("Error saving data: " + e.message); }
   };
 
   // --- DATA LOADING FUNCTIONS ---
   async function loadAllData() {
-    // Load Notices
-    const notSnap = await getDocs(collection(db, "notices"));
-    document.getElementById('noticesTable').innerHTML = '';
-    notSnap.forEach(d => {
-      let data = d.data();
-      document.getElementById('noticesTable').innerHTML += `<tr><td>${data.date}</td><td>${data.type}</td><td>${data.title}</td><td><button class="delete-btn" onclick="deleteRecord('notices', '${d.id}')">Delete</button></td></tr>`;
-    });
+    try {
+      // Load Notices
+      const notSnap = await getDocs(collection(db, "notices"));
+      document.getElementById('noticesTable').innerHTML = '';
+      notSnap.forEach(d => {
+        let data = d.data();
+        document.getElementById('noticesTable').innerHTML += `<tr><td>${data.date}</td><td>${data.type}</td><td>${data.title}</td><td><button class="delete-btn" onclick="deleteRecord('notices', '${d.id}')">Delete</button></td></tr>`;
+      });
 
-    // Load Residents
-    const resSnap = await getDocs(collection(db, "residents"));
-    document.getElementById('residentsTable').innerHTML = '';
-    resSnap.forEach(d => {
-      let data = d.data();
-      document.getElementById('residentsTable').innerHTML += `<tr><td>${data.name}</td><td>${data.bungalow}</td><td>${data.phone}</td><td><button class="delete-btn" onclick="deleteRecord('residents', '${d.id}')">Delete</button></td></tr>`;
-    });
+      // Load Residents
+      const resSnap = await getDocs(collection(db, "residents"));
+      document.getElementById('residentsTable').innerHTML = '';
+      resSnap.forEach(d => {
+        let data = d.data();
+        document.getElementById('residentsTable').innerHTML += `<tr><td>${data.name}</td><td>${data.bungalow}</td><td>${data.phone}</td><td><button class="delete-btn" onclick="deleteRecord('residents', '${d.id}')">Delete</button></td></tr>`;
+      });
 
-    // Load Facilities
-    const facSnap = await getDocs(collection(db, "facilities"));
-    document.getElementById('facilitiesTable').innerHTML = '';
-    facSnap.forEach(d => {
-      let data = d.data();
-      document.getElementById('facilitiesTable').innerHTML += `<tr><td>${data.icon}</td><td>${data.name}</td><td>${data.description}</td><td><button class="delete-btn" onclick="deleteRecord('facilities', '${d.id}')">Delete</button></td></tr>`;
-    });
+      // Load Facilities
+      const facSnap = await getDocs(collection(db, "facilities"));
+      document.getElementById('facilitiesTable').innerHTML = '';
+      facSnap.forEach(d => {
+        let data = d.data();
+        document.getElementById('facilitiesTable').innerHTML += `<tr><td>${data.icon}</td><td>${data.name}</td><td>${data.description}</td><td><button class="delete-btn" onclick="deleteRecord('facilities', '${d.id}')">Delete</button></td></tr>`;
+      });
 
-    // Load Bookings
-    const bookSnap = await getDocs(collection(db, "bookings"));
-    document.getElementById('bookingsTable').innerHTML = '';
-    bookSnap.forEach(d => {
-      let data = d.data();
-      document.getElementById('bookingsTable').innerHTML += `<tr><td>${data.userName}</td><td>${data.facility}</td><td>${data.date}</td><td><button class="delete-btn" onclick="deleteRecord('bookings', '${d.id}')">Cancel Booking</button></td></tr>`;
-    });
+      // Load Bookings
+      const bookSnap = await getDocs(collection(db, "bookings"));
+      document.getElementById('bookingsTable').innerHTML = '';
+      bookSnap.forEach(d => {
+        let data = d.data();
+        document.getElementById('bookingsTable').innerHTML += `<tr><td>${data.userName}</td><td>${data.facility}</td><td>${data.date}</td><td><button class="delete-btn" onclick="deleteRecord('bookings', '${d.id}')">Cancel Booking</button></td></tr>`;
+      });
+    } catch (e) {
+      console.error("Error loading tables: ", e);
+    }
   }
 </script>
 </body>
