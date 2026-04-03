@@ -28,19 +28,20 @@
     .admin-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
     h3 { margin-top: 0; color: var(--primary); border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; margin-bottom: 20px; }
     
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-    input, select, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; }
+    /* Schedule Grid in Admin */
+    .schedule-wrapper { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; min-width: 1200px; font-size: 12px; }
+    th, td { border: 1px solid #eee; padding: 10px; text-align: center; }
+    th { background: #f4f4f4; color: var(--primary); }
+    .fac-col { background: #fafafa; font-weight: bold; text-align: left; border-right: 2px solid var(--border); width: 150px; }
+    
+    .status-booked { background: #fdecea; color: var(--danger); font-weight: bold; cursor: pointer; }
+    .status-maint { background: #333; color: white; cursor: pointer; }
+    .status-free { background: #e6f5ee; color: #2d9c55; cursor: pointer; font-weight: bold; }
+    .status-free:hover { background: #c9993a; color: white; }
+
     .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
     .btn-save { background: var(--primary); color: white; }
-    .btn-block { background: var(--danger); color: white; }
-    
-    /* Table Styles */
-    table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
-    th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
-    th { background: #f8f9fa; color: var(--primary); font-weight: 700; }
-    .del-btn { color: var(--danger); background: none; border: 1px solid var(--danger); padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
-    .del-btn:hover { background: var(--danger); color: white; }
-    
     .hidden { display: none !important; }
   </style>
 </head>
@@ -56,7 +57,7 @@
 <div id="dashboardSection">
   <div class="sidebar">
     <h2>Management</h2>
-    <button class="tab-btn active" onclick="switchTab('sports')">🏆 Sports Manager</button>
+    <button class="tab-btn active" onclick="switchTab('sports')">🏆 Sports Master</button>
     <button class="tab-btn" onclick="switchTab('notices')">📢 Notice Board</button>
     <button class="tab-btn" onclick="switchTab('residents')">👥 Residents</button>
     <button id="logoutBtn" class="tab-btn" style="margin-top:auto; color: #ff9999;">🚪 Log Out</button>
@@ -66,60 +67,36 @@
 
     <div id="tab-sports" class="tab-content active">
       <div class="admin-card">
-        <h3>Block Slots (Maintenance)</h3>
-        <p style="font-size:13px; color:#666; margin-bottom:15px;">Use this to prevent residents from booking a specific ground during maintenance or private events.</p>
-        <div class="form-row form-grid">
-          <div><label>Date</label><input type="date" id="blockDate"></div>
-          <div><label>Ground</label><select id="blockFac"></select></div>
-          <div><label>Time Slot</label><select id="blockTime"></select></div>
+        <h3>Master Schedule Control</h3>
+        <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
+            <label>View Date:</label>
+            <input type="date" id="adminDateView" style="width:200px;" onchange="loadAdminSchedule()">
+            <span style="font-size:12px; color:#666;">(Click <b>Available</b> to Block/Maint, click <b>Booked</b> to Cancel)</span>
         </div>
-        <button class="btn btn-block" onclick="blockSlot()">Mark as Maintenance</button>
+        
+        <div class="schedule-wrapper">
+          <table id="adminScheduleTable">
+            <thead><tr id="adminHead"><th>Facility</th></tr></thead>
+            <tbody id="adminBody"></tbody>
+          </table>
+        </div>
       </div>
 
       <div class="admin-card">
-        <h3>Live Bookings & Maintenance</h3>
-        <table id="bookingsTable">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Ground</th>
-              <th>Time</th>
-              <th>Resident / Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="bookingsBody"></tbody>
-        </table>
-      </div>
-
-      <div class="admin-card">
-        <h3>Configure Grounds</h3>
-        <div class="form-grid">
-          <input type="text" id="facName" placeholder="New Facility Name">
-          <input type="text" id="facIcon" placeholder="Emoji (e.g. 🎾)">
+        <h3>Add New Ground/Facility</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:15px;">
+          <input type="text" id="facName" placeholder="Facility Name">
+          <input type="text" id="facIcon" placeholder="Emoji (🎾)">
         </div>
-        <button class="btn btn-save" onclick="addFacility()">Add New Facility</button>
+        <button class="btn btn-save" onclick="addFacility()">Add Facility</button>
       </div>
     </div>
 
     <div id="tab-notices" class="tab-content">
-      <div class="admin-card">
-        <h3>Post Notice</h3>
-        <input type="text" id="notTitle" placeholder="Title" style="margin-bottom:10px;">
-        <textarea id="notDesc" placeholder="Description" rows="3"></textarea><br><br>
-        <button class="btn btn-save" onclick="addNotice()">Post to Board</button>
-      </div>
+      <div class="admin-card"><h3>Post Notice</h3><input type="text" id="notTitle" placeholder="Title"><textarea id="notDesc" rows="3" placeholder="Text"></textarea><br><button class="btn btn-save" onclick="addNotice()">Post</button></div>
     </div>
-
     <div id="tab-residents" class="tab-content">
-      <div class="admin-card">
-        <h3>Add Resident</h3>
-        <div class="form-grid">
-          <input type="text" id="resName" placeholder="Name">
-          <input type="text" id="resBung" placeholder="Bungalow No.">
-        </div>
-        <button class="btn btn-save" onclick="addResident()">Add to Directory</button>
-      </div>
+      <div class="admin-card"><h3>Add Resident</h3><input type="text" id="resName" placeholder="Name"><input type="text" id="resBung" placeholder="Bungalow"><button class="btn btn-save" onclick="addResident()">Add</button></div>
     </div>
 
   </div>
@@ -128,7 +105,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
@@ -144,16 +121,18 @@
   const db = getFirestore(app);
 
   const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
+  
+  // Set default view date
+  document.getElementById('adminDateView').value = new Date().toISOString().split('T')[0];
 
-  // Populate Times
-  times.forEach(t => document.getElementById('blockTime').innerHTML += `<option value="${t}">${t}</option>`);
+  // Build headers
+  times.forEach(t => document.getElementById('adminHead').innerHTML += `<th>${t}</th>`);
 
-  // Auth Logic
   onAuthStateChanged(auth, (user) => {
     if (user) {
       document.getElementById('loginSection').classList.add('hidden');
       document.getElementById('dashboardSection').style.display = 'flex';
-      loadData();
+      loadAdminSchedule();
     } else {
       document.getElementById('loginSection').classList.remove('hidden');
       document.getElementById('dashboardSection').style.display = 'none';
@@ -166,63 +145,60 @@
   });
   document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
-  // --- DATA LOADING ---
-  async function loadData() {
+  async function loadAdminSchedule() {
+    const date = document.getElementById('adminDateView').value;
     const facSnap = await getDocs(collection(db, "facilities"));
-    const bookSnap = await getDocs(query(collection(db, "bookings"), orderBy("date", "desc")));
-    
-    // Fill Grounds Select
-    const blockFac = document.getElementById('blockFac');
-    blockFac.innerHTML = '';
-    facSnap.forEach(d => blockFac.innerHTML += `<option value="${d.data().name}">${d.data().name}</option>`);
+    const bookSnap = await getDocs(query(collection(db, "bookings"), where("date", "==", date)));
 
-    // Fill Bookings Table
-    const body = document.getElementById('bookingsBody');
+    const bMap = {};
+    bookSnap.forEach(d => bMap[`${d.data().facility}-${d.data().time}`] = { id: d.id, ...d.data() });
+
+    const body = document.getElementById('adminBody');
     body.innerHTML = '';
-    bookSnap.forEach(d => {
-      const b = d.data();
-      const isMaint = b.userName === "MAINTENANCE";
-      body.innerHTML += `
-        <tr style="${isMaint ? 'background:#fff8f8' : ''}">
-          <td>${b.date}</td>
-          <td>${b.facility}</td>
-          <td>${b.time}</td>
-          <td><strong style="color:${isMaint ? 'var(--danger)' : '#333'}">${isMaint ? '⚠️ MAINTENANCE' : b.userName + ' (' + b.bungalow + ')'}</strong></td>
-          <td><button class="del-btn" onclick="deleteBooking('${d.id}')">${isMaint ? 'Unlock' : 'Cancel'}</button></td>
-        </tr>`;
+
+    facSnap.forEach(d => {
+      const f = d.data();
+      let row = `<tr><td class="fac-col">${f.icon} ${f.name}</td>`;
+      times.forEach(t => {
+        const b = bMap[`${f.name}-${t}`];
+        if(b) {
+          const isMaint = b.userName === "MAINTENANCE";
+          row += `<td class="${isMaint ? 'status-maint' : 'status-booked'}" onclick="adminAction('${b.id}', true)">
+                    ${isMaint ? '⚠️ MAINT' : b.userName + '<br>(' + b.bungalow + ')'}
+                  </td>`;
+        } else {
+          row += `<td class="status-free" onclick="adminAction('${f.name}|${t}|${date}', false)">Available</td>`;
+        }
+      });
+      body.innerHTML += row + `</tr>`;
     });
   }
 
-  // --- ADMIN ACTIONS ---
-  window.blockSlot = async () => {
-    const d = document.getElementById('blockDate').value;
-    const f = document.getElementById('blockFac').value;
-    const t = document.getElementById('blockTime').value;
-    if(!d) return alert("Select a date");
-
-    await addDoc(collection(db, "bookings"), {
-      facility: f, time: t, date: d, userName: "MAINTENANCE", bungalow: "ADMIN"
-    });
-    alert("Slot Blocked for Residents");
-    loadData();
-  };
-
-  window.deleteBooking = async (id) => {
-    if(confirm("Are you sure?")) {
-      await deleteDoc(doc(db, "bookings", id));
-      loadData();
+  window.adminAction = async (data, exists) => {
+    if(exists) {
+      if(confirm("Cancel this booking/block?")) {
+        await deleteDoc(doc(db, "bookings", data));
+        loadAdminSchedule();
+      }
+    } else {
+      if(confirm("Mark this slot as MAINTENANCE?")) {
+        const [fac, time, date] = data.split('|');
+        await addDoc(collection(db, "bookings"), {
+          facility: fac, time: time, date: date, userName: "MAINTENANCE", bungalow: "ADMIN"
+        });
+        loadAdminSchedule();
+      }
     }
   };
 
   window.addFacility = async () => {
-    const n = document.getElementById('facName').value, i = document.getElementById('facIcon').value;
-    await addDoc(collection(db, "facilities"), { name: n, icon: i });
-    alert("Facility Added"); loadData();
+    await addDoc(collection(db, "facilities"), { name: document.getElementById('facName').value, icon: document.getElementById('facIcon').value });
+    loadAdminSchedule();
   };
 
   window.addNotice = async () => {
-    await addDoc(collection(db, "notices"), { title: document.getElementById('notTitle').value, description: document.getElementById('notDesc').value, date: new Date().toLocaleDateString(), type: 'general' });
-    alert("Notice Posted");
+    await addDoc(collection(db, "notices"), { title: document.getElementById('notTitle').value, description: document.getElementById('notDesc').value });
+    alert("Notice Sent");
   };
 
   window.addResident = async () => {
@@ -237,7 +213,7 @@
     event.currentTarget.classList.add('active');
   };
 
-  window.loadData = loadData;
+  window.loadAdminSchedule = loadAdminSchedule;
 </script>
 </body>
 </html>
