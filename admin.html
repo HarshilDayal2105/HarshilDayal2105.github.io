@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -205,14 +205,35 @@
   };
 
   window.addResident = async function() {
-    const n = document.getElementById('resName').value, b = document.getElementById('resBung').value;
-    if(!n || !b) return alert("Name and Bungalow are required");
-    await addDoc(collection(db, "residents"), { 
-      name: n, bungalow: b, phone: document.getElementById('resPhone').value, 
-      occupation: document.getElementById('resOcc').value, block: document.getElementById('resBlock').value 
-    });
-    document.getElementById('resName').value = ''; document.getElementById('resBung').value = '';
-    loadAllData(); alert("Resident Added");
+    try {
+      const n = document.getElementById('resName').value;
+      const b = document.getElementById('resBung').value;
+      
+      if(!n || !b) {
+        return alert("Name and Bungalow are required!");
+      }
+
+      await addDoc(collection(db, "residents"), { 
+        name: n, 
+        bungalow: b, 
+        phone: document.getElementById('resPhone').value, 
+        occupation: document.getElementById('resOcc').value, 
+        block: document.getElementById('resBlock').value 
+      });
+      
+      // Clear the form
+      document.getElementById('resName').value = ''; 
+      document.getElementById('resBung').value = '';
+      document.getElementById('resPhone').value = '';
+      document.getElementById('resOcc').value = '';
+      
+      loadAllData(); 
+      alert("Resident Added Successfully!");
+      
+    } catch (error) {
+      console.error("Error adding resident: ", error);
+      alert("Uh oh! Failed to add resident. Error: " + error.message);
+    }
   };
 
   window.addFacility = async function() {
