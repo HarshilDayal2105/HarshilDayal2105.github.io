@@ -2,72 +2,122 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin | Sind Society Control</title>
+  <title>Admin Portal | Sind Society Management</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root { --primary: #0a3d2b; --bg: #faf8f3; --border: #ddd; --danger: #c0392b; --gold: #c9993a; }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); margin: 0; padding: 0; }
-    #loginSection { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; }
-    button { padding: 12px; cursor: pointer; border-radius: 8px; border: none; font-weight: bold; }
-    .btn-save { background: var(--primary); color: white; width: 100%; }
+    
+    /* Login Screen */
+    #loginSection { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
+    #loginSection input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 6px; }
+    #loginSection button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+
+    /* Main Dashboard Layout */
     #dashboardSection { display: none; display: flex; height: 100vh; }
-    .sidebar { width: 250px; background: var(--primary); color: white; display: flex; flex-direction: column; }
-    .sidebar button { background: none; color: rgba(255,255,255,0.7); text-align: left; padding: 15px 25px; border-bottom: 1px solid rgba(255,255,255,0.1); border-left: 4px solid transparent; }
-    .sidebar button.active { background: rgba(255,255,255,0.1); color: white; border-left-color: var(--gold); }
+    .sidebar { width: 250px; background: var(--primary); color: white; display: flex; flex-direction: column; flex-shrink: 0; }
+    .sidebar h2 { padding: 25px; margin: 0; font-size: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .sidebar button { background: none; color: rgba(255,255,255,0.7); text-align: left; padding: 15px 25px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; border: none; border-left: 4px solid transparent; transition: 0.2s; }
+    .sidebar button:hover, .sidebar button.active { background: rgba(255,255,255,0.1); color: white; border-left-color: var(--gold); }
+    
     .main { flex: 1; padding: 40px; overflow-y: auto; }
     .tab { display: none; } .tab.active { display: block; }
-    .card { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
-    table { width: 100%; border-collapse: collapse; min-width: 1000px; font-size: 11px; }
-    th, td { border: 1px solid #eee; padding: 8px; text-align: center; }
-    .status-maint { background: #333; color: white; cursor: pointer; }
-    .status-booked { background: #fdecea; color: var(--danger); cursor: pointer; }
-    .status-free { background: #e6f5ee; color: #2d9c55; cursor: pointer; }
-    .hidden { display: none; }
+
+    /* Admin Cards */
+    .card { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    h3 { margin-top: 0; color: var(--primary); border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; margin-bottom: 20px; }
+    
+    /* Schedule Grid Control */
+    .schedule-wrapper { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; min-width: 1200px; font-size: 11px; }
+    th, td { border: 1px solid #eee; padding: 10px; text-align: center; }
+    th { background: #f4f4f4; color: var(--primary); font-weight: bold; }
+    .fac-col { background: #fafafa; font-weight: bold; text-align: left; border-right: 2px solid var(--border); width: 180px; }
+    
+    .status-maint { background: #333; color: white; cursor: pointer; font-weight: bold; }
+    .status-booked { background: #fdecea; color: var(--danger); font-weight: bold; cursor: pointer; }
+    .status-free { background: #e6f5ee; color: #2d9c55; cursor: pointer; font-weight: bold; }
+
+    /* Inputs & Buttons */
+    input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; }
+    .btn-save { background: var(--primary); color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    .btn-danger { background: none; border: 1px solid var(--danger); color: var(--danger); padding: 5px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; }
+    .btn-danger:hover { background: var(--danger); color: white; }
+    
+    .fac-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
+
 <div id="loginSection">
-  <h2>Admin Login</h2>
+  <h2>Sind Admin Portal</h2>
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Password">
-  <button class="btn-save" onclick="login()">Login</button>
+  <button id="loginBtn" onclick="login()">Login to Control Panel</button>
 </div>
 
 <div id="dashboardSection">
   <div class="sidebar">
-    <h2 style="padding:20px;">Control Panel</h2>
-    <button id="btn-sports" class="active" onclick="switchTab('sports')">🏆 Sports Control</button>
+    <h2>Management</h2>
+    <button id="btn-sports" class="active" onclick="switchTab('sports')">🏆 Sports Master</button>
     <button id="btn-facs" onclick="switchTab('facs')">🏗️ Facilities</button>
     <button id="btn-notices" onclick="switchTab('notices')">📢 Notice Board</button>
     <button id="btn-res" onclick="switchTab('res')">👥 Residents</button>
-    <button onclick="logout()" style="margin-top:auto; color:#ff9999;">Logout</button>
+    <button onclick="logout()" style="margin-top:auto; color:#ff9999; border-top: 1px solid rgba(255,255,255,0.1);">Logout</button>
   </div>
+
   <div class="main">
     <div id="tab-sports" class="tab active">
       <div class="card">
-        <h3>Master Schedule</h3>
-        <input type="date" id="adminDate" onchange="loadAdmin()" style="width:200px;">
-        <div style="overflow-x:auto; margin-top:15px;"><table><thead><tr id="adminHead"><th>Facility</th></tr></thead><tbody id="adminBody"></tbody></table></div>
+        <h3>Master Schedule Control</h3>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <label>View Date:</label>
+            <input type="date" id="adminDate" onchange="loadAdmin()" style="width:200px;">
+            <span style="font-size:12px; color:#666;">(Click <b>Free</b> to Block/Maint, click <b>Booked</b> to Cancel)</span>
+        </div>
+        <div class="schedule-wrapper">
+          <table>
+            <thead><tr id="adminHead"><th>Facility</th></tr></thead>
+            <tbody id="adminBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
+
     <div id="tab-facs" class="tab">
-      <div class="card"><h3>Add Ground</h3><input type="text" id="fName" placeholder="Name"><button class="btn-save" onclick="addFac()">Add</button></div>
-      <div class="card"><h3>Existing</h3><div id="facList"></div></div>
+      <div class="card">
+        <h3>Add New Ground</h3>
+        <input type="text" id="fName" placeholder="Name (e.g. Cricket Ground)">
+        <button class="btn-save" onclick="addFac()">Add Facility</button>
+      </div>
+      <div class="card">
+        <h3>Active Grounds</h3>
+        <div id="facList">Loading...</div>
+      </div>
     </div>
+
     <div id="tab-notices" class="tab">
       <div class="card">
-        <h3>Post Notice</h3>
-        <input type="text" id="nTitle" placeholder="Title">
-        <textarea id="nDesc" placeholder="Text message (Optional)" rows="4"></textarea>
-        <label>Upload PDF (Optional):</label>
+        <h3>Post New Announcement</h3>
+        <p style="font-size:12px; color:#666; margin-bottom:10px;">Write a text message, attach a PDF, or both.</p>
+        <input type="text" id="nTitle" placeholder="Notice Title (Required)">
+        <textarea id="nDesc" rows="5" placeholder="Write message text here..."></textarea>
+        <label style="font-size:12px; font-weight:bold; color:var(--primary); margin-top:10px; display:block;">Attach PDF Notice (Optional):</label>
         <input type="file" id="nFile" accept="application/pdf">
-        <button class="btn-save" id="upBtn" onclick="postNotice()">Post Announcement</button>
+        <button class="btn-save" id="upBtn" onclick="postNotice()" style="margin-top:10px;">Post to Society Board</button>
       </div>
     </div>
+
     <div id="tab-res" class="tab">
-      <div class="card"><h3>Add Resident</h3><input type="text" id="rName" placeholder="Name"><input type="text" id="rBung" placeholder="Bungalow"><button class="btn-save" onclick="addRes()">Add</button></div>
+      <div class="card">
+        <h3>Add to Directory</h3>
+        <input type="text" id="rName" placeholder="Full Name">
+        <input type="text" id="rBung" placeholder="Bungalow No. (e.g. B-12)">
+        <button class="btn-save" onclick="addRes()">Add Resident</button>
+      </div>
     </div>
+
   </div>
 </div>
 
@@ -77,8 +127,21 @@
   import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-storage.js";
 
-  const firebaseConfig = { apiKey: "YOUR_API_KEY", authDomain: "YOUR_PROJECT_ID.firebaseapp.com", projectId: "YOUR_PROJECT_ID", storageBucket: "YOUR_PROJECT_ID.firebasestorage.app", messagingSenderId: "YOUR_SENDER_ID", appId: "YOUR_APP_ID" };
-  const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const storage = getStorage(app);
+  const firebaseConfig = {
+    apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
+    authDomain: "sind-society.firebaseapp.com",
+    projectId: "sind-society",
+    storageBucket: "sind-society.firebasestorage.app",
+    messagingSenderId: "821689204364",
+    appId: "1:821689204364:web:68aa0db383e84b051145a9",
+    measurementId: "G-WC6BCC1490"
+  };
+
+  const app = initializeApp(firebaseConfig); 
+  const auth = getAuth(app); 
+  const db = getFirestore(app); 
+  const storage = getStorage(app);
+  
   const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
   
   document.getElementById('adminDate').value = new Date().toISOString().split('T')[0];
@@ -86,54 +149,99 @@
 
   window.login = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value).catch(e => alert(e.message));
   window.logout = () => signOut(auth);
-  onAuthStateChanged(auth, u => { if(u){ document.getElementById('loginSection').style.display='none'; document.getElementById('dashboardSection').style.display='flex'; loadAdmin(); } else { document.getElementById('loginSection').style.display='block'; document.getElementById('dashboardSection').style.display='none'; } });
+  
+  onAuthStateChanged(auth, u => { 
+    if(u){ 
+      document.getElementById('loginSection').classList.add('hidden'); 
+      document.getElementById('dashboardSection').style.display='flex'; 
+      loadAdmin(); 
+    } else { 
+      document.getElementById('loginSection').classList.remove('hidden'); 
+      document.getElementById('dashboardSection').style.display='none'; 
+    } 
+  });
 
   async function loadAdmin() {
     const d = document.getElementById('adminDate').value;
-    const facs = await getDocs(collection(db, "facilities"));
-    const books = await getDocs(query(collection(db, "bookings"), where("date", "==", d)));
-    const bMap = {}; books.forEach(doc => bMap[`${doc.data().facility}-${doc.data().time}`] = {id: doc.id, ...doc.data()});
-    const body = document.getElementById('adminBody'); body.innerHTML = '';
-    facs.forEach(doc => {
-      const f = doc.data(); let row = `<tr><td style="font-weight:bold; background:#fafafa; text-align:left;">${f.name}</td>`;
-      times.forEach(t => {
-        const b = bMap[`${f.name}-${t}`];
-        if(b) row += `<td class="${b.userName=='MAINTENANCE'?'status-maint':'status-booked'}" onclick="adminAct('${b.id}', true)">${b.userName=='MAINTENANCE'?'MAINT':b.userName}</td>`;
-        else row += `<td class="status-free" onclick="adminAct('${f.name}|${t}|${d}', false)">Free</td>`;
-      });
-      body.innerHTML += row + '</tr>';
-    });
-    const fList = document.getElementById('facList'); fList.innerHTML = ''; facs.forEach(d => fList.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">${d.data().name} <button onclick="delFac('${d.id}')" style="color:red; background:none; border:1px solid red; padding:5px; border-radius:4px; font-size:11px;">Del</button></div>`);
+    try {
+        const facs = await getDocs(collection(db, "facilities"));
+        const books = await getDocs(query(collection(db, "bookings"), where("date", "==", d)));
+        
+        const bMap = {}; 
+        books.forEach(doc => bMap[`${doc.data().facility}-${doc.data().time}`] = {id: doc.id, ...doc.data()});
+        
+        const body = document.getElementById('adminBody'); body.innerHTML = '';
+        facs.forEach(doc => {
+          const f = doc.data(); 
+          let row = `<tr><td class="fac-col">${f.name}</td>`;
+          times.forEach(t => {
+            const b = bMap[`${f.name}-${t}`];
+            if(b) {
+                const isM = b.userName === "MAINTENANCE";
+                row += `<td class="${isM ? 'status-maint' : 'status-booked'}" onclick="adminAct('${b.id}', true)">${isM ? 'MAINT' : b.userName}</td>`;
+            } else {
+                row += `<td class="status-free" onclick="adminAct('${f.name}|${t}|${d}', false)">Free</td>`;
+            }
+          });
+          body.innerHTML += row + '</tr>';
+        });
+
+        // Update Facility List Tab too
+        const fList = document.getElementById('facList'); fList.innerHTML = ''; 
+        facs.forEach(d => fList.innerHTML += `<div class="fac-item"><span>${d.data().name}</span> <button class="btn-danger" onclick="delFac('${d.id}')">Remove</button></div>`);
+    } catch (e) { console.error(e); }
   }
 
   window.adminAct = async (data, exists) => {
-    if(exists) { if(confirm("Cancel?")) { await deleteDoc(doc(db, "bookings", data)); loadAdmin(); } }
-    else { if(confirm("Block for Maintenance?")) { const [f, t, d] = data.split('|'); await addDoc(collection(db, "bookings"), { facility: f, time: t, date: d, userName: "MAINTENANCE", bungalow: "ADMIN" }); loadAdmin(); } }
+    if(exists) { 
+      if(confirm("Cancel this booking/maintenance?")) { await deleteDoc(doc(db, "bookings", data)); loadAdmin(); } 
+    } else { 
+      if(confirm("Mark as MAINTENANCE?")) { 
+        const [f, t, d] = data.split('|'); 
+        await addDoc(collection(db, "bookings"), { facility: f, time: t, date: d, userName: "MAINTENANCE", bungalow: "ADMIN" }); 
+        loadAdmin(); 
+      } 
+    }
   };
-  window.addFac = async () => { await addDoc(collection(db, "facilities"), { name: document.getElementById('fName').value }); document.getElementById('fName').value=''; loadAdmin(); };
-  window.delFac = async (id) => { if(confirm("Delete?")) { await deleteDoc(doc(db, "facilities", id)); loadAdmin(); } };
-  window.addRes = async () => { await addDoc(collection(db, "residents"), { name: document.getElementById('rName').value, bungalow: document.getElementById('rBung').value }); alert("Added"); };
+
+  window.addFac = async () => { 
+    const val = document.getElementById('fName').value;
+    if(!val) return;
+    await addDoc(collection(db, "facilities"), { name: val }); 
+    document.getElementById('fName').value=''; loadAdmin(); 
+  };
+  
+  window.delFac = async (id) => { if(confirm("Remove this facility entirely?")) { await deleteDoc(doc(db, "facilities", id)); loadAdmin(); } };
+  
+  window.addRes = async () => {
+    await addDoc(collection(db, "residents"), { name: document.getElementById('rName').value, bungalow: document.getElementById('rBung').value });
+    alert("Added to Directory"); document.getElementById('rName').value=''; document.getElementById('rBung').value='';
+  };
 
   window.postNotice = async () => {
     const file = document.getElementById('nFile').files[0], title = document.getElementById('nTitle').value, desc = document.getElementById('nDesc').value;
-    if(!title) return alert("Title required");
+    if(!title) return alert("Title is required");
     document.getElementById('upBtn').innerText = "Posting...";
     try {
       let url = null;
       if(file) {
-        const refS = ref(storage, 'notices/'+Date.now()+'_'+file.name); await uploadBytes(refS, file);
+        const refS = ref(storage, 'notices/' + Date.now() + '_' + file.name); await uploadBytes(refS, file);
         url = await getDownloadURL(refS);
       }
       await addDoc(collection(db, "notices"), { title: title, description: desc, pdfUrl: url, date: new Date().toLocaleDateString() });
-      alert("Notice Posted"); document.getElementById('nTitle').value=''; document.getElementById('nDesc').value=''; document.getElementById('nFile').value=''; loadAdmin();
-    } catch(e) { alert(e.message); }
-    document.getElementById('upBtn').innerText = "Post Announcement";
+      alert("Notice Posted Successfully"); 
+      document.getElementById('nTitle').value=''; document.getElementById('nDesc').value=''; document.getElementById('nFile').value=''; loadAdmin();
+    } catch(e) { alert("Failed: " + e.message); }
+    document.getElementById('upBtn').innerText = "Post Notice";
   };
+
   window.switchTab = (id) => { 
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); 
     document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-'+id).classList.add('active'); document.getElementById('btn-'+id).classList.add('active');
+    document.getElementById('tab-'+id).classList.add('active'); 
+    document.getElementById('btn-'+id).classList.add('active');
   };
+  
   window.loadAdmin = loadAdmin;
 </script>
 </body>
