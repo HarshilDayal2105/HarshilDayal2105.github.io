@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -77,33 +77,11 @@
   .ground-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; }
   .ground-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
   .ground-card-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 64px; position: relative; }
-  .ground-card-img.cricket { background: linear-gradient(135deg, #1e6b3a, #2d9c55); }
-  .ground-card-img.tennis { background: linear-gradient(135deg, #1a5c8a, #2980b9); }
-  .ground-card-img.multi { background: linear-gradient(135deg, #7d3c98, #9b59b6); }
-  .ground-availability { position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-  .avail-open { background: rgba(255,255,255,0.9); color: #1d8a5e; }
-  .avail-busy { background: rgba(255,255,255,0.9); color: var(--danger); }
   .ground-info { padding: 20px; }
   .ground-name { font-size: 17px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
   .ground-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
-  .ground-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-  .ground-tag { font-size: 11px; padding: 3px 10px; border-radius: 10px; background: var(--green-light); color: var(--green-deep); font-weight: 500; }
   .ground-book-btn { width: 100%; padding: 10px; border: none; border-radius: 8px; background: var(--green-deep); color: white; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
   .ground-book-btn:hover { background: var(--green-mid); }
- 
-  /* SCHEDULE */
-  .schedule-section { background: var(--white); border-radius: var(--radius); padding: 28px; border: 1px solid var(--border); }
-  .schedule-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green-deep); margin-bottom: 20px; }
-  .schedule-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
-  .sched-tab { padding: 7px 18px; border-radius: 8px; border: 1px solid var(--border); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.2s; color: var(--text-mid); }
-  .sched-tab.active { background: var(--green-deep); color: white; border-color: var(--green-deep); }
-  .schedule-grid { display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 2px; font-size: 12px; }
-  .sched-head { background: var(--green-deep); color: white; padding: 8px 4px; text-align: center; font-weight: 600; border-radius: 4px; font-size: 11px; }
-  .sched-time { background: var(--green-light); color: var(--green-deep); padding: 8px 4px; text-align: right; font-weight: 500; border-radius: 4px; padding-right: 8px; }
-  .sched-slot { border-radius: 4px; padding: 8px 4px; text-align: center; cursor: pointer; transition: all 0.15s; font-size: 11px; font-weight: 500; }
-  .sched-slot.free { background: #e6f5ee; color: var(--green-deep); }
-  .sched-slot.booked { background: #fdecea; color: var(--danger); cursor: default; }
-  .sched-slot.mine { background: #fffbe6; color: #b7860b; }
  
   /* DIRECTORY */
   #directory-section { background: var(--white); }
@@ -198,30 +176,7 @@
   </div>
  
   <div class="grounds-grid">
-    <div class="ground-card">
-      <div class="ground-card-img cricket">🏏<span class="ground-availability avail-open">Available</span></div>
-      <div class="ground-info">
-        <div class="ground-name">Main Cricket Ground</div>
-        <div class="ground-desc">Full-size cricket pitch with matting. Floodlights available.</div>
-        <button class="ground-book-btn" onclick="openBooking('Main Cricket Ground')">Book Now</button>
-      </div>
-    </div>
-    <div class="ground-card">
-      <div class="ground-card-img tennis">🎾<span class="ground-availability avail-busy">Booked Today</span></div>
-      <div class="ground-info">
-        <div class="ground-name">Tennis Courts (2)</div>
-        <div class="ground-desc">Two hard-surface tennis courts.</div>
-        <button class="ground-book-btn" onclick="openBooking('Tennis Courts')">Book Now</button>
-      </div>
-    </div>
-    <div class="ground-card">
-      <div class="ground-card-img multi">🏀<span class="ground-availability avail-open">Available</span></div>
-      <div class="ground-info">
-        <div class="ground-name">Multi-Purpose Court</div>
-        <div class="ground-desc">Basketball, volleyball and badminton.</div>
-        <button class="ground-book-btn" onclick="openBooking('Multi-Purpose Court')">Book Now</button>
-      </div>
-    </div>
+      <p style="text-align: center; color: #777; width: 100%;">Loading facilities...</p>
   </div>
 </div>
 </div>
@@ -243,10 +198,12 @@
       <option value="">All Blocks</option>
       <option value="A">Block A</option>
       <option value="B">Block B</option>
+      <option value="C">Block C</option>
+      <option value="D">Block D</option>
     </select>
   </div>
  
-  <div class="dir-count" id="dirCount">Showing 6 residents</div>
+  <div class="dir-count" id="dirCount">Loading residents...</div>
   <div class="dir-grid" id="dirGrid"></div>
 </div>
 </div>
@@ -261,67 +218,27 @@
     <button class="modal-close" onclick="closeBooking()">✕</button>
     <div id="bookingForm">
       <div class="modal-title">Book a Ground</div>
-      <div class="form-row"><label>Name</label><input type="text" id="bkName"></div>
-      <div class="form-row"><label>Date</label><input type="date" id="bkDate"></div>
-      <button class="form-submit" onclick="closeBooking(); alert('Booking requested!');">Confirm Booking</button>
+      <div class="form-row">
+          <label>Name</label>
+          <input type="text" id="bkName" placeholder="Your full name">
+      </div>
+      <div class="form-row">
+          <label>Date</label>
+          <input type="date" id="bkDate">
+      </div>
+      <div class="form-row">
+          <label>Ground / Facility</label>
+          <select id="bkGround">
+              </select>
+      </div>
+      <button class="form-submit" onclick="submitBookingRequest()">Confirm Booking</button>
     </div>
   </div>
 </div>
  
-<script>
-// Mock Resident Data
-const residents = [
-  { name: 'Amit Deshmukh', bungalow: 'A-01', phone: '+91-98220-12345', occupation: 'Engineer', block: 'A' },
-  { name: 'Priya Kulkarni', bungalow: 'A-07', phone: '+91-98221-76543', occupation: 'Doctor', block: 'A' },
-  { name: 'Rahul Joshi', bungalow: 'A-14', phone: '+91-98222-98765', occupation: 'Businessman', block: 'A' },
-  { name: 'Zainab Hussain', bungalow: 'B-03', phone: '+91-98223-45612', occupation: 'Teacher', block: 'B' },
-  { name: 'Sanjay Patil', bungalow: 'B-11', phone: '+91-98224-65498', occupation: 'Lawyer', block: 'B' },
-  { name: 'Vikram Gokhale', bungalow: 'C-02', phone: '+91-98226-22233', occupation: 'Banker', block: 'C' }
-];
-const avatarColors = ['av-green','av-gold','av-blue','av-pink'];
-function getInitials(name) { return name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase(); }
-
-function renderDirectory(data) {
-  const grid = document.getElementById('dirGrid');
-  document.getElementById('dirCount').textContent = `Showing ${data.length} resident${data.length!==1?'s':''}`;
-  grid.innerHTML = data.map((r, i) => `
-    <div class="dir-card">
-      <div class="dir-card-head">
-        <div class="dir-avatar ${avatarColors[i % avatarColors.length]}">${getInitials(r.name)}</div>
-        <div><div class="dir-name">${r.name}</div><span class="dir-bungalow">${r.bungalow}</span></div>
-      </div>
-      <div class="dir-details">
-        <div class="dir-row"><span>Phone</span><span>${r.phone}</span></div>
-        <div class="dir-row"><span>Job</span><span>${r.occupation}</span></div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function filterDirectory() {
-  const q = document.getElementById('dirSearch').value.toLowerCase();
-  const block = document.getElementById('dirBlock').value;
-  const filtered = residents.filter(r => (r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q)) && (!block || r.block === block));
-  renderDirectory(filtered);
-}
-renderDirectory(residents);
-
-// Notice UI Filtering
-function filterNotices(btn, type) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.notice-card').forEach(card => {
-    card.style.display = (type === 'all' || card.dataset.type === type) ? 'flex' : 'none';
-  });
-}
-
-function openBooking(ground) { document.getElementById('bookingModal').classList.add('open'); }
-function closeBooking() { document.getElementById('bookingModal').classList.remove('open'); }
-</script>
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
@@ -329,55 +246,120 @@ function closeBooking() { document.getElementById('bookingModal').classList.remo
     projectId: "sind-society",
     storageBucket: "sind-society.firebasestorage.app",
     messagingSenderId: "821689204364",
-    appId: "1:821689204364:web:68aa0db383e84b051145a9",
-    measurementId: "G-WC6BCC1490"
+    appId: "1:821689204364:web:68aa0db383e84b051145a9"
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // GLOBALS for UI Filtering
+  window.allResidents = [];
+
+  // --- 1. FETCH NOTICES ---
   async function fetchNotices() {
-    try {
-      const noticesRef = collection(db, "notices");
-      const snapshot = await getDocs(noticesRef);
-      const noticeGrid = document.getElementById('noticeGrid');
-      
-      document.getElementById('loadingNotices').style.display = 'none';
-
-      if (snapshot.empty) {
-        noticeGrid.innerHTML = "<p style='color:#777; font-size: 14px;'>No notices posted yet.</p>";
-        return;
-      }
-
-      let noticesHTML = "";
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        let icon = "📋";
-        if(data.type === "urgent") icon = "🚨";
-        if(data.type === "info") icon = "🎉";
-
-        noticesHTML += `
-          <div class="notice-card ${data.type}" data-type="${data.type}">
-            <div class="notice-icon ${data.type}">${icon}</div>
-            <div class="notice-body">
-              <div class="notice-meta">
-                <span class="notice-badge ${data.type}">${data.type.toUpperCase()}</span>
-                <span class="notice-date">${data.date || 'Recently'}</span>
-              </div>
-              <div class="notice-title">${data.title}</div>
-              <div class="notice-desc">${data.description}</div>
-            </div>
-          </div>
-        `;
-      });
-      noticeGrid.innerHTML = noticesHTML;
-    } catch (e) {
-      document.getElementById('loadingNotices').innerText = "Error loading notices. Check database rules.";
-      console.error(e);
-    }
+    const snap = await getDocs(collection(db, "notices"));
+    const grid = document.getElementById('noticeGrid');
+    document.getElementById('loadingNotices').style.display = 'none';
+    if (snap.empty) { grid.innerHTML = "<p>No notices yet.</p>"; return; }
+    
+    let html = "";
+    snap.forEach(doc => {
+      const d = doc.data();
+      let icon = d.type === "urgent" ? "🚨" : d.type === "info" ? "🎉" : "📋";
+      html += `<div class="notice-card ${d.type}" data-type="${d.type}">
+        <div class="notice-icon ${d.type}">${icon}</div>
+        <div class="notice-body">
+          <div class="notice-meta"><span class="notice-badge ${d.type}">${d.type.toUpperCase()}</span><span class="notice-date">${d.date||''}</span></div>
+          <div class="notice-title">${d.title}</div><div class="notice-desc">${d.description}</div>
+        </div></div>`;
+    });
+    grid.innerHTML = html;
   }
 
-  fetchNotices();
+  // --- 2. FETCH FACILITIES (SPORTS COURTS) ---
+  async function fetchFacilities() {
+    const snap = await getDocs(collection(db, "facilities"));
+    const grid = document.querySelector('.grounds-grid');
+    const bookingDropdown = document.getElementById('bkGround'); // For the modal
+    grid.innerHTML = ''; bookingDropdown.innerHTML = '';
+    
+    snap.forEach(doc => {
+      const d = doc.data();
+      // Add to public display
+      grid.innerHTML += `
+      <div class="ground-card">
+        <div class="ground-card-img" style="background:linear-gradient(135deg, #1e6b3a, #2d9c55); font-size: 64px;">${d.icon}</div>
+        <div class="ground-info">
+          <div class="ground-name">${d.name}</div>
+          <div class="ground-desc">${d.description}</div>
+          <button class="ground-book-btn" onclick="openBooking('${d.name}')">Book Now</button>
+        </div>
+      </div>`;
+      // Add to booking modal dropdown
+      bookingDropdown.innerHTML += `<option value="${d.name}">${d.name}</option>`;
+    });
+  }
+
+  // --- 3. FETCH RESIDENTS DIRECTORY ---
+  const avatarColors = ['av-green','av-gold','av-blue','av-pink'];
+  window.getInitials = (name) => name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+  window.renderDirectory = function(data) {
+    const grid = document.getElementById('dirGrid');
+    document.getElementById('dirCount').textContent = `Showing ${data.length} resident(s)`;
+    grid.innerHTML = data.map((r, i) => `
+      <div class="dir-card">
+        <div class="dir-card-head">
+          <div class="dir-avatar ${avatarColors[i % avatarColors.length]}">${getInitials(r.name)}</div>
+          <div><div class="dir-name">${r.name}</div><span class="dir-bungalow">${r.bungalow}</span></div>
+        </div>
+        <div class="dir-details">
+          <div class="dir-row"><span>Phone</span><span>${r.phone}</span></div>
+          <div class="dir-row"><span>Job</span><span>${r.occupation}</span></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function fetchResidents() {
+    const snap = await getDocs(collection(db, "residents"));
+    window.allResidents = [];
+    snap.forEach(doc => window.allResidents.push(doc.data()));
+    window.renderDirectory(window.allResidents);
+  }
+
+  // --- 4. SUBMIT BOOKING ---
+  window.submitBookingRequest = async function() {
+    const n = document.getElementById('bkName').value;
+    const date = document.getElementById('bkDate').value;
+    const fac = document.getElementById('bkGround').value;
+    
+    if(!n || !date) return alert("Please enter name and date.");
+    
+    await addDoc(collection(db, "bookings"), { userName: n, date: date, facility: fac });
+    alert("Booking sent to committee!");
+    closeBooking();
+  }
+
+  // Initialize
+  fetchNotices(); fetchFacilities(); fetchResidents();
+
+  // Expose UI functions to window for onclick handlers
+  window.filterNotices = function(btn, type) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+    document.querySelectorAll('.notice-card').forEach(card => card.style.display = (type === 'all' || card.dataset.type === type) ? 'flex' : 'none');
+  };
+  window.filterDirectory = function() {
+    const q = document.getElementById('dirSearch').value.toLowerCase(), block = document.getElementById('dirBlock').value;
+    const filtered = window.allResidents.filter(r => (r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q)) && (!block || r.block === block));
+    window.renderDirectory(filtered);
+  };
+  window.openBooking = function(groundName) { 
+    if(groundName) document.getElementById('bkGround').value = groundName;
+    document.getElementById('bookingModal').classList.add('open'); 
+  };
+  window.closeBooking = function() { document.getElementById('bookingModal').classList.remove('open'); };
+
 </script>
 </body>
 </html>
