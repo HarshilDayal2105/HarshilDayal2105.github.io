@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sind Society | Community Management Portal</title>
+<title>Sind Society | Multi-Day Management Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -25,13 +25,14 @@
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
   .booking-panel { background: white; padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-  .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 15px; }
+  .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 15px; }
   label { display: block; font-size: 11px; font-weight: bold; color: var(--green-deep); margin-bottom: 5px; text-transform: uppercase; }
   input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; outline: none; background: #fff; }
-  .btn-primary { background: var(--green-deep); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s; }
+  .btn-primary { background: var(--green-deep); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
 
   .schedule-container { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+  .table-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+  table { width: 100%; border-collapse: collapse; min-width: 1300px; }
   th, td { border: 1px solid #eee; padding: 12px; text-align: center; font-size: 12px; }
   th { background: var(--green-deep); color: white; }
   .fac-name { background: #f9f9f9; font-weight: bold; text-align: left; border-right: 2px solid var(--border); min-width: 150px; }
@@ -41,7 +42,6 @@
 
   .grid-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
   .card { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); }
-  .search-box { width: 100%; max-width: 400px; padding: 12px; border-radius: 30px; border: 1px solid var(--border); margin-bottom: 20px; }
   footer { text-align: center; padding: 40px; color: #999; font-size: 12px; }
 </style>
 </head>
@@ -58,19 +58,29 @@
 
 <section class="hero">
   <h1 id="hero-title">Sports Booking</h1>
-  <p id="hero-desc">Daily Master Schedule: 6 AM to 11 PM</p>
+  <p id="hero-desc">Select a date to view and book slots.</p>
 </section>
 
 <div id="page-sports" class="page-section active">
   <div class="booking-panel">
     <div class="form-row">
+      <div><label>Date</label><input type="date" id="inDate"></div>
       <div><label>Ground</label><select id="inFac"></select></div>
       <div><label>Time Slot</label><select id="inTime"></select></div>
-      <div><label>Full Name</label><input type="text" id="inName" placeholder="Enter Name"></div>
-      <div><label>Bungalow No.</label><input type="text" id="inBung" placeholder="e.g. A-12"></div>
+      <div><label>Your Name</label><input type="text" id="inName" placeholder="Name"></div>
+      <div><label>Bungalow</label><input type="text" id="inBung" placeholder="e.g. A-12"></div>
     </div>
     <button class="btn-primary" onclick="handleBooking()">Confirm Reservation</button>
   </div>
+
+  <div class="table-header-flex">
+    <h2>Schedule for: <span id="viewingDateText">Today</span></h2>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <label style="margin:0;">View Date:</label>
+      <input type="date" id="viewDateFilter" style="width:160px; padding:8px;" onchange="loadAll()">
+    </div>
+  </div>
+
   <div class="schedule-container">
     <table>
       <thead><tr id="tableHead"><th class="fac-name">Facility</th></tr></thead>
@@ -81,7 +91,7 @@
 
 <div id="page-notices" class="page-section"><div id="noticeGrid" class="grid-grid">Loading notices...</div></div>
 <div id="page-directory" class="page-section">
-  <input type="text" id="dirSearch" class="search-box" placeholder="Search by name or bungalow..." oninput="filterDirectory()">
+  <input type="text" id="dirSearch" style="width:100%; max-width:400px; padding:12px; border-radius:30px; border:1px solid var(--border); margin-bottom:20px;" placeholder="Search..." oninput="filterDirectory()">
   <div id="dirGrid" class="grid-grid">Loading residents...</div>
 </div>
 
@@ -89,7 +99,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
@@ -103,11 +113,13 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // UPDATED TIME ARRAY: 6AM to 11PM
   const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
-  window.allResidents = [];
+  
+  // Set default dates to today
+  const todayStr = new Date().toISOString().split('T')[0];
+  document.getElementById('inDate').value = todayStr;
+  document.getElementById('viewDateFilter').value = todayStr;
 
-  // Populate UI headers and dropdown
   const timeSelect = document.getElementById('inTime');
   const tableHead = document.getElementById('tableHead');
   times.forEach(t => {
@@ -116,8 +128,11 @@
   });
 
   async function loadAll() {
+    const selectedDate = document.getElementById('viewDateFilter').value;
+    document.getElementById('viewingDateText').innerText = selectedDate;
+
     const facSnap = await getDocs(collection(db, "facilities"));
-    const bookSnap = await getDocs(collection(db, "bookings"));
+    const bookSnap = await getDocs(query(collection(db, "bookings"), where("date", "==", selectedDate)));
     const noteSnap = await getDocs(collection(db, "notices"));
     const resSnap = await getDocs(collection(db, "residents"));
 
@@ -126,6 +141,7 @@
 
     const facSelect = document.getElementById('inFac'); facSelect.innerHTML = '';
     const body = document.getElementById('tableBody'); body.innerHTML = '';
+    
     facSnap.forEach(d => {
       const f = d.data();
       facSelect.innerHTML += `<option value="${f.name}">${f.name}</option>`;
@@ -137,52 +153,40 @@
       body.innerHTML += row + `</tr>`;
     });
 
+    // Notices & Directory
     document.getElementById('noticeGrid').innerHTML = '';
-    noteSnap.forEach(d => {
-      document.getElementById('noticeGrid').innerHTML += `<div class="card"><h3>${d.data().title}</h3><p>${d.data().description}</p></div>`;
-    });
-
-    window.allResidents = [];
-    resSnap.forEach(d => window.allResidents.push(d.data()));
-    renderDir(window.allResidents);
+    noteSnap.forEach(d => document.getElementById('noticeGrid').innerHTML += `<div class="card"><h3>${d.data().title}</h3><p>${d.data().description}</p></div>`);
+    
+    const rData = [];
+    resSnap.forEach(d => rData.push(d.data()));
+    window.renderDir = (data) => {
+      const g = document.getElementById('dirGrid'); g.innerHTML = '';
+      data.forEach(r => g.innerHTML += `<div class="card"><strong>${r.name}</strong><br>Bungalow: ${r.bungalow}</div>`);
+    };
+    window.renderDir(rData);
   }
-
-  function renderDir(data) {
-    const grid = document.getElementById('dirGrid'); grid.innerHTML = '';
-    data.forEach(r => grid.innerHTML += `<div class="card"><strong>${r.name}</strong><br>Bungalow: ${r.bungalow}</div>`);
-  }
-
-  window.filterDirectory = () => {
-    const q = document.getElementById('dirSearch').value.toLowerCase();
-    renderDir(window.allResidents.filter(r => r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q)));
-  };
 
   window.handleBooking = async () => {
-    const f = document.getElementById('inFac').value, t = document.getElementById('inTime').value, n = document.getElementById('inName').value, b = document.getElementById('inBung').value;
-    if(!n || !b) return alert("Enter name and bungalow");
+    const d = document.getElementById('inDate').value, f = document.getElementById('inFac').value, t = document.getElementById('inTime').value, n = document.getElementById('inName').value, b = document.getElementById('inBung').value;
+    if(!n || !b || !d) return alert("Fill all fields including date.");
     
-    // Check if slot taken
-    const bookSnap = await getDocs(collection(db, "bookings"));
-    let taken = false;
-    bookSnap.forEach(d => { if(d.data().facility === f && d.data().time === t) taken = true; });
-    if(taken) return alert("This slot is already booked!");
+    const checkSnap = await getDocs(query(collection(db, "bookings"), where("date", "==", d), where("facility", "==", f), where("time", "==", t)));
+    if(!checkSnap.empty) return alert("Slot already booked for this date!");
 
-    await addDoc(collection(db, "bookings"), { facility: f, time: t, userName: n, bungalow: b, date: new Date().toLocaleDateString() });
+    await addDoc(collection(db, "bookings"), { facility: f, time: t, userName: n, bungalow: b, date: d });
     alert("Booked!"); loadAll();
   };
 
   window.cancelBooking = async (id) => {
-    if(confirm("Cancel booking?")) { await deleteDoc(doc(db, "bookings", id)); loadAll(); }
+    if(confirm("Cancel?")) { await deleteDoc(doc(db, "bookings", id)); loadAll(); }
   };
 
   window.showPage = (id) => {
     document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
     document.getElementById('page-'+id).classList.add('active');
-    document.getElementById('nav-'+id).classList.add('active');
-    document.getElementById('hero-title').innerText = id === 'sports' ? 'Sports Booking' : id.charAt(0).toUpperCase() + id.slice(1);
   };
 
+  window.loadAll = loadAll;
   loadAll();
 </script>
 </body>
