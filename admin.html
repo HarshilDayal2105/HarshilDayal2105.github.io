@@ -22,30 +22,66 @@
     th, td { border: 1px solid #eee; padding: 10px; text-align: center; }
     .status-maint { background: #333; color: white; cursor: pointer; }
     .status-booked { background: #fdecea; color: var(--danger); cursor: pointer; }
-    .status-free { background: #e6f5ee; color: #2d9c55; cursor: pointer; }
+    .status-free { background: #e6f5ee; color: #2d9c55; cursor: pointer; font-weight: bold;}
   </style>
 </head>
 <body>
-<div id="loginSection"><h2>Admin Login</h2><input type="email" id="email" placeholder="Email"><input type="password" id="password" placeholder="Password"><button class="btn-save" onclick="login()">Login</button></div>
+<div id="loginSection">
+  <h2>Admin Login</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button class="btn-save" onclick="login()">Login</button>
+</div>
+
 <div id="dashboardSection">
   <div class="sidebar">
-    <h2 style="padding:20px;">Control Panel</h2>
-    <button onclick="switchTab('sports')">🏆 Sports Control</button>
+    <h2 style="padding:20px; margin:0;">Control Panel</h2>
+    <button onclick="switchTab('sports')" class="active">🏆 Sports Control</button>
     <button onclick="switchTab('facs')">🏗️ Facility Manager</button>
     <button onclick="switchTab('notices')">📢 PDF Notices</button>
+    <button onclick="switchTab('res')">👥 Add Residents</button>
     <button onclick="logout()" style="margin-top:auto; color:#ff9999;">Logout</button>
   </div>
   <div class="main">
+    
     <div id="tab-sports" class="tab active">
-      <div class="card"><h3>Master Schedule Control</h3><input type="date" id="adminDate" onchange="loadAdmin()" style="width:200px;"><div style="overflow-x:auto; margin-top:20px;"><table><thead><tr id="adminHead"><th>Facility</th></tr></thead><tbody id="adminBody"></tbody></table></div></div>
+      <div class="card">
+        <h3>Master Schedule Control</h3>
+        <input type="date" id="adminDate" onchange="loadAdmin()" style="width:200px;">
+        <p style="font-size:12px; color:#666;">Click empty slots to block for Maintenance.</p>
+        <div style="overflow-x:auto; margin-top:20px;">
+          <table><thead><tr id="adminHead"><th>Facility</th></tr></thead><tbody id="adminBody"></tbody></table>
+        </div>
+      </div>
     </div>
+    
     <div id="tab-facs" class="tab">
-      <div class="card"><h3>Add Facility</h3><input type="text" id="fName" placeholder="Name"><button class="btn-save" onclick="addFac()">Add</button></div>
+      <div class="card">
+        <h3>Add Facility</h3>
+        <input type="text" id="fName" placeholder="Name (e.g. Squash Court)">
+        <button class="btn-save" onclick="addFac()">Add Facility</button>
+      </div>
       <div class="card"><h3>Active Grounds</h3><div id="facList"></div></div>
     </div>
+    
     <div id="tab-notices" class="tab">
-      <div class="card"><h3>Post PDF Notice</h3><input type="text" id="nTitle" placeholder="Title"><input type="file" id="nFile" accept="application/pdf"><button class="btn-save" id="upBtn" onclick="uploadPDF()">Upload PDF Notice</button></div>
+      <div class="card">
+        <h3>Post PDF Notice</h3>
+        <input type="text" id="nTitle" placeholder="Title">
+        <input type="file" id="nFile" accept="application/pdf">
+        <button class="btn-save" id="upBtn" onclick="uploadPDF()">Upload PDF Notice</button>
+      </div>
     </div>
+
+    <div id="tab-res" class="tab">
+      <div class="card">
+        <h3>Add Resident to Directory</h3>
+        <input type="text" id="rName" placeholder="Full Name">
+        <input type="text" id="rBung" placeholder="Bungalow No.">
+        <button class="btn-save" onclick="addRes()">Add Resident</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -55,8 +91,20 @@
   import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-storage.js";
 
-  const firebaseConfig = { apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU", authDomain: "sind-society.firebaseapp.com", projectId: "sind-society", storageBucket: "sind-society.firebasestorage.app", messagingSenderId: "821689204364", appId: "1:821689204364:web:68aa0db383e84b051145a9" };
-  const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const storage = getStorage(app);
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig); 
+  const auth = getAuth(app); 
+  const db = getFirestore(app); 
+  const storage = getStorage(app);
+  
   const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
   
   document.getElementById('adminDate').value = new Date().toISOString().split('T')[0];
@@ -64,14 +112,29 @@
 
   window.login = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value).catch(e => alert(e.message));
   window.logout = () => signOut(auth);
-  onAuthStateChanged(auth, u => { if(u){ document.getElementById('loginSection').style.display='none'; document.getElementById('dashboardSection').style.display='flex'; loadAdmin(); } else { document.getElementById('loginSection').style.display='block'; document.getElementById('dashboardSection').style.display='none'; } });
+  
+  onAuthStateChanged(auth, u => { 
+    if(u){ 
+      document.getElementById('loginSection').style.display='none'; 
+      document.getElementById('dashboardSection').style.display='flex'; 
+      loadAdmin(); 
+    } else { 
+      document.getElementById('loginSection').style.display='block'; 
+      document.getElementById('dashboardSection').style.display='none'; 
+    } 
+  });
 
   async function loadAdmin() {
-    const d = document.getElementById('adminDate').value, facs = await getDocs(collection(db, "facilities")), books = await getDocs(query(collection(db, "bookings"), where("date", "==", d)));
-    const bMap = {}; books.forEach(doc => bMap[`${doc.data().facility}-${doc.data().time}`] = {id: doc.id, ...doc.data()});
+    const d = document.getElementById('adminDate').value;
+    const facs = await getDocs(collection(db, "facilities"));
+    const books = await getDocs(query(collection(db, "bookings"), where("date", "==", d)));
+    
+    const bMap = {}; 
+    books.forEach(doc => bMap[`${doc.data().facility}-${doc.data().time}`] = {id: doc.id, ...doc.data()});
+    
     const body = document.getElementById('adminBody'); body.innerHTML = '';
     facs.forEach(doc => {
-      const f = doc.data(); let row = `<tr><td style="text-align:left; font-weight:bold;">${f.name}</td>`;
+      const f = doc.data(); let row = `<tr><td style="text-align:left; font-weight:bold; background:#fafafa;">${f.name}</td>`;
       times.forEach(t => {
         const b = bMap[`${f.name}-${t}`];
         if(b) row += `<td class="${b.userName=='MAINTENANCE'?'status-maint':'status-booked'}" onclick="adminAct('${b.id}', true)">${b.userName=='MAINTENANCE'?'MAINT':b.userName}</td>`;
@@ -79,23 +142,60 @@
       });
       body.innerHTML += row + '</tr>';
     });
-    const fList = document.getElementById('facList'); fList.innerHTML = ''; facs.forEach(d => fList.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">${d.data().name} <button onclick="delFac('${d.id}')" style="color:red; background:none; border:1px solid red;">Del</button></div>`);
+
+    const fList = document.getElementById('facList'); fList.innerHTML = ''; 
+    facs.forEach(d => fList.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">${d.data().name} <button onclick="delFac('${d.id}')" style="color:red; background:none; border:1px solid red; padding:5px 10px; cursor:pointer;">Delete</button></div>`);
   }
 
   window.adminAct = async (data, exists) => {
-    if(exists) { if(confirm("Cancel?")) { await deleteDoc(doc(db, "bookings", data)); loadAdmin(); } }
-    else { if(confirm("Block for Maintenance?")) { const [f, t, d] = data.split('|'); await addDoc(collection(db, "bookings"), { facility: f, time: t, date: d, userName: "MAINTENANCE", bungalow: "ADMIN" }); loadAdmin(); } }
+    if(exists) { 
+      if(confirm("Cancel this booking/maintenance block?")) { await deleteDoc(doc(db, "bookings", data)); loadAdmin(); } 
+    } else { 
+      if(confirm("Block this slot for Maintenance?")) { 
+        const [f, t, d] = data.split('|'); 
+        await addDoc(collection(db, "bookings"), { facility: f, time: t, date: d, userName: "MAINTENANCE", bungalow: "ADMIN" }); 
+        loadAdmin(); 
+      } 
+    }
   };
-  window.addFac = async () => { await addDoc(collection(db, "facilities"), { name: document.getElementById('fName').value }); document.getElementById('fName').value=''; loadAdmin(); };
-  window.delFac = async (id) => { if(confirm("Delete Facility?")) { await deleteDoc(doc(db, "facilities", id)); loadAdmin(); } };
+
+  window.addFac = async () => { 
+    if(!document.getElementById('fName').value) return;
+    await addDoc(collection(db, "facilities"), { name: document.getElementById('fName').value }); 
+    document.getElementById('fName').value=''; loadAdmin(); 
+  };
+  
+  window.delFac = async (id) => { if(confirm("Delete Facility entirely?")) { await deleteDoc(doc(db, "facilities", id)); loadAdmin(); } };
+  
+  window.addRes = async () => {
+    await addDoc(collection(db, "residents"), { name: document.getElementById('rName').value, bungalow: document.getElementById('rBung').value });
+    alert("Resident Added!"); document.getElementById('rName').value=''; document.getElementById('rBung').value='';
+  };
+
   window.uploadPDF = async () => {
-    const file = document.getElementById('nFile').files[0], title = document.getElementById('nTitle').value; if(!file) return alert("Pick PDF");
-    document.getElementById('upBtn').innerText = "Uploading...";
-    const refS = ref(storage, 'notices/'+Date.now()+'_'+file.name); await uploadBytes(refS, file);
-    const url = await getDownloadURL(refS); await addDoc(collection(db, "notices"), { title: title, pdfUrl: url, date: new Date().toLocaleDateString() });
-    alert("Posted"); document.getElementById('upBtn').innerText = "Upload PDF Notice"; loadAdmin();
+    const file = document.getElementById('nFile').files[0], title = document.getElementById('nTitle').value; 
+    if(!file || !title) return alert("Title and PDF are required");
+    
+    document.getElementById('upBtn').innerText = "Uploading... Please wait";
+    try {
+      const refS = ref(storage, 'notices/' + Date.now() + '_' + file.name); 
+      await uploadBytes(refS, file);
+      const url = await getDownloadURL(refS); 
+      await addDoc(collection(db, "notices"), { title: title, pdfUrl: url, date: new Date().toLocaleDateString() });
+      alert("Notice Posted Successfully"); 
+      document.getElementById('nTitle').value = ''; document.getElementById('nFile').value = '';
+    } catch (e) { alert("Upload failed: " + e.message); }
+    document.getElementById('upBtn').innerText = "Upload PDF Notice";
   };
-  window.switchTab = (id) => { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById('tab-'+id).classList.add('active'); };
+
+  window.switchTab = (id) => { 
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); 
+    document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-'+id).classList.add('active'); 
+    event.currentTarget.classList.add('active');
+  };
+  
+  window.loadAdmin = loadAdmin;
 </script>
 </body>
 </html>
