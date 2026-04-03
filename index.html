@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sind Cooperative Housing Society, Aundh</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #0a3d2b; --green-mid: #14573d; --green-bright: #1d8a5e; --green-light: #e6f5ee;
+    --gold: #c9993a; --gold-light: #f5e9cc; --cream: #faf8f3;
+    --text-dark: #1a1a1a; --text-mid: #444; --text-muted: #777; --border: #ddd8cc; --white: #ffffff;
+    --danger: #c0392b; --danger-light: #fdecea; --info-light: #e8f4fd; --info: #1a6fa0;
+    --radius: 12px; --shadow: 0 2px 12px rgba(0,0,0,0.08); --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  }
+ 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-dark); line-height: 1.6; }
+ 
+  /* NAV */
+  nav { background: var(--green-deep); position: sticky; top: 0; z-index: 100; border-bottom: 3px solid var(--gold); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo .crest { width: 40px; height: 40px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 16px; color: var(--green-deep); font-weight: 700; }
+  .nav-logo span { font-family: 'Playfair Display', serif; color: var(--white); font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .nav-logo small { display: block; font-family: 'DM Sans', sans-serif; font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 300; }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 500; transition: all 0.2s; }
+  .nav-links a:hover, .nav-links a.active { background: rgba(255,255,255,0.12); color: #fff; }
+ 
+  /* HERO */
+  .hero { background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 60%, var(--green-bright) 100%); color: white; text-align: center; padding: 72px 24px 56px; position: relative; overflow: hidden; }
+  .hero-tag { display: inline-block; background: var(--gold); color: var(--green-deep); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 5px 16px; border-radius: 20px; margin-bottom: 20px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; line-height: 1.15; margin-bottom: 16px; }
+  .hero p { color: rgba(255,255,255,0.7); font-size: 16px; max-width: 480px; margin: 0 auto 32px; }
+  .hero-stats { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.15); }
+  .hero-stat { text-align: center; }
+  .hero-stat .num { font-size: 28px; font-weight: 700; font-family: 'Playfair Display', serif; color: var(--gold); }
+  .hero-stat .lbl { font-size: 12px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+ 
+  /* SECTIONS */
+  .section { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+  .section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 36px; padding-bottom: 16px; border-bottom: 2px solid var(--green-light); }
+  .section-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--green-bright); margin-bottom: 6px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--green-deep); }
+  .section-divider { background: var(--green-light); height: 1px; margin: 0; border: none; }
+ 
+  /* NOTICES */
+  #notices-section { background: var(--white); }
+  .notices-wrap { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+  .notice-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+  .filter-btn { padding: 6px 18px; border-radius: 20px; border: 1.5px solid var(--border); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.2s; color: var(--text-mid); }
+  .filter-btn.active, .filter-btn:hover { border-color: var(--green-deep); background: var(--green-deep); color: white; }
+  .notice-grid { display: grid; gap: 16px; }
+  .notice-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; background: var(--white); display: flex; gap: 20px; align-items: flex-start; transition: box-shadow 0.2s, border-color 0.2s; }
+  .notice-card:hover { box-shadow: var(--shadow); border-color: #bbb; }
+  .notice-card.urgent { border-left: 4px solid var(--danger); background: var(--danger-light); }
+  .notice-card.general { border-left: 4px solid var(--green-bright); }
+  .notice-card.info { border-left: 4px solid var(--info); background: var(--info-light); }
+  .notice-icon { width: 40px; height: 40px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .notice-icon.urgent { background: #f5c6c3; }
+  .notice-icon.general { background: var(--green-light); }
+  .notice-icon.info { background: #cce5f7; }
+  .notice-body { flex: 1; }
+  .notice-meta { display: flex; gap: 12px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+  .notice-badge { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 3px 10px; border-radius: 10px; }
+  .notice-badge.urgent { background: #f5c6c3; color: var(--danger); }
+  .notice-badge.general { background: var(--green-light); color: var(--green-deep); }
+  .notice-badge.info { background: #cce5f7; color: var(--info); }
+  .notice-date { font-size: 12px; color: var(--text-muted); }
+  .notice-title { font-size: 15px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+  .notice-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+ 
+  /* GROUNDS */
+  #grounds-section { background: var(--cream); }
+  .grounds-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 48px; }
+  .ground-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; }
+  .ground-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .ground-card-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 64px; position: relative; }
+  .ground-card-img.cricket { background: linear-gradient(135deg, #1e6b3a, #2d9c55); }
+  .ground-card-img.tennis { background: linear-gradient(135deg, #1a5c8a, #2980b9); }
+  .ground-card-img.multi { background: linear-gradient(135deg, #7d3c98, #9b59b6); }
+  .ground-availability { position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .avail-open { background: rgba(255,255,255,0.9); color: #1d8a5e; }
+  .avail-busy { background: rgba(255,255,255,0.9); color: var(--danger); }
+  .ground-info { padding: 20px; }
+  .ground-name { font-size: 17px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+  .ground-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+  .ground-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .ground-tag { font-size: 11px; padding: 3px 10px; border-radius: 10px; background: var(--green-light); color: var(--green-deep); font-weight: 500; }
+  .ground-book-btn { width: 100%; padding: 10px; border: none; border-radius: 8px; background: var(--green-deep); color: white; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+  .ground-book-btn:hover { background: var(--green-mid); }
+ 
+  /* SCHEDULE */
+  .schedule-section { background: var(--white); border-radius: var(--radius); padding: 28px; border: 1px solid var(--border); }
+  .schedule-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green-deep); margin-bottom: 20px; }
+  .schedule-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .sched-tab { padding: 7px 18px; border-radius: 8px; border: 1px solid var(--border); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.2s; color: var(--text-mid); }
+  .sched-tab.active { background: var(--green-deep); color: white; border-color: var(--green-deep); }
+  .schedule-grid { display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 2px; font-size: 12px; }
+  .sched-head { background: var(--green-deep); color: white; padding: 8px 4px; text-align: center; font-weight: 600; border-radius: 4px; font-size: 11px; }
+  .sched-time { background: var(--green-light); color: var(--green-deep); padding: 8px 4px; text-align: right; font-weight: 500; border-radius: 4px; padding-right: 8px; }
+  .sched-slot { border-radius: 4px; padding: 8px 4px; text-align: center; cursor: pointer; transition: all 0.15s; font-size: 11px; font-weight: 500; }
+  .sched-slot.free { background: #e6f5ee; color: var(--green-deep); }
+  .sched-slot.booked { background: #fdecea; color: var(--danger); cursor: default; }
+  .sched-slot.mine { background: #fffbe6; color: #b7860b; }
+ 
+  /* DIRECTORY */
+  #directory-section { background: var(--white); }
+  .dir-wrap { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+  .dir-search-bar { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
+  .dir-search-bar input, .dir-search-bar select { flex: 1; padding: 10px 16px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; background: var(--cream); }
+  .dir-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .dir-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; background: var(--cream); }
+  .dir-card-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .dir-avatar { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; flex-shrink: 0; }
+  .av-green { background: var(--green-light); color: var(--green-deep); } .av-gold { background: var(--gold-light); color: #8a6020; } .av-blue { background: #d6eaf8; color: #154360; } .av-pink { background: #fdedee; color: #922b21; }
+  .dir-name { font-size: 15px; font-weight: 600; color: var(--text-dark); }
+  .dir-bungalow { display: inline-block; margin-top: 2px; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; background: var(--green-deep); color: white; padding: 2px 8px; border-radius: 4px; }
+  .dir-details { border-top: 1px solid var(--border); padding-top: 12px; }
+  .dir-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; font-size: 13px; color: var(--text-mid); }
+  .dir-row span:first-child { color: var(--text-muted); min-width: 60px; font-size: 12px; }
+  .dir-count { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+ 
+  /* FOOTER & MODALS */
+  footer { background: var(--green-deep); color: rgba(255,255,255,0.65); text-align: center; padding: 32px 24px; font-size: 13px; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--white); border-radius: 16px; padding: 36px; max-width: 460px; width: 92%; position: relative; }
+  .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green-deep); margin-bottom: 6px; }
+  .form-row { margin-bottom: 16px; }
+  .form-row label { display: block; font-size: 13px; font-weight: 500; color: var(--text-mid); margin-bottom: 6px; }
+  .form-row input, .form-row select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; background: var(--cream); }
+  .form-submit { width: 100%; padding: 12px; background: var(--green-deep); color: white; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+  
+  /* Loading text for notices */
+  #loadingNotices { text-align: center; padding: 40px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+ 
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <div class="crest">SC</div>
+      <span>Sind Cooperative<small>Housing Society</small></span>
+    </a>
+    <div class="nav-links">
+      <a href="#notices-section" class="active">Notices</a>
+      <a href="#grounds-section">Sports Grounds</a>
+      <a href="#directory-section">Directory</a>
+    </div>
+  </div>
+</nav>
+ 
+<section class="hero">
+  <div class="hero-tag">Est. Aundh, Pune</div>
+  <h1>Sind Cooperative<br>Housing Society</h1>
+  <p>Building a stronger community — one neighbourhood at a time.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">500+</div><div class="lbl">Bungalows</div></div>
+    <div class="hero-stat"><div class="num">3</div><div class="lbl">Sports Grounds</div></div>
+    <div class="hero-stat"><div class="num">2400+</div><div class="lbl">Residents</div></div>
+  </div>
+</section>
+ 
+<div id="notices-section">
+  <div class="notices-wrap">
+    <div class="section-header">
+      <div class="section-title-group">
+        <div class="section-eyebrow">Community Board</div>
+        <div class="section-title">Notices & Announcements</div>
+      </div>
+    </div>
+    
+    <div class="notice-filters">
+      <button class="filter-btn active" onclick="filterNotices(this,'all')">All</button>
+      <button class="filter-btn" onclick="filterNotices(this,'urgent')">Urgent</button>
+      <button class="filter-btn" onclick="filterNotices(this,'general')">General</button>
+      <button class="filter-btn" onclick="filterNotices(this,'info')">Info</button>
+    </div>
+    
+    <div id="loadingNotices">Loading latest notices from database...</div>
+    <div class="notice-grid" id="noticeGrid"></div>
+  </div>
+</div>
+ 
+<hr class="section-divider">
+ 
+<div id="grounds-section">
+<div class="section" style="background: var(--cream);">
+  <div class="section-header">
+    <div class="section-title-group">
+      <div class="section-eyebrow">Facilities</div>
+      <div class="section-title">Sports Grounds</div>
+    </div>
+  </div>
+ 
+  <div class="grounds-grid">
+    <div class="ground-card">
+      <div class="ground-card-img cricket">🏏<span class="ground-availability avail-open">Available</span></div>
+      <div class="ground-info">
+        <div class="ground-name">Main Cricket Ground</div>
+        <div class="ground-desc">Full-size cricket pitch with matting. Floodlights available.</div>
+        <button class="ground-book-btn" onclick="openBooking('Main Cricket Ground')">Book Now</button>
+      </div>
+    </div>
+    <div class="ground-card">
+      <div class="ground-card-img tennis">🎾<span class="ground-availability avail-busy">Booked Today</span></div>
+      <div class="ground-info">
+        <div class="ground-name">Tennis Courts (2)</div>
+        <div class="ground-desc">Two hard-surface tennis courts.</div>
+        <button class="ground-book-btn" onclick="openBooking('Tennis Courts')">Book Now</button>
+      </div>
+    </div>
+    <div class="ground-card">
+      <div class="ground-card-img multi">🏀<span class="ground-availability avail-open">Available</span></div>
+      <div class="ground-info">
+        <div class="ground-name">Multi-Purpose Court</div>
+        <div class="ground-desc">Basketball, volleyball and badminton.</div>
+        <button class="ground-book-btn" onclick="openBooking('Multi-Purpose Court')">Book Now</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+ 
+<hr class="section-divider">
+ 
+<div id="directory-section">
+<div class="dir-wrap">
+  <div class="section-header">
+    <div class="section-title-group">
+      <div class="section-eyebrow">Residents</div>
+      <div class="section-title">Society Directory</div>
+    </div>
+  </div>
+ 
+  <div class="dir-search-bar">
+    <input type="text" id="dirSearch" placeholder="Search by name, bungalow number…" oninput="filterDirectory()">
+    <select id="dirBlock" onchange="filterDirectory()">
+      <option value="">All Blocks</option>
+      <option value="A">Block A</option>
+      <option value="B">Block B</option>
+    </select>
+  </div>
+ 
+  <div class="dir-count" id="dirCount">Showing 6 residents</div>
+  <div class="dir-grid" id="dirGrid"></div>
+</div>
+</div>
+ 
+<footer>
+  <strong>Sind Cooperative Housing Society</strong> &mdash; Aundh, Pune, Maharashtra, India<br>
+  <span style="margin-top:6px;display:block;">Office: +91-20-2569-XXXX &nbsp;|&nbsp; Email: info@sindchs-aundh.org.in</span>
+</footer>
+ 
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeBooking()">✕</button>
+    <div id="bookingForm">
+      <div class="modal-title">Book a Ground</div>
+      <div class="form-row"><label>Name</label><input type="text" id="bkName"></div>
+      <div class="form-row"><label>Date</label><input type="date" id="bkDate"></div>
+      <button class="form-submit" onclick="closeBooking(); alert('Booking requested!');">Confirm Booking</button>
+    </div>
+  </div>
+</div>
+ 
+<script>
+// Mock Resident Data
+const residents = [
+  { name: 'Amit Deshmukh', bungalow: 'A-01', phone: '+91-98220-12345', occupation: 'Engineer', block: 'A' },
+  { name: 'Priya Kulkarni', bungalow: 'A-07', phone: '+91-98221-76543', occupation: 'Doctor', block: 'A' },
+  { name: 'Rahul Joshi', bungalow: 'A-14', phone: '+91-98222-98765', occupation: 'Businessman', block: 'A' },
+  { name: 'Zainab Hussain', bungalow: 'B-03', phone: '+91-98223-45612', occupation: 'Teacher', block: 'B' },
+  { name: 'Sanjay Patil', bungalow: 'B-11', phone: '+91-98224-65498', occupation: 'Lawyer', block: 'B' },
+  { name: 'Vikram Gokhale', bungalow: 'C-02', phone: '+91-98226-22233', occupation: 'Banker', block: 'C' }
+];
+const avatarColors = ['av-green','av-gold','av-blue','av-pink'];
+function getInitials(name) { return name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase(); }
+
+function renderDirectory(data) {
+  const grid = document.getElementById('dirGrid');
+  document.getElementById('dirCount').textContent = `Showing ${data.length} resident${data.length!==1?'s':''}`;
+  grid.innerHTML = data.map((r, i) => `
+    <div class="dir-card">
+      <div class="dir-card-head">
+        <div class="dir-avatar ${avatarColors[i % avatarColors.length]}">${getInitials(r.name)}</div>
+        <div><div class="dir-name">${r.name}</div><span class="dir-bungalow">${r.bungalow}</span></div>
+      </div>
+      <div class="dir-details">
+        <div class="dir-row"><span>Phone</span><span>${r.phone}</span></div>
+        <div class="dir-row"><span>Job</span><span>${r.occupation}</span></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterDirectory() {
+  const q = document.getElementById('dirSearch').value.toLowerCase();
+  const block = document.getElementById('dirBlock').value;
+  const filtered = residents.filter(r => (r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q)) && (!block || r.block === block));
+  renderDirectory(filtered);
+}
+renderDirectory(residents);
+
+// Notice UI Filtering
+function filterNotices(btn, type) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.notice-card').forEach(card => {
+    card.style.display = (type === 'all' || card.dataset.type === type) ? 'flex' : 'none';
+  });
+}
+
+function openBooking(ground) { document.getElementById('bookingModal').classList.add('open'); }
+function closeBooking() { document.getElementById('bookingModal').classList.remove('open'); }
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
+    authDomain: "sind-society.firebaseapp.com",
+    projectId: "sind-society",
+    storageBucket: "sind-society.firebasestorage.app",
+    messagingSenderId: "821689204364",
+    appId: "1:821689204364:web:68aa0db383e84b051145a9",
+    measurementId: "G-WC6BCC1490"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  async function fetchNotices() {
+    try {
+      const noticesRef = collection(db, "notices");
+      const snapshot = await getDocs(noticesRef);
+      const noticeGrid = document.getElementById('noticeGrid');
+      
+      document.getElementById('loadingNotices').style.display = 'none';
+
+      if (snapshot.empty) {
+        noticeGrid.innerHTML = "<p style='color:#777; font-size: 14px;'>No notices posted yet.</p>";
+        return;
+      }
+
+      let noticesHTML = "";
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        let icon = "📋";
+        if(data.type === "urgent") icon = "🚨";
+        if(data.type === "info") icon = "🎉";
+
+        noticesHTML += `
+          <div class="notice-card ${data.type}" data-type="${data.type}">
+            <div class="notice-icon ${data.type}">${icon}</div>
+            <div class="notice-body">
+              <div class="notice-meta">
+                <span class="notice-badge ${data.type}">${data.type.toUpperCase()}</span>
+                <span class="notice-date">${data.date || 'Recently'}</span>
+              </div>
+              <div class="notice-title">${data.title}</div>
+              <div class="notice-desc">${data.description}</div>
+            </div>
+          </div>
+        `;
+      });
+      noticeGrid.innerHTML = noticesHTML;
+    } catch (e) {
+      document.getElementById('loadingNotices').innerText = "Error loading notices. Check database rules.";
+      console.error(e);
+    }
+  }
+
+  fetchNotices();
+</script>
+</body>
+</html>
