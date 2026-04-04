@@ -104,7 +104,6 @@
     <div id="tab-notices" class="tab">
       <div class="card">
         <h3>Post New Announcement</h3>
-        <p style="font-size:12px; color:#666; margin-bottom:10px;">Write a text message, attach a PDF, or both.</p>
         <input type="text" id="nTitle" placeholder="Notice Title (Required)">
         <textarea id="nDesc" rows="5" placeholder="Write message text here..."></textarea>
         <label style="font-size:12px; font-weight:bold; color:var(--primary); margin-top:10px; display:block;">Attach PDF Notice (Optional):</label>
@@ -139,13 +138,15 @@
   import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-storage.js";
 
+  // CORRECTED, CLEANED FIREBASE CONFIG
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
+    authDomain: "sind-society.firebaseapp.com",
+    projectId: "sind-society",
+    storageBucket: "sind-society.firebasestorage.app",
+    messagingSenderId: "821689204364",
+    appId: "1:821689204364:web:68aa0db383e84b051145a9",
+    measurementId: "G-WC6BCC1490"
   };
 
   const app = initializeApp(firebaseConfig); 
@@ -176,7 +177,6 @@
     } 
   });
 
-  // --- SPORTS & FACILITIES ---
   async function loadAdmin() {
     const d = document.getElementById('adminDate').value;
     try {
@@ -228,7 +228,6 @@
   
   window.delFac = async (id) => { if(confirm("Remove this facility entirely?")) { await deleteDoc(doc(db, "facilities", id)); loadAdmin(); } };
 
-  // --- POOL LOGS ---
   window.loadPoolLogs = async () => {
     const d = document.getElementById('adminPoolDate').value;
     const body = document.getElementById('poolBody'); 
@@ -257,7 +256,6 @@
 
   window.delPoolLog = async (id) => { if(confirm("Delete this entry log?")) { await deleteDoc(doc(db, "pool_registrations", id)); loadPoolLogs(); } };
   
-  // --- NOTICES & RESIDENTS ---
   async function loadExtras() {
     const nList = document.getElementById('noticeList'); nList.innerHTML = '';
     const nSnap = await getDocs(collection(db, "notices"));
