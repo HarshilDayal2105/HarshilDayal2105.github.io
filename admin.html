@@ -157,8 +157,7 @@
     projectId: "sind-society",
     storageBucket: "sind-society.firebasestorage.app",
     messagingSenderId: "821689204364",
-    appId: "1:821689204364:web:68aa0db383e84b051145a9",
-    measurementId: "G-WC6BCC1490"
+    appId: "1:821689204364:web:68aa0db383e84b051145a9"
   };
 
   const app = initializeApp(firebaseConfig); 
@@ -192,7 +191,8 @@
   async function loadAdmin() {
     const d = document.getElementById('adminDate').value;
     try {
-        const facs = await getDocs(collection(db, "facilities"));
+        // Facilities ordered by creation date
+        const facs = await getDocs(query(collection(db, "facilities"), orderBy("createdAt", "asc")));
         const books = await getDocs(query(collection(db, "bookings"), where("date", "==", d)));
         
         const bMap = {}; 
@@ -234,8 +234,10 @@
   window.addFac = async () => { 
     const val = document.getElementById('fName').value;
     if(!val) return;
-    await addDoc(collection(db, "facilities"), { name: val }); 
-    document.getElementById('fName').value=''; loadAdmin(); 
+    // Add timestamp for ordering
+    await addDoc(collection(db, "facilities"), { name: val, createdAt: Date.now() }); 
+    document.getElementById('fName').value=''; 
+    loadAdmin(); 
   };
   
   window.delFac = async (id) => { if(confirm("Remove this facility entirely?")) { await deleteDoc(doc(db, "facilities", id)); loadAdmin(); } };
