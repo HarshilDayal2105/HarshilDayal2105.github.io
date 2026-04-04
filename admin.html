@@ -22,10 +22,10 @@
     .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 15px; }
     label { font-size: 11px; font-weight: bold; text-transform: uppercase; color: var(--primary); display: block; margin-bottom: 5px; }
     .schedule-wrapper { overflow-x: auto; margin-top: 15px; }
-    table { width: 100%; border-collapse: collapse; min-width: 1000px; font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; min-width: 1500px; font-size: 12px; }
     th, td { border: 1px solid #eee; padding: 10px; text-align: left; }
-    th { background: #f4f4f4; color: var(--primary); font-weight: bold; }
-    .fac-col { background: #fafafa; font-weight: bold; text-align: left; border-right: 2px solid var(--border); width: 180px; }
+    th { background: #f4f4f4; color: var(--primary); font-weight: bold; white-space: nowrap; }
+    .fac-col { background: #fafafa; font-weight: bold; text-align: left; border-right: 2px solid var(--border); width: 220px; }
     .status-maint { background: #333; color: white; cursor: pointer; font-weight: bold; text-align: center;}
     .status-booked { background: #fdecea; color: var(--danger); font-weight: bold; cursor: pointer; text-align: center;}
     .status-free { background: #e6f5ee; color: #2d9c55; cursor: pointer; font-weight: bold; text-align: center;}
@@ -135,7 +135,7 @@
             <input type="date" id="adminPoolDate" onchange="loadPoolLogs()" style="width:200px; margin:0;">
         </div>
         <div class="schedule-wrapper">
-          <table>
+          <table style="min-width: 600px;">
             <thead><tr><th>Date</th><th>Time</th><th>Name</th><th>Bungalow</th><th>Phone</th><th>Action</th></tr></thead>
             <tbody id="poolBody"></tbody>
           </table>
@@ -207,7 +207,14 @@
   const db = getFirestore(app); 
   const storage = getStorage(app);
   
-  const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
+  // UPDATED: Time Ranges instead of single times
+  const times = [
+    "6 AM - 7 AM", "7 AM - 8 AM", "8 AM - 9 AM", "9 AM - 10 AM", "10 AM - 11 AM", 
+    "11 AM - 12 PM", "12 PM - 1 PM", "1 PM - 2 PM", "2 PM - 3 PM", "3 PM - 4 PM", 
+    "4 PM - 5 PM", "5 PM - 6 PM", "6 PM - 7 PM", "7 PM - 8 PM", "8 PM - 9 PM", 
+    "9 PM - 10 PM", "10 PM - 11 PM", "11 PM - 12 AM"
+  ];
+  
   const fixedHalls = ["Big Club House Hall", "Big Clubhouse Hall with Small Lawn", "Big ClubHouse Hall with Big Lawn", "Big Lawn", "Small Lawn"];
   
   const today = new Date().toISOString().split('T')[0];
