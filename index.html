@@ -9,10 +9,11 @@
   :root { --green-deep: #0a3d2b; --green-mid: #14573d; --gold: #c9993a; --cream: #faf8f3; --border: #ddd8cc; --white: #ffffff; --danger: #c0392b; --radius: 12px; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: #1a1a1a; }
-  nav { background: var(--green-deep); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--gold); padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
-  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-family: 'Playfair Display', serif; }
+  nav { background: var(--green-deep); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--gold); padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; overflow-x: auto;}
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-family: 'Playfair Display', serif; flex-shrink: 0;}
   .crest { width: 35px; height: 35px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--green-deep); font-weight: bold; }
-  .nav-links button { background: none; border: none; color: rgba(255,255,255,0.6); padding: 8px 16px; cursor: pointer; font-size: 14px; font-weight: 500; transition: 0.3s; }
+  .nav-links { display: flex; gap: 5px; flex-shrink: 0;}
+  .nav-links button { background: none; border: none; color: rgba(255,255,255,0.6); padding: 8px 16px; cursor: pointer; font-size: 14px; font-weight: 500; transition: 0.3s; white-space: nowrap;}
   .nav-links button.active { color: white; background: rgba(255,255,255,0.1); border-radius: 6px; }
   .hero { background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%); color: white; text-align: center; padding: 40px 24px; transition: 0.3s; }
   .page-section { display: none; max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
@@ -41,6 +42,7 @@
   <div class="nav-links">
     <button id="nav-notices" onclick="showPage('notices')">📢 Notices</button>
     <button id="nav-sports" class="active" onclick="showPage('sports')">🎾 Sports</button>
+    <button id="nav-pool" onclick="showPage('pool')">🏊 Pool</button>
     <button id="nav-directory" onclick="showPage('directory')">👥 Directory</button>
   </div>
 </nav>
@@ -73,6 +75,21 @@
   </div>
 </div>
 
+<div id="page-pool" class="page-section">
+  <div class="booking-panel">
+    <h2 style="margin-bottom: 20px; color: var(--green-deep);">Swimming Pool Entry Register</h2>
+    <p style="font-size: 14px; margin-bottom: 20px; color: #666;">Please log your entry details before using the society swimming pool.</p>
+    <div class="form-row">
+      <div><label>Date</label><input type="date" id="poolDate"></div>
+      <div><label>Time of Entry</label><input type="time" id="poolTime"></div>
+      <div><label>Full Name</label><input type="text" id="poolName" placeholder="Resident Name"></div>
+      <div><label>Bungalow No.</label><input type="text" id="poolBung" placeholder="e.g. B-14"></div>
+      <div><label>Phone No.</label><input type="tel" id="poolPhone" placeholder="10-digit number"></div>
+    </div>
+    <button class="btn-primary" onclick="registerPool()">Register Pool Entry</button>
+  </div>
+</div>
+
 <div id="page-notices" class="page-section">
   <div id="noticeGrid" class="grid-grid">Loading announcements...</div>
 </div>
@@ -87,13 +104,12 @@
   import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
-    authDomain: "sind-society.firebaseapp.com",
-    projectId: "sind-society",
-    storageBucket: "sind-society.firebasestorage.app",
-    messagingSenderId: "821689204364",
-    appId: "1:821689204364:web:68aa0db383e84b051145a9",
-    measurementId: "G-WC6BCC1490"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -104,6 +120,7 @@
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('inDate').value = today; 
   document.getElementById('viewDateFilter').value = today;
+  document.getElementById('poolDate').value = today;
   
   times.forEach(t => { 
     document.getElementById('inTime').innerHTML += `<option value="${t}">${t}</option>`; 
@@ -114,7 +131,7 @@
     const vDate = document.getElementById('viewDateFilter').value; 
     document.getElementById('viewingDateText').innerText = vDate;
 
-    // 1. Load Notices
+    // Load Notices
     try {
       const notes = await getDocs(collection(db, "notices"));
       const grid = document.getElementById('noticeGrid');
@@ -128,12 +145,9 @@
         grid.innerHTML += html;
       });
       if(grid.innerHTML === '') grid.innerHTML = '<p>No recent notices.</p>';
-    } catch(e) { 
-      console.error(e);
-      document.getElementById('noticeGrid').innerHTML = `<p style="color:red;">Error loading notices. Check console.</p>`; 
-    }
+    } catch(e) { console.error(e); }
 
-    // 2. Load Sports Schedule
+    // Load Sports Schedule
     try {
       const facs = await getDocs(collection(db, "facilities"));
       const books = await getDocs(query(collection(db, "bookings"), where("date", "==", vDate)));
@@ -154,21 +168,15 @@
         body.innerHTML += row + '</tr>';
       });
       if(body.innerHTML === '') body.innerHTML = '<tr><td colspan="19">No facilities found. Admin must add grounds.</td></tr>';
-    } catch (e) { 
-      console.error(e);
-      document.getElementById('tableBody').innerHTML = `<tr><td colspan="19" style="color:red;">Error loading schedule: ${e.message}</td></tr>`; 
-    }
+    } catch (e) { console.error(e); }
 
-    // 3. Load Directory
+    // Load Directory
     try {
       const res = await getDocs(collection(db, "residents"));
       window.residents = []; 
       res.forEach(d => window.residents.push(d.data())); 
       renderDir(window.residents);
-    } catch (e) { 
-      console.error(e);
-      document.getElementById('dirGrid').innerHTML = `<p style="color:red;">Error loading directory.</p>`; 
-    }
+    } catch (e) { console.error(e); }
   }
 
   function renderDir(data) { 
@@ -185,15 +193,31 @@
   window.handleBooking = async () => {
     const d = document.getElementById('inDate').value, f = document.getElementById('inFac').value, t = document.getElementById('inTime').value, n = document.getElementById('inName').value, b = document.getElementById('inBung').value;
     if(!n || !b) return alert("Enter your name and bungalow number.");
-    
     try {
       const checkSnap = await getDocs(query(collection(db, "bookings"), where("date", "==", d), where("facility", "==", f), where("time", "==", t)));
       if(!checkSnap.empty) return alert("This slot is already reserved for this date.");
 
       await addDoc(collection(db, "bookings"), { facility: f, time: t, userName: n, bungalow: b, date: d });
-      alert("Booking Confirmed!"); 
-      loadAll();
+      alert("Booking Confirmed!"); loadAll();
     } catch (e) { alert("Error: " + e.message); }
+  };
+
+  window.registerPool = async () => {
+    const d = document.getElementById('poolDate').value;
+    const t = document.getElementById('poolTime').value;
+    const n = document.getElementById('poolName').value;
+    const b = document.getElementById('poolBung').value;
+    const p = document.getElementById('poolPhone').value;
+
+    if(!d || !t || !n || !b || !p) return alert("Please fill in all fields for pool registration.");
+
+    try {
+      await addDoc(collection(db, "pool_registrations"), { date: d, time: t, name: n, bungalow: b, phone: p, timestamp: new Date() });
+      alert("Pool Entry Successfully Registered!");
+      document.getElementById('poolName').value = '';
+      document.getElementById('poolBung').value = '';
+      document.getElementById('poolPhone').value = '';
+    } catch (e) { alert("Error registering: " + e.message); }
   };
 
   window.cancelBooking = async (id) => { if(confirm("Are you sure you want to cancel this booking?")) { await deleteDoc(doc(db, "bookings", id)); loadAll(); } };
@@ -217,6 +241,9 @@
     } else if (id === 'directory') {
       title.innerText = "Resident Directory";
       desc.innerText = "Connect with your neighbors.";
+    } else if (id === 'pool') {
+      title.innerText = "Pool Registration";
+      desc.innerText = "Mandatory log for swimming pool entry.";
     }
   };
 
