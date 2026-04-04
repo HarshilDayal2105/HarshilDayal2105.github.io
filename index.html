@@ -162,7 +162,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
@@ -170,8 +170,7 @@
     projectId: "sind-society",
     storageBucket: "sind-society.firebasestorage.app",
     messagingSenderId: "821689204364",
-    appId: "1:821689204364:web:68aa0db383e84b051145a9",
-    measurementId: "G-WC6BCC1490"
+    appId: "1:821689204364:web:68aa0db383e84b051145a9"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -197,7 +196,7 @@
     document.getElementById('viewingDateText').innerText = dateObj.toLocaleDateString('en-US', options);
 
     try {
-      const notes = await getDocs(collection(db, "notices"));
+      const notes = await getDocs(query(collection(db, "notices")));
       const grid = document.getElementById('noticeGrid');
       grid.innerHTML = '';
       notes.forEach(d => {
@@ -212,7 +211,8 @@
     } catch(e) { console.error(e); }
 
     try {
-      const facs = await getDocs(collection(db, "facilities"));
+      // Ordered by creation date for consistent layout
+      const facs = await getDocs(query(collection(db, "facilities"), orderBy("createdAt", "asc")));
       const books = await getDocs(query(collection(db, "bookings"), where("date", "==", vDate)));
       const bMap = {}; 
       books.forEach(d => bMap[`${d.data().facility}-${d.data().time}`] = { id: d.id, ...d.data() });
@@ -230,7 +230,7 @@
         });
         body.innerHTML += row + '</tr>';
       });
-      if(body.innerHTML === '') body.innerHTML = '<tr><td colspan="19">No facilities are currently configured.</td></tr>';
+      if(body.innerHTML === '') body.innerHTML = '<tr><td colspan="19">No facilities are currently configured. Admin must add them.</td></tr>';
     } catch (e) { console.error(e); }
 
     try {
