@@ -10,7 +10,7 @@
     #loginSection { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
     #loginSection input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border); border-radius: 6px; }
     #loginSection button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-    #dashboardSection { display: none; display: flex; height: 100vh; }
+    #dashboardSection { display: none; height: 100vh; }
     .sidebar { width: 250px; background: var(--primary); color: white; display: flex; flex-direction: column; flex-shrink: 0; }
     .sidebar h2 { padding: 25px; margin: 0; font-size: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
     .sidebar button { background: none; color: rgba(255,255,255,0.7); text-align: left; padding: 15px 25px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; border: none; border-left: 4px solid transparent; transition: 0.2s; }
@@ -65,7 +65,7 @@
     <button id="btn-halls" class="active" onclick="switchTab('halls')">🎪 Hall Booking</button>
     <button id="btn-sports" onclick="switchTab('sports')">🏆 Sports Master</button>
     <button id="btn-pool" onclick="switchTab('pool')">🏊 Pool Log</button>
-    <button id="btn-facs" onclick="switchTab('facs')">🏗️ Facilities</button>
+    <button id="btn-facs" onclick="switchTab('facs')">🏗️ Facilities & Halls</button>
     <button id="btn-notices" onclick="switchTab('notices')">📢 Notice Board</button>
     <button id="btn-res" onclick="switchTab('res')">👥 Residents</button>
     <button onclick="logout()" style="margin-top:auto; color:#ff9999; border-top: 1px solid rgba(255,255,255,0.1);">Logout</button>
@@ -79,13 +79,7 @@
         <div class="form-row">
           <div><label>Date</label><input type="date" id="hallDate"></div>
           <div><label>Venue</label>
-            <select id="hallFac">
-              <option value="Big Club House Hall">Big Club House Hall</option>
-              <option value="Big Clubhouse Hall with Small Lawn">Big Clubhouse Hall with Small Lawn</option>
-              <option value="Big ClubHouse Hall with Big Lawn">Big ClubHouse Hall with Big Lawn</option>
-              <option value="Big Lawn">Big Lawn</option>
-              <option value="Small Lawn">Small Lawn</option>
-            </select>
+            <select id="hallFac"></select>
           </div>
           <div><label>Time Slot</label><select id="hallTime"></select></div>
           <div><label>Resident Name</label><input type="text" id="hallName" placeholder="Full Name"></div>
@@ -144,15 +138,24 @@
     </div>
 
     <div id="tab-facs" class="tab">
-      <div class="card">
+      <div class="card" style="border-left: 4px solid var(--primary);">
         <h3>Add New Sports Ground</h3>
-        <input type="text" id="fName" placeholder="Name (e.g. Cricket Ground)">
-        <button class="btn-save" onclick="addFac()">Add Facility</button>
+        <input type="text" id="fName" placeholder="Name (e.g. Tennis Court 2)">
+        <button class="btn-save" onclick="addFac()">Add Sports Facility</button>
+        <div style="margin-top: 20px;">
+            <h4 style="color:#666; font-size:14px; margin-bottom: 10px;">Active Sports Grounds</h4>
+            <div id="facList">Loading...</div>
+        </div>
       </div>
-      <div class="card">
-        <h3>Active Sports Grounds</h3>
-        <p style="font-size:12px; color:#666; margin-bottom:10px;">(Halls are fixed and do not appear here)</p>
-        <div id="facList">Loading...</div>
+      
+      <div class="card" style="border-left: 4px solid var(--gold);">
+        <h3>Add New Hall or Lawn</h3>
+        <input type="text" id="hName" placeholder="Name (e.g. Big Club House Hall)">
+        <button class="btn-save" style="background: var(--gold); color:var(--primary);" onclick="addNewHall()">Add Hall / Lawn</button>
+        <div style="margin-top: 20px;">
+            <h4 style="color:#666; font-size:14px; margin-bottom: 10px;">Active Halls & Lawns</h4>
+            <div id="hallsList">Loading...</div>
+        </div>
       </div>
     </div>
 
@@ -214,8 +217,6 @@
     "9 PM - 10 PM", "10 PM - 11 PM", "11 PM - 12 AM"
   ];
   
-  const fixedHalls = ["Big Club House Hall", "Big Clubhouse Hall with Small Lawn", "Big ClubHouse Hall with Big Lawn", "Big Lawn", "Small Lawn"];
-  
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('hallDate').value = today;
   document.getElementById('adminHallDate').value = today;
@@ -245,16 +246,20 @@
     } 
   });
 
-  // --- HALL BOOKING LOGIC ---
+  // --- HALL BOOKING LOGIC (DYNAMIC) ---
   window.loadHallSchedule = async () => {
     const d = document.getElementById('adminHallDate').value;
     try {
+        const hallsSnap = await getDocs(query(collection(db, "halls"), orderBy("createdAt", "asc")));
+        const dynamicHalls = [];
+        hallsSnap.forEach(d => dynamicHalls.push(d.data().name));
+
         const books = await getDocs(query(collection(db, "hall_bookings"), where("date", "==", d)));
         const bMap = {}; 
         books.forEach(doc => bMap[`${doc.data().facility}-${doc.data().time}`] = {id: doc.id, ...doc.data()});
         
         const body = document.getElementById('adminHallBody'); body.innerHTML = '';
-        fixedHalls.forEach(f => {
+        dynamicHalls.forEach(f => {
           let row = `<tr><td class="fac-col">${f}</td>`;
           times.forEach(t => {
             const b = bMap[`${f}-${t}`];
@@ -276,7 +281,7 @@
           n = document.getElementById('hallName').value, 
           b = document.getElementById('hallBung').value;
     
-    if(!n || !b) return alert("Please enter the resident's name and bungalow.");
+    if(!n || !b || !f) return alert("Please select a venue and enter the resident's details.");
     
     try {
       const checkSnap = await getDocs(query(collection(db, "hall_bookings"), where("date", "==", d), where("facility", "==", f), where("time", "==", t)));
@@ -297,10 +302,29 @@
       }
   };
 
-  // --- SPORTS LOGIC (ADMIN SEES PIN) ---
+  // --- NEW: ADD/REMOVE HALLS ---
+  window.addNewHall = async () => {
+    const val = document.getElementById('hName').value;
+    if(!val) return;
+    await addDoc(collection(db, "halls"), { name: val, createdAt: Date.now() }); 
+    document.getElementById('hName').value=''; 
+    loadAdmin();
+    loadHallSchedule();
+  };
+
+  window.delHall = async (id) => { 
+    if(confirm("Remove this hall entirely?")) { 
+      await deleteDoc(doc(db, "halls", id)); 
+      loadAdmin(); 
+      loadHallSchedule();
+    } 
+  };
+
+  // --- SPORTS LOGIC ---
   async function loadAdmin() {
     const d = document.getElementById('adminDate').value;
     try {
+        // Load Sports Grid
         const facs = await getDocs(query(collection(db, "facilities"), orderBy("createdAt", "asc")));
         const books = await getDocs(query(collection(db, "bookings"), where("date", "==", d)));
         
@@ -315,7 +339,6 @@
             const b = bMap[`${f.name}-${t}`];
             if(b) {
                 const isM = b.userName === "MAINTENANCE";
-                // Admin can see the PIN in the schedule grid
                 const pinText = b.pin ? `<br><span style="color:#a00; font-size:10px;">[PIN: ${b.pin}]</span>` : '';
                 row += `<td class="${isM ? 'status-maint' : 'status-booked'}" onclick="adminAct('${b.id}', true)">${isM ? 'MAINT' : b.userName}${isM ? '' : pinText}</td>`;
             } else {
@@ -325,8 +348,19 @@
           body.innerHTML += row + '</tr>';
         });
 
+        // Load Sports List in Facilities Tab
         const fList = document.getElementById('facList'); fList.innerHTML = ''; 
         facs.forEach(d => fList.innerHTML += `<div class="list-item"><span>${d.data().name}</span> <button class="btn-danger" onclick="delFac('${d.id}')">Remove</button></div>`);
+
+        // Load Halls List in Facilities Tab & Hall Dropdown
+        const hallsSnap = await getDocs(query(collection(db, "halls"), orderBy("createdAt", "asc")));
+        const hList = document.getElementById('hallsList'); hList.innerHTML = '';
+        const hSel = document.getElementById('hallFac'); hSel.innerHTML = '';
+        hallsSnap.forEach(d => {
+           hList.innerHTML += `<div class="list-item"><span>${d.data().name}</span> <button class="btn-danger" onclick="delHall('${d.id}')">Remove</button></div>`;
+           hSel.innerHTML += `<option value="${d.data().name}">${d.data().name}</option>`;
+        });
+
     } catch (e) { console.error(e); }
   }
 
