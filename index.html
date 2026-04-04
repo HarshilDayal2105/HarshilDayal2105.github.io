@@ -39,6 +39,7 @@
   th { background: var(--green-deep); color: white; white-space: nowrap; }
   .booked { background: #fdecea; color: var(--danger); font-weight: 700; }
   .available { color: #2d9c55; font-weight: 700; }
+  .cancel-link { display: block; margin-top: 5px; color: var(--danger); font-size: 11px; cursor: pointer; text-decoration: underline; border: none; background: none; width: 100%; font-weight: bold; }
   
   .grid-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
   .card { background: white; padding: 30px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: 0.3s; }
@@ -140,6 +141,7 @@
       <div><label>Time Slot</label><select id="inTime"></select></div>
       <div><label>Full Name</label><input type="text" id="inName" placeholder="Resident Name"></div>
       <div><label>Bungalow</label><input type="text" id="inBung" placeholder="e.g. A-12"></div>
+      <div><label>Secret PIN (To Cancel)</label><input type="text" id="inPin" placeholder="4-digits" maxlength="4"></div>
     </div>
     <button class="btn-primary" onclick="handleBooking()">Confirm Reservation</button>
   </div>
@@ -184,7 +186,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
@@ -227,7 +229,7 @@
     document.getElementById('viewingDateText').innerText = new Date(vDate).toLocaleDateString('en-US', options);
     document.getElementById('viewingHallDateText').innerText = new Date(hDate).toLocaleDateString('en-US', options);
 
-    // 1. Load Notices
+    // Load Notices
     try {
       const notes = await getDocs(query(collection(db, "notices")));
       const grid = document.getElementById('noticeGrid');
@@ -243,7 +245,7 @@
       if(grid.innerHTML === '') grid.innerHTML = '<p>No recent announcements to display.</p>';
     } catch(e) { console.error(e); }
 
-    // 2. Load Halls Schedule
+    // Load Halls Schedule
     try {
       const hBooks = await getDocs(query(collection(db, "hall_bookings"), where("date", "==", hDate)));
       const hMap = {}; 
@@ -261,7 +263,7 @@
       });
     } catch (e) { console.error(e); }
 
-    // 3. Load Sports Schedule
+    // Load Sports Schedule (WITH PIN CANCEL OPTION)
     try {
       const facs = await getDocs(query(collection(db, "facilities"), orderBy("createdAt", "asc")));
       const books = await getDocs(query(collection(db, "bookings"), where("date", "==", vDate)));
@@ -277,14 +279,15 @@
         let row = `<tr><td style="text-align:left; font-weight:bold; background:#f9f9f9; border-right: 2px solid #ddd;">${f.name}</td>`;
         times.forEach(t => {
           const b = bMap[`${f.name}-${t}`];
-          row += b ? `<td class="booked">${b.userName}<br><span style="color:#666;">(${b.bungalow})</span></td>` : `<td class="available">Available</td>`;
+          // We pass the PIN into the cancel function
+          row += b ? `<td class="booked">${b.userName}<br><span style="color:#666;">(${b.bungalow})</span><button class="cancel-link" onclick="cancelBooking('${b.id}', '${b.pin || ''}')">Cancel (Requires PIN)</button></td>` : `<td class="available">Available</td>`;
         });
         body.innerHTML += row + '</tr>';
       });
       if(body.innerHTML === '') body.innerHTML = '<tr><td colspan="19">No facilities are currently configured. Admin must add them.</td></tr>';
     } catch (e) { console.error(e); }
 
-    // 4. Load Directory
+    // Load Directory
     try {
       const res = await getDocs(collection(db, "residents"));
       window.residents = []; 
@@ -305,15 +308,38 @@
   };
 
   window.handleBooking = async () => {
-    const d = document.getElementById('inDate').value, f = document.getElementById('inFac').value, t = document.getElementById('inTime').value, n = document.getElementById('inName').value, b = document.getElementById('inBung').value;
-    if(!n || !b) return alert("Please enter your name and bungalow number.");
+    const d = document.getElementById('inDate').value, f = document.getElementById('inFac').value, t = document.getElementById('inTime').value, n = document.getElementById('inName').value, b = document.getElementById('inBung').value, p = document.getElementById('inPin').value;
+    if(!n || !b || !p) return alert("Please enter your name, bungalow number, and a 4-digit Secret PIN.");
     try {
       const checkSnap = await getDocs(query(collection(db, "bookings"), where("date", "==", d), where("facility", "==", f), where("time", "==", t)));
       if(!checkSnap.empty) return alert("Sorry, this slot is already reserved.");
 
-      await addDoc(collection(db, "bookings"), { facility: f, time: t, userName: n, bungalow: b, date: d });
-      alert("Booking Confirmed Successfully!"); loadAll();
+      await addDoc(collection(db, "bookings"), { facility: f, time: t, userName: n, bungalow: b, date: d, pin: p });
+      alert("Booking Confirmed Successfully! Don't forget your PIN if you need to cancel.");
+      document.getElementById('inName').value = '';
+      document.getElementById('inPin').value = '';
+      loadAll();
     } catch (e) { alert("Error: " + e.message); }
+  };
+
+  // NEW PIN CANCELLATION LOGIC
+  window.cancelBooking = async (id, correctPin) => { 
+    if(!correctPin) {
+      alert("This booking was made before the PIN system was active. Please contact the admin to cancel.");
+      return;
+    }
+    
+    const userPin = prompt("Please enter the 4-digit Secret PIN you used when booking this slot:");
+    if (userPin === null) return; // User pressed cancel on the prompt
+
+    if (userPin === correctPin) {
+      if(confirm("PIN Accepted! Are you sure you want to cancel this booking?")) { 
+        await deleteDoc(doc(db, "bookings", id)); 
+        loadAll(); 
+      }
+    } else {
+      alert("Incorrect PIN. Only the original booker can cancel this slot.");
+    }
   };
 
   window.registerPool = async () => {
