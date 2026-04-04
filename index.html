@@ -74,6 +74,7 @@
   <div class="nav-links">
     <button id="nav-home" class="active" onclick="showPage('home')">🏠 Home</button>
     <button id="nav-notices" onclick="showPage('notices')">📢 Notices</button>
+    <button id="nav-halls" onclick="showPage('halls')">🎪 Halls</button>
     <button id="nav-sports" onclick="showPage('sports')">🎾 Sports</button>
     <button id="nav-pool" onclick="showPage('pool')">🏊 Pool</button>
     <button id="nav-directory" onclick="showPage('directory')">👥 Directory</button>
@@ -82,7 +83,7 @@
 
 <section class="hero">
   <h1 id="hero-title">Welcome to Sind Society</h1>
-  <p id="hero-desc">Your central portal for community updates, sports bookings, and society management.</p>
+  <p id="hero-desc">Your central portal for community updates, facility schedules, and society management.</p>
 </section>
 
 <div id="page-home" class="page-section active">
@@ -91,6 +92,11 @@
       <div class="icon">📢</div>
       <h3>Notice Board</h3>
       <p>Stay updated with the latest society announcements, events, and official documents.</p>
+    </div>
+    <div class="card home-card" onclick="showPage('halls')">
+      <div class="icon">🎪</div>
+      <h3>Hall Availability</h3>
+      <p>Check the schedule for the Club House Halls and Lawns. Contact admin to book.</p>
     </div>
     <div class="card home-card" onclick="showPage('sports')">
       <div class="icon">🎾</div>
@@ -107,6 +113,23 @@
       <h3>Resident Directory</h3>
       <p>Find and connect with your neighbors. Search by name or bungalow number easily.</p>
     </div>
+  </div>
+</div>
+
+<div id="page-halls" class="page-section">
+  <div style="background: white; padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 25px; border-left: 5px solid var(--gold);">
+    <h2 style="color: var(--green-deep); margin-bottom: 10px;">Club House & Lawns</h2>
+    <p style="color: #666; font-size: 14px;"><strong>Note:</strong> Hall and Lawn reservations are managed exclusively by the Society Admin. Please view the availability below and contact the management office to secure your booking.</p>
+  </div>
+  <div style="display:flex; justify-content:space-between; margin-bottom:15px; align-items:center;">
+    <h2 style="color: var(--green-deep);">Schedule: <span id="viewingHallDateText" style="color: var(--gold);">Today</span></h2>
+    <input type="date" id="viewHallDateFilter" onchange="loadAll()" style="width:160px; padding:8px; border:1px solid #ccc; border-radius:6px;">
+  </div>
+  <div class="schedule-container">
+    <table>
+      <thead><tr id="hallTableHead"><th style="width:220px; background:#f9f9f9; color:#333;">Venue</th></tr></thead>
+      <tbody id="hallTableBody"></tbody>
+    </table>
   </div>
 </div>
 
@@ -177,24 +200,29 @@
   const db = getFirestore(app);
   
   const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
+  const fixedHalls = ["Big Club House Hall", "Big Clubhouse Hall with Small Lawn", "Big ClubHouse Hall with Big Lawn", "Big Lawn", "Small Lawn"];
   
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('inDate').value = today; 
   document.getElementById('viewDateFilter').value = today;
+  document.getElementById('viewHallDateFilter').value = today;
   document.getElementById('poolDate').value = today;
   
   times.forEach(t => { 
     document.getElementById('inTime').innerHTML += `<option value="${t}">${t}</option>`; 
     document.getElementById('tableHead').innerHTML += `<th>${t}</th>`; 
+    document.getElementById('hallTableHead').innerHTML += `<th>${t}</th>`; 
   });
 
   async function loadAll() {
     const vDate = document.getElementById('viewDateFilter').value; 
+    const hDate = document.getElementById('viewHallDateFilter').value; 
     
-    const dateObj = new Date(vDate);
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    document.getElementById('viewingDateText').innerText = dateObj.toLocaleDateString('en-US', options);
+    document.getElementById('viewingDateText').innerText = new Date(vDate).toLocaleDateString('en-US', options);
+    document.getElementById('viewingHallDateText').innerText = new Date(hDate).toLocaleDateString('en-US', options);
 
+    // 1. Load Notices
     try {
       const notes = await getDocs(query(collection(db, "notices")));
       const grid = document.getElementById('noticeGrid');
@@ -210,8 +238,27 @@
       if(grid.innerHTML === '') grid.innerHTML = '<p>No recent announcements to display.</p>';
     } catch(e) { console.error(e); }
 
+    // 2. Load Halls Schedule
     try {
-      // Ordered by creation date for consistent layout
+      const hBooks = await getDocs(query(collection(db, "hall_bookings"), where("date", "==", hDate)));
+      const hMap = {}; 
+      hBooks.forEach(d => hMap[`${d.data().facility}-${d.data().time}`] = { id: d.id, ...d.data() });
+      
+      const hBody = document.getElementById('hallTableBody'); hBody.innerHTML = '';
+      
+      fixedHalls.forEach(f => {
+        let row = `<tr><td style="text-align:left; font-weight:bold; background:#f9f9f9; border-right: 2px solid #ddd;">${f}</td>`;
+        times.forEach(t => {
+          const b = hMap[`${f}-${t}`];
+          // Notice: No cancel button for residents in the hall table
+          row += b ? `<td class="booked">${b.userName}<br><span style="color:#666;">(${b.bungalow})</span></td>` : `<td class="available">Available</td>`;
+        });
+        hBody.innerHTML += row + '</tr>';
+      });
+    } catch (e) { console.error(e); }
+
+    // 3. Load Sports Schedule
+    try {
       const facs = await getDocs(query(collection(db, "facilities"), orderBy("createdAt", "asc")));
       const books = await getDocs(query(collection(db, "bookings"), where("date", "==", vDate)));
       const bMap = {}; 
@@ -233,6 +280,7 @@
       if(body.innerHTML === '') body.innerHTML = '<tr><td colspan="19">No facilities are currently configured. Admin must add them.</td></tr>';
     } catch (e) { console.error(e); }
 
+    // 4. Load Directory
     try {
       const res = await getDocs(collection(db, "residents"));
       window.residents = []; 
@@ -295,7 +343,10 @@
 
     if (id === 'home') {
       title.innerText = "Welcome to Sind Society";
-      desc.innerText = "Your central portal for community updates, sports bookings, and society management.";
+      desc.innerText = "Your central portal for community updates, facility schedules, and society management.";
+    } else if (id === 'halls') {
+      title.innerText = "Hall Availability";
+      desc.innerText = "Check schedule for the Club House Halls and Lawns.";
     } else if (id === 'sports') {
       title.innerText = "Sports Booking";
       desc.innerText = "Check live availability and reserve society grounds.";
