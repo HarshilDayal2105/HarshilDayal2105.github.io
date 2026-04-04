@@ -207,8 +207,6 @@
     "9 PM - 10 PM", "10 PM - 11 PM", "11 PM - 12 AM"
   ];
   
-  const fixedHalls = ["Big Club House Hall", "Big Clubhouse Hall with Small Lawn", "Big ClubHouse Hall with Big Lawn", "Big Lawn", "Small Lawn"];
-  
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('inDate').value = today; 
   document.getElementById('viewDateFilter').value = today;
@@ -229,7 +227,7 @@
     document.getElementById('viewingDateText').innerText = new Date(vDate).toLocaleDateString('en-US', options);
     document.getElementById('viewingHallDateText').innerText = new Date(hDate).toLocaleDateString('en-US', options);
 
-    // Load Notices
+    // 1. Load Notices
     try {
       const notes = await getDocs(query(collection(db, "notices")));
       const grid = document.getElementById('noticeGrid');
@@ -245,15 +243,19 @@
       if(grid.innerHTML === '') grid.innerHTML = '<p>No recent announcements to display.</p>';
     } catch(e) { console.error(e); }
 
-    // Load Halls Schedule
+    // 2. Load Halls Schedule (Now fully dynamic)
     try {
+      const hallsSnap = await getDocs(query(collection(db, "halls"), orderBy("createdAt", "asc")));
+      const dynamicHalls = [];
+      hallsSnap.forEach(d => dynamicHalls.push(d.data().name));
+
       const hBooks = await getDocs(query(collection(db, "hall_bookings"), where("date", "==", hDate)));
       const hMap = {}; 
       hBooks.forEach(d => hMap[`${d.data().facility}-${d.data().time}`] = { id: d.id, ...d.data() });
       
       const hBody = document.getElementById('hallTableBody'); hBody.innerHTML = '';
       
-      fixedHalls.forEach(f => {
+      dynamicHalls.forEach(f => {
         let row = `<tr><td style="text-align:left; font-weight:bold; background:#f9f9f9; border-right: 2px solid #ddd;">${f}</td>`;
         times.forEach(t => {
           const b = hMap[`${f}-${t}`];
@@ -261,9 +263,10 @@
         });
         hBody.innerHTML += row + '</tr>';
       });
+      if(hBody.innerHTML === '') hBody.innerHTML = '<tr><td colspan="19">No halls configured by Admin yet.</td></tr>';
     } catch (e) { console.error(e); }
 
-    // Load Sports Schedule (WITH PIN CANCEL OPTION)
+    // 3. Load Sports Schedule
     try {
       const facs = await getDocs(query(collection(db, "facilities"), orderBy("createdAt", "asc")));
       const books = await getDocs(query(collection(db, "bookings"), where("date", "==", vDate)));
@@ -279,7 +282,6 @@
         let row = `<tr><td style="text-align:left; font-weight:bold; background:#f9f9f9; border-right: 2px solid #ddd;">${f.name}</td>`;
         times.forEach(t => {
           const b = bMap[`${f.name}-${t}`];
-          // We pass the PIN into the cancel function
           row += b ? `<td class="booked">${b.userName}<br><span style="color:#666;">(${b.bungalow})</span><button class="cancel-link" onclick="cancelBooking('${b.id}', '${b.pin || ''}')">Cancel (Requires PIN)</button></td>` : `<td class="available">Available</td>`;
         });
         body.innerHTML += row + '</tr>';
@@ -287,7 +289,7 @@
       if(body.innerHTML === '') body.innerHTML = '<tr><td colspan="19">No facilities are currently configured. Admin must add them.</td></tr>';
     } catch (e) { console.error(e); }
 
-    // Load Directory
+    // 4. Load Directory
     try {
       const res = await getDocs(collection(db, "residents"));
       window.residents = []; 
@@ -322,7 +324,6 @@
     } catch (e) { alert("Error: " + e.message); }
   };
 
-  // NEW PIN CANCELLATION LOGIC
   window.cancelBooking = async (id, correctPin) => { 
     if(!correctPin) {
       alert("This booking was made before the PIN system was active. Please contact the admin to cancel.");
@@ -330,7 +331,7 @@
     }
     
     const userPin = prompt("Please enter the 4-digit Secret PIN you used when booking this slot:");
-    if (userPin === null) return; // User pressed cancel on the prompt
+    if (userPin === null) return; 
 
     if (userPin === correctPin) {
       if(confirm("PIN Accepted! Are you sure you want to cancel this booking?")) { 
