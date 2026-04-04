@@ -39,7 +39,6 @@
   th { background: var(--green-deep); color: white; white-space: nowrap; }
   .booked { background: #fdecea; color: var(--danger); font-weight: 700; }
   .available { color: #2d9c55; font-weight: 700; }
-  .cancel-link { display: block; margin-top: 5px; color: var(--danger); font-size: 10px; cursor: pointer; text-decoration: underline; border: none; background: none; width: 100%; }
   
   .grid-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
   .card { background: white; padding: 30px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: 0.3s; }
@@ -185,7 +184,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, addDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
@@ -199,7 +198,6 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   
-  // UPDATED: Time Ranges instead of single times
   const times = [
     "6 AM - 7 AM", "7 AM - 8 AM", "8 AM - 9 AM", "9 AM - 10 AM", "10 AM - 11 AM", 
     "11 AM - 12 PM", "12 PM - 1 PM", "1 PM - 2 PM", "2 PM - 3 PM", "3 PM - 4 PM", 
@@ -279,7 +277,7 @@
         let row = `<tr><td style="text-align:left; font-weight:bold; background:#f9f9f9; border-right: 2px solid #ddd;">${f.name}</td>`;
         times.forEach(t => {
           const b = bMap[`${f.name}-${t}`];
-          row += b ? `<td class="booked">${b.userName}<br><span style="color:#666;">(${b.bungalow})</span><button class="cancel-link" onclick="cancelBooking('${b.id}')">Cancel</button></td>` : `<td class="available">Available</td>`;
+          row += b ? `<td class="booked">${b.userName}<br><span style="color:#666;">(${b.bungalow})</span></td>` : `<td class="available">Available</td>`;
         });
         body.innerHTML += row + '</tr>';
       });
@@ -335,8 +333,6 @@
       document.getElementById('poolPhone').value = '';
     } catch (e) { alert("Error registering: " + e.message); }
   };
-
-  window.cancelBooking = async (id) => { if(confirm("Are you sure you want to cancel this booking?")) { await deleteDoc(doc(db, "bookings", id)); loadAll(); } };
   
   window.showPage = (id) => { 
     document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active')); 
