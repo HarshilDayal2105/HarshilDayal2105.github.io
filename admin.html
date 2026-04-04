@@ -20,14 +20,13 @@
     .card { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
     h3 { margin-top: 0; color: var(--primary); border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; margin-bottom: 20px; }
     .schedule-wrapper { overflow-x: auto; margin-top: 15px; }
-    table { width: 100%; border-collapse: collapse; min-width: 1200px; font-size: 11px; }
-    th, td { border: 1px solid #eee; padding: 10px; text-align: center; }
+    table { width: 100%; border-collapse: collapse; min-width: 1000px; font-size: 12px; }
+    th, td { border: 1px solid #eee; padding: 10px; text-align: left; }
     th { background: #f4f4f4; color: var(--primary); font-weight: bold; }
-    .fac-col { background: #fafafa; font-weight: bold; text-align: left; border-right: 2px solid var(--border); width: 180px; }
     .status-maint { background: #333; color: white; cursor: pointer; font-weight: bold; }
-    .status-booked { background: #fdecea; color: var(--danger); font-weight: bold; cursor: pointer; }
-    .status-free { background: #e6f5ee; color: #2d9c55; cursor: pointer; font-weight: bold; }
-    input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; }
+    .status-booked { background: #fdecea; color: var(--danger); font-weight: bold; cursor: pointer; text-align: center;}
+    .status-free { background: #e6f5ee; color: #2d9c55; cursor: pointer; font-weight: bold; text-align: center;}
+    input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; box-sizing: border-box;}
     .btn-save { background: var(--primary); color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
     .btn-danger { background: none; border: 1px solid var(--danger); color: var(--danger); padding: 5px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; }
     .btn-danger:hover { background: var(--danger); color: white; }
@@ -48,6 +47,7 @@
   <div class="sidebar">
     <h2>Management</h2>
     <button id="btn-sports" class="active" onclick="switchTab('sports')">🏆 Sports Master</button>
+    <button id="btn-pool" onclick="switchTab('pool')">🏊 Pool Log</button>
     <button id="btn-facs" onclick="switchTab('facs')">🏗️ Facilities</button>
     <button id="btn-notices" onclick="switchTab('notices')">📢 Notice Board</button>
     <button id="btn-res" onclick="switchTab('res')">👥 Residents</button>
@@ -65,9 +65,25 @@
             <span style="font-size:12px; color:#666;">(Click <b>Free</b> to Block, click <b>Booked</b> to Cancel)</span>
         </div>
         <div class="schedule-wrapper">
-          <table>
+          <table style="text-align: center;">
             <thead><tr id="adminHead"><th>Facility</th></tr></thead>
             <tbody id="adminBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-pool" class="tab">
+      <div class="card">
+        <h3>Swimming Pool Entries</h3>
+        <div style="display:flex; align-items:center; gap:15px; margin-bottom: 15px;">
+            <label>Select Date:</label>
+            <input type="date" id="adminPoolDate" onchange="loadPoolLogs()" style="width:200px;">
+        </div>
+        <div class="schedule-wrapper">
+          <table>
+            <thead><tr><th>Date</th><th>Time</th><th>Name</th><th>Bungalow</th><th>Phone</th><th>Action</th></tr></thead>
+            <tbody id="poolBody"></tbody>
           </table>
         </div>
       </div>
@@ -120,18 +136,16 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-storage.js";
 
-  // REPLACE THESE KEYS WITH YOUR ACTUAL FIREBASE CONFIG
   const firebaseConfig = {
-    apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
-    authDomain: "sind-society.firebaseapp.com",
-    projectId: "sind-society",
-    storageBucket: "sind-society.firebasestorage.app",
-    messagingSenderId: "821689204364",
-    appId: "1:821689204364:web:68aa0db383e84b051145a9",
-    measurementId: "G-WC6BCC1490"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
   };
 
   const app = initializeApp(firebaseConfig); 
@@ -141,7 +155,9 @@
   
   const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
   
-  document.getElementById('adminDate').value = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('adminDate').value = today;
+  document.getElementById('adminPoolDate').value = today;
   times.forEach(t => document.getElementById('adminHead').innerHTML += `<th>${t}</th>`);
 
   window.login = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value).catch(e => alert(e.message));
@@ -152,7 +168,8 @@
       document.getElementById('loginSection').classList.add('hidden'); 
       document.getElementById('dashboardSection').style.display='flex'; 
       loadAdmin(); 
-      loadExtras(); // Loads notices and residents
+      loadExtras(); 
+      loadPoolLogs();
     } else { 
       document.getElementById('loginSection').classList.remove('hidden'); 
       document.getElementById('dashboardSection').style.display='none'; 
@@ -172,7 +189,7 @@
         const body = document.getElementById('adminBody'); body.innerHTML = '';
         facs.forEach(doc => {
           const f = doc.data(); 
-          let row = `<tr><td class="fac-col">${f.name}</td>`;
+          let row = `<tr><td style="font-weight:bold; background:#fafafa; text-align:left; border-right: 2px solid var(--border);">${f.name}</td>`;
           times.forEach(t => {
             const b = bMap[`${f.name}-${t}`];
             if(b) {
@@ -210,10 +227,38 @@
   };
   
   window.delFac = async (id) => { if(confirm("Remove this facility entirely?")) { await deleteDoc(doc(db, "facilities", id)); loadAdmin(); } };
+
+  // --- POOL LOGS ---
+  window.loadPoolLogs = async () => {
+    const d = document.getElementById('adminPoolDate').value;
+    const body = document.getElementById('poolBody'); 
+    body.innerHTML = '<tr><td colspan="6" style="text-align:center;">Loading logs...</td></tr>';
+    try {
+      const logs = await getDocs(query(collection(db, "pool_registrations"), where("date", "==", d)));
+      body.innerHTML = '';
+      if(logs.empty) {
+        body.innerHTML = '<tr><td colspan="6" style="text-align:center;">No pool entries for this date.</td></tr>';
+        return;
+      }
+      logs.forEach(doc => {
+        const l = doc.data();
+        body.innerHTML += `
+          <tr>
+            <td>${l.date}</td>
+            <td><strong>${l.time}</strong></td>
+            <td>${l.name}</td>
+            <td>${l.bungalow}</td>
+            <td>${l.phone}</td>
+            <td><button class="btn-danger" onclick="delPoolLog('${doc.id}')">Delete</button></td>
+          </tr>`;
+      });
+    } catch(e) { console.error(e); }
+  };
+
+  window.delPoolLog = async (id) => { if(confirm("Delete this entry log?")) { await deleteDoc(doc(db, "pool_registrations", id)); loadPoolLogs(); } };
   
-  // --- NOTICES & RESIDENTS (VIEW & DELETE) ---
+  // --- NOTICES & RESIDENTS ---
   async function loadExtras() {
-    // Load Notices List
     const nList = document.getElementById('noticeList'); nList.innerHTML = '';
     const nSnap = await getDocs(collection(db, "notices"));
     if(nSnap.empty) nList.innerHTML = '<p style="font-size:12px; color:#666;">No active notices.</p>';
@@ -229,7 +274,6 @@
         </div>`;
     });
 
-    // Load Residents List
     const rList = document.getElementById('resList'); rList.innerHTML = '';
     const rSnap = await getDocs(collection(db, "residents"));
     if(rSnap.empty) rList.innerHTML = '<p style="font-size:12px; color:#666;">Directory is empty.</p>';
@@ -277,6 +321,7 @@
   };
   
   window.loadAdmin = loadAdmin;
+  window.loadPoolLogs = loadPoolLogs;
 </script>
 </body>
 </html>
