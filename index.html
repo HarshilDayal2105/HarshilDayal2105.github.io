@@ -44,7 +44,6 @@
   .grid-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
   .card { background: white; padding: 30px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: 0.3s; }
   
-  /* Home Page Cards */
   .home-card { text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; border-bottom: 4px solid transparent; }
   .home-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-bottom-color: var(--gold); }
   .home-card .icon { font-size: 40px; margin-bottom: 15px; }
@@ -54,6 +53,18 @@
   .pdf-btn { display: inline-block; margin-top: 15px; background: var(--gold); color: white; text-align: center; padding: 10px 15px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 13px; transition: 0.2s;}
   .pdf-btn:hover { background: var(--green-deep); }
   .notice-date { font-size: 11px; font-weight: bold; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; display: block; }
+
+  /* --- MOBILE RESPONSIVENESS --- */
+  @media (max-width: 768px) {
+    .hero { padding: 30px 15px; }
+    .hero h1 { font-size: 28px; }
+    .form-row { grid-template-columns: 1fr; } 
+    .page-section { padding: 20px 10px; }
+    .booking-panel, .card { padding: 15px; }
+    nav { padding: 0 15px; }
+    .nav-logo { font-size: 16px; }
+    .schedule-container { border-left: 3px solid var(--gold); border-right: 3px solid var(--gold); padding: 10px; }
+  }
 </style>
 </head>
 <body>
@@ -76,31 +87,26 @@
 
 <div id="page-home" class="page-section active">
   <div class="grid-grid">
-    
     <div class="card home-card" onclick="showPage('notices')">
       <div class="icon">📢</div>
       <h3>Notice Board</h3>
       <p>Stay updated with the latest society announcements, events, and official documents.</p>
     </div>
-
     <div class="card home-card" onclick="showPage('sports')">
       <div class="icon">🎾</div>
       <h3>Sports Booking</h3>
       <p>Check live availability and reserve courts and grounds for your recreational activities.</p>
     </div>
-
     <div class="card home-card" onclick="showPage('pool')">
       <div class="icon">🏊</div>
       <h3>Pool Register</h3>
       <p>Log your daily entry details before utilizing the society swimming pool facilities.</p>
     </div>
-
     <div class="card home-card" onclick="showPage('directory')">
       <div class="icon">👥</div>
       <h3>Resident Directory</h3>
       <p>Find and connect with your neighbors. Search by name or bungalow number easily.</p>
     </div>
-
   </div>
 </div>
 
@@ -158,7 +164,6 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // Remember to replace with your active config!
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
     authDomain: "sind-society.firebaseapp.com",
@@ -187,12 +192,10 @@
   async function loadAll() {
     const vDate = document.getElementById('viewDateFilter').value; 
     
-    // Format date for display (e.g. "Oct 25, 2026")
     const dateObj = new Date(vDate);
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     document.getElementById('viewingDateText').innerText = dateObj.toLocaleDateString('en-US', options);
 
-    // Load Notices
     try {
       const notes = await getDocs(collection(db, "notices"));
       const grid = document.getElementById('noticeGrid');
@@ -208,7 +211,6 @@
       if(grid.innerHTML === '') grid.innerHTML = '<p>No recent announcements to display.</p>';
     } catch(e) { console.error(e); }
 
-    // Load Sports Schedule
     try {
       const facs = await getDocs(collection(db, "facilities"));
       const books = await getDocs(query(collection(db, "bookings"), where("date", "==", vDate)));
@@ -231,7 +233,6 @@
       if(body.innerHTML === '') body.innerHTML = '<tr><td colspan="19">No facilities are currently configured.</td></tr>';
     } catch (e) { console.error(e); }
 
-    // Load Directory
     try {
       const res = await getDocs(collection(db, "residents"));
       window.residents = []; 
@@ -283,7 +284,6 @@
 
   window.cancelBooking = async (id) => { if(confirm("Are you sure you want to cancel this booking?")) { await deleteDoc(doc(db, "bookings", id)); loadAll(); } };
   
-  // DYNAMIC UI NAVIGATION
   window.showPage = (id) => { 
     document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active')); 
     document.querySelectorAll('.nav-links button').forEach(btn => btn.classList.remove('active'));
@@ -312,7 +312,7 @@
   };
 
   window.loadAll = loadAll;
-  loadAll(); // Initial load
+  loadAll();
 </script>
 </body>
 </html>
