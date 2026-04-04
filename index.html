@@ -34,9 +34,9 @@
   .btn-primary:hover { background: var(--gold); }
   
   .schedule-container { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
-  table { width: 100%; border-collapse: collapse; min-width: 1300px; }
+  table { width: 100%; border-collapse: collapse; min-width: 1600px; }
   th, td { border: 1px solid #eee; padding: 12px; text-align: center; font-size: 12px; }
-  th { background: var(--green-deep); color: white; }
+  th { background: var(--green-deep); color: white; white-space: nowrap; }
   .booked { background: #fdecea; color: var(--danger); font-weight: 700; }
   .available { color: #2d9c55; font-weight: 700; }
   .cancel-link { display: block; margin-top: 5px; color: var(--danger); font-size: 10px; cursor: pointer; text-decoration: underline; border: none; background: none; width: 100%; }
@@ -127,7 +127,7 @@
   </div>
   <div class="schedule-container">
     <table>
-      <thead><tr id="hallTableHead"><th style="width:220px; background:#f9f9f9; color:#333;">Venue</th></tr></thead>
+      <thead><tr id="hallTableHead"><th style="min-width:200px; background:#f9f9f9; color:#333;">Venue</th></tr></thead>
       <tbody id="hallTableBody"></tbody>
     </table>
   </div>
@@ -150,7 +150,7 @@
   </div>
   <div class="schedule-container">
     <table>
-      <thead><tr id="tableHead"><th style="width:150px; background:#f9f9f9; color:#333;">Facility</th></tr></thead>
+      <thead><tr id="tableHead"><th style="min-width:180px; background:#f9f9f9; color:#333;">Facility</th></tr></thead>
       <tbody id="tableBody"></tbody>
     </table>
   </div>
@@ -199,7 +199,14 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   
-  const times = ["6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"];
+  // UPDATED: Time Ranges instead of single times
+  const times = [
+    "6 AM - 7 AM", "7 AM - 8 AM", "8 AM - 9 AM", "9 AM - 10 AM", "10 AM - 11 AM", 
+    "11 AM - 12 PM", "12 PM - 1 PM", "1 PM - 2 PM", "2 PM - 3 PM", "3 PM - 4 PM", 
+    "4 PM - 5 PM", "5 PM - 6 PM", "6 PM - 7 PM", "7 PM - 8 PM", "8 PM - 9 PM", 
+    "9 PM - 10 PM", "10 PM - 11 PM", "11 PM - 12 AM"
+  ];
+  
   const fixedHalls = ["Big Club House Hall", "Big Clubhouse Hall with Small Lawn", "Big ClubHouse Hall with Big Lawn", "Big Lawn", "Small Lawn"];
   
   const today = new Date().toISOString().split('T')[0];
@@ -250,7 +257,6 @@
         let row = `<tr><td style="text-align:left; font-weight:bold; background:#f9f9f9; border-right: 2px solid #ddd;">${f}</td>`;
         times.forEach(t => {
           const b = hMap[`${f}-${t}`];
-          // Notice: No cancel button for residents in the hall table
           row += b ? `<td class="booked">${b.userName}<br><span style="color:#666;">(${b.bungalow})</span></td>` : `<td class="available">Available</td>`;
         });
         hBody.innerHTML += row + '</tr>';
