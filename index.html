@@ -9,50 +9,102 @@
   :root { --green-deep: #0a3d2b; --green-mid: #14573d; --gold: #c9993a; --cream: #faf8f3; --border: #ddd8cc; --white: #ffffff; --danger: #c0392b; --radius: 12px; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: #1a1a1a; }
+  
   nav { background: var(--green-deep); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--gold); padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; overflow-x: auto;}
   .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-family: 'Playfair Display', serif; flex-shrink: 0;}
   .crest { width: 35px; height: 35px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--green-deep); font-weight: bold; }
   .nav-links { display: flex; gap: 5px; flex-shrink: 0;}
   .nav-links button { background: none; border: none; color: rgba(255,255,255,0.6); padding: 8px 16px; cursor: pointer; font-size: 14px; font-weight: 500; transition: 0.3s; white-space: nowrap;}
-  .nav-links button.active { color: white; background: rgba(255,255,255,0.1); border-radius: 6px; }
-  .hero { background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%); color: white; text-align: center; padding: 40px 24px; transition: 0.3s; }
+  .nav-links button.active, .nav-links button:hover { color: white; background: rgba(255,255,255,0.1); border-radius: 6px; }
+  
+  .hero { background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%); color: white; text-align: center; padding: 50px 24px; transition: 0.3s; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 36px; margin-bottom: 10px; }
+  .hero p { font-size: 16px; opacity: 0.9; }
+
   .page-section { display: none; max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
   .page-section.active { display: block; animation: fadeIn 0.4s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  .booking-panel { background: white; padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-  .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 15px; }
-  input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
-  .btn-primary { background: var(--green-deep); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s; }
-  .schedule-container { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); overflow-x: auto; }
+  
+  .booking-panel { background: white; padding: 30px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+  .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
+  label { font-size: 11px; font-weight: bold; text-transform: uppercase; color: var(--green-mid); display: block; margin-bottom: 5px; }
+  input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; outline: none; }
+  input:focus, select:focus { border-color: var(--gold); }
+  .btn-primary { background: var(--green-deep); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s; font-size: 15px; }
+  .btn-primary:hover { background: var(--gold); }
+  
+  .schedule-container { background: white; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
   table { width: 100%; border-collapse: collapse; min-width: 1300px; }
   th, td { border: 1px solid #eee; padding: 12px; text-align: center; font-size: 12px; }
   th { background: var(--green-deep); color: white; }
   .booked { background: #fdecea; color: var(--danger); font-weight: 700; }
   .available { color: #2d9c55; font-weight: 700; }
   .cancel-link { display: block; margin-top: 5px; color: var(--danger); font-size: 10px; cursor: pointer; text-decoration: underline; border: none; background: none; width: 100%; }
-  .grid-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
-  .card { background: white; padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-  .pdf-btn { display: inline-block; margin-top: 15px; background: var(--gold); color: white; text-align: center; padding: 10px 15px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 13px; }
+  
+  .grid-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .card { background: white; padding: 30px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: 0.3s; }
+  
+  /* Home Page Cards */
+  .home-card { text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; border-bottom: 4px solid transparent; }
+  .home-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-bottom-color: var(--gold); }
+  .home-card .icon { font-size: 40px; margin-bottom: 15px; }
+  .home-card h3 { color: var(--green-deep); margin-bottom: 10px; }
+  .home-card p { color: #666; font-size: 14px; line-height: 1.5; }
+
+  .pdf-btn { display: inline-block; margin-top: 15px; background: var(--gold); color: white; text-align: center; padding: 10px 15px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 13px; transition: 0.2s;}
+  .pdf-btn:hover { background: var(--green-deep); }
   .notice-date { font-size: 11px; font-weight: bold; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; display: block; }
 </style>
 </head>
 <body>
+
 <nav>
-  <a class="nav-logo" href="#"><div class="crest">SC</div> Sind Society</a>
+  <a class="nav-logo" href="#" onclick="showPage('home')"><div class="crest">SC</div> Sind Society</a>
   <div class="nav-links">
+    <button id="nav-home" class="active" onclick="showPage('home')">🏠 Home</button>
     <button id="nav-notices" onclick="showPage('notices')">📢 Notices</button>
-    <button id="nav-sports" class="active" onclick="showPage('sports')">🎾 Sports</button>
+    <button id="nav-sports" onclick="showPage('sports')">🎾 Sports</button>
     <button id="nav-pool" onclick="showPage('pool')">🏊 Pool</button>
     <button id="nav-directory" onclick="showPage('directory')">👥 Directory</button>
   </div>
 </nav>
 
 <section class="hero">
-  <h1 id="hero-title">Sports Booking</h1>
-  <p id="hero-desc">Live availability from 6 AM to 11 PM.</p>
+  <h1 id="hero-title">Welcome to Sind Society</h1>
+  <p id="hero-desc">Your central portal for community updates, sports bookings, and society management.</p>
 </section>
 
-<div id="page-sports" class="page-section active">
+<div id="page-home" class="page-section active">
+  <div class="grid-grid">
+    
+    <div class="card home-card" onclick="showPage('notices')">
+      <div class="icon">📢</div>
+      <h3>Notice Board</h3>
+      <p>Stay updated with the latest society announcements, events, and official documents.</p>
+    </div>
+
+    <div class="card home-card" onclick="showPage('sports')">
+      <div class="icon">🎾</div>
+      <h3>Sports Booking</h3>
+      <p>Check live availability and reserve courts and grounds for your recreational activities.</p>
+    </div>
+
+    <div class="card home-card" onclick="showPage('pool')">
+      <div class="icon">🏊</div>
+      <h3>Pool Register</h3>
+      <p>Log your daily entry details before utilizing the society swimming pool facilities.</p>
+    </div>
+
+    <div class="card home-card" onclick="showPage('directory')">
+      <div class="icon">👥</div>
+      <h3>Resident Directory</h3>
+      <p>Find and connect with your neighbors. Search by name or bungalow number easily.</p>
+    </div>
+
+  </div>
+</div>
+
+<div id="page-sports" class="page-section">
   <div class="booking-panel">
     <div class="form-row">
       <div><label>Date</label><input type="date" id="inDate"></div>
@@ -63,9 +115,9 @@
     </div>
     <button class="btn-primary" onclick="handleBooking()">Confirm Reservation</button>
   </div>
-  <div style="display:flex; justify-content:space-between; margin-bottom:10px; align-items:center;">
-    <h2>Schedule: <span id="viewingDateText">Today</span></h2>
-    <input type="date" id="viewDateFilter" onchange="loadAll()" style="width:160px; padding:8px;">
+  <div style="display:flex; justify-content:space-between; margin-bottom:15px; align-items:center;">
+    <h2 style="color: var(--green-deep);">Schedule: <span id="viewingDateText" style="color: var(--gold);">Today</span></h2>
+    <input type="date" id="viewDateFilter" onchange="loadAll()" style="width:160px; padding:8px; border:1px solid #ccc; border-radius:6px;">
   </div>
   <div class="schedule-container">
     <table>
@@ -77,8 +129,8 @@
 
 <div id="page-pool" class="page-section">
   <div class="booking-panel">
-    <h2 style="margin-bottom: 20px; color: var(--green-deep);">Swimming Pool Entry Register</h2>
-    <p style="font-size: 14px; margin-bottom: 20px; color: #666;">Please log your entry details before using the society swimming pool.</p>
+    <h2 style="margin-bottom: 10px; color: var(--green-deep);">Swimming Pool Entry Register</h2>
+    <p style="font-size: 14px; margin-bottom: 25px; color: #666;">Please log your entry details before using the society swimming pool.</p>
     <div class="form-row">
       <div><label>Date</label><input type="date" id="poolDate"></div>
       <div><label>Time of Entry</label><input type="time" id="poolTime"></div>
@@ -95,16 +147,18 @@
 </div>
 
 <div id="page-directory" class="page-section">
-  <input type="text" id="dirSearch" placeholder="Search residents by name or bungalow..." oninput="filterDirectory()" style="width:100%; max-width:400px; padding:12px; border-radius:30px; border:1px solid #ccc; margin-bottom:20px;">
+  <div style="background: white; padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 25px;">
+     <label>Search Directory</label>
+     <input type="text" id="dirSearch" placeholder="Search residents by name or bungalow..." oninput="filterDirectory()" style="width:100%; border:none; border-bottom: 2px solid var(--border); border-radius:0; padding: 15px 5px; font-size: 16px; margin-top:5px;">
+  </div>
   <div id="dirGrid" class="grid-grid">Loading directory...</div>
 </div>
 
 <script type="module">
-  // Using rock-solid version 10.12.2
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // Completely sanitized config
+  // Remember to replace with your active config!
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
     authDomain: "sind-society.firebaseapp.com",
@@ -132,7 +186,11 @@
 
   async function loadAll() {
     const vDate = document.getElementById('viewDateFilter').value; 
-    document.getElementById('viewingDateText').innerText = vDate;
+    
+    // Format date for display (e.g. "Oct 25, 2026")
+    const dateObj = new Date(vDate);
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    document.getElementById('viewingDateText').innerText = dateObj.toLocaleDateString('en-US', options);
 
     // Load Notices
     try {
@@ -142,12 +200,12 @@
       notes.forEach(d => {
         const n = d.data();
         let html = `<div class="card"><span class="notice-date">${n.date || 'Society Update'}</span><h3>${n.title}</h3>`;
-        if(n.description) html += `<p style="font-size:14px; margin-top:10px; white-space:pre-wrap; color:#444;">${n.description}</p>`;
-        if(n.pdfUrl) html += `<a href="${n.pdfUrl}" target="_blank" class="pdf-btn">📄 View PDF Notice</a>`;
+        if(n.description) html += `<p style="font-size:14px; margin-top:10px; white-space:pre-wrap; color:#444; line-height: 1.6;">${n.description}</p>`;
+        if(n.pdfUrl) html += `<a href="${n.pdfUrl}" target="_blank" class="pdf-btn">📄 View Official PDF</a>`;
         html += `</div>`;
         grid.innerHTML += html;
       });
-      if(grid.innerHTML === '') grid.innerHTML = '<p>No recent notices.</p>';
+      if(grid.innerHTML === '') grid.innerHTML = '<p>No recent announcements to display.</p>';
     } catch(e) { console.error(e); }
 
     // Load Sports Schedule
@@ -163,14 +221,14 @@
       facs.forEach(d => {
         const f = d.data(); 
         fSel.innerHTML += `<option value="${f.name}">${f.name}</option>`;
-        let row = `<tr><td style="text-align:left; font-weight:bold; background:#f9f9f9;">${f.name}</td>`;
+        let row = `<tr><td style="text-align:left; font-weight:bold; background:#f9f9f9; border-right: 2px solid #ddd;">${f.name}</td>`;
         times.forEach(t => {
           const b = bMap[`${f.name}-${t}`];
-          row += b ? `<td class="booked">${b.userName}<br>(${b.bungalow})<button class="cancel-link" onclick="cancelBooking('${b.id}')">Cancel</button></td>` : `<td class="available">Available</td>`;
+          row += b ? `<td class="booked">${b.userName}<br><span style="color:#666;">(${b.bungalow})</span><button class="cancel-link" onclick="cancelBooking('${b.id}')">Cancel</button></td>` : `<td class="available">Available</td>`;
         });
         body.innerHTML += row + '</tr>';
       });
-      if(body.innerHTML === '') body.innerHTML = '<tr><td colspan="19">No facilities found. Admin must add grounds.</td></tr>';
+      if(body.innerHTML === '') body.innerHTML = '<tr><td colspan="19">No facilities are currently configured.</td></tr>';
     } catch (e) { console.error(e); }
 
     // Load Directory
@@ -184,8 +242,8 @@
 
   function renderDir(data) { 
     const grid = document.getElementById('dirGrid');
-    grid.innerHTML = data.map(r => `<div class="card"><strong>${r.name}</strong><br>Bungalow: ${r.bungalow}</div>`).join(''); 
-    if(grid.innerHTML === '') grid.innerHTML = '<p>No residents found.</p>';
+    grid.innerHTML = data.map(r => `<div class="card"><h3 style="color:var(--green-deep); margin-bottom:5px; font-size:18px;">${r.name}</h3><span style="font-weight:bold; color:var(--gold); font-size:14px;">Bungalow: ${r.bungalow}</span></div>`).join(''); 
+    if(grid.innerHTML === '') grid.innerHTML = '<p>No residents found in the directory.</p>';
   }
   
   window.filterDirectory = () => { 
@@ -195,13 +253,13 @@
 
   window.handleBooking = async () => {
     const d = document.getElementById('inDate').value, f = document.getElementById('inFac').value, t = document.getElementById('inTime').value, n = document.getElementById('inName').value, b = document.getElementById('inBung').value;
-    if(!n || !b) return alert("Enter your name and bungalow number.");
+    if(!n || !b) return alert("Please enter your name and bungalow number.");
     try {
       const checkSnap = await getDocs(query(collection(db, "bookings"), where("date", "==", d), where("facility", "==", f), where("time", "==", t)));
-      if(!checkSnap.empty) return alert("This slot is already reserved for this date.");
+      if(!checkSnap.empty) return alert("Sorry, this slot is already reserved.");
 
       await addDoc(collection(db, "bookings"), { facility: f, time: t, userName: n, bungalow: b, date: d });
-      alert("Booking Confirmed!"); loadAll();
+      alert("Booking Confirmed Successfully!"); loadAll();
     } catch (e) { alert("Error: " + e.message); }
   };
 
@@ -212,11 +270,11 @@
     const b = document.getElementById('poolBung').value;
     const p = document.getElementById('poolPhone').value;
 
-    if(!d || !t || !n || !b || !p) return alert("Please fill in all fields for pool registration.");
+    if(!d || !t || !n || !b || !p) return alert("Please fill out all fields before registering.");
 
     try {
       await addDoc(collection(db, "pool_registrations"), { date: d, time: t, name: n, bungalow: b, phone: p, timestamp: new Date() });
-      alert("Pool Entry Successfully Registered!");
+      alert("Pool Entry Successfully Logged. Have a great swim!");
       document.getElementById('poolName').value = '';
       document.getElementById('poolBung').value = '';
       document.getElementById('poolPhone').value = '';
@@ -225,6 +283,7 @@
 
   window.cancelBooking = async (id) => { if(confirm("Are you sure you want to cancel this booking?")) { await deleteDoc(doc(db, "bookings", id)); loadAll(); } };
   
+  // DYNAMIC UI NAVIGATION
   window.showPage = (id) => { 
     document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active')); 
     document.querySelectorAll('.nav-links button').forEach(btn => btn.classList.remove('active'));
@@ -234,23 +293,26 @@
     const title = document.getElementById('hero-title');
     const desc = document.getElementById('hero-desc');
 
-    if (id === 'sports') {
+    if (id === 'home') {
+      title.innerText = "Welcome to Sind Society";
+      desc.innerText = "Your central portal for community updates, sports bookings, and society management.";
+    } else if (id === 'sports') {
       title.innerText = "Sports Booking";
-      desc.innerText = "Live availability from 6 AM to 11 PM.";
+      desc.innerText = "Check live availability and reserve society grounds.";
     } else if (id === 'notices') {
-      title.innerText = "Society Notices";
-      desc.innerText = "Latest updates and announcements.";
+      title.innerText = "Society Notice Board";
+      desc.innerText = "Latest updates, guidelines, and official announcements.";
     } else if (id === 'directory') {
       title.innerText = "Resident Directory";
-      desc.innerText = "Connect with your neighbors.";
+      desc.innerText = "Find and connect with your neighbors.";
     } else if (id === 'pool') {
-      title.innerText = "Pool Registration";
-      desc.innerText = "Mandatory log for swimming pool entry.";
+      title.innerText = "Swimming Pool Log";
+      desc.innerText = "Mandatory safety and entry registration for pool users.";
     }
   };
 
   window.loadAll = loadAll;
-  loadAll();
+  loadAll(); // Initial load
 </script>
 </body>
 </html>
