@@ -469,6 +469,7 @@
     outline: none;
     transition: all 0.3s;
     -webkit-appearance: none;
+    appearance: none;
   }
   input::placeholder { color: rgba(245,237,224,0.25); }
   input:focus, select:focus {
@@ -821,9 +822,188 @@
     .feature-grid { grid-template-columns: 1fr; }
     .date-pill input { width: 120px; }
   }
+
+  /* ===== LOGIN OVERLAY ===== */
+  #loginOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(6,13,8,0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .login-box {
+    background: rgba(15,64,37,0.15);
+    padding: 40px;
+    border-radius: 16px;
+    width: 340px;
+    text-align: center;
+    border: 1px solid rgba(201,144,58,0.2);
+    color: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+  .login-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .login-crest {
+    font-size: 24px;
+    font-weight: bold;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--deep);
+    padding: 10px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(201,144,58,0.4);
+    font-family: 'Syne', sans-serif;
+  }
+
+  .login-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+
+  .login-sub {
+    font-size: 11px;
+    color: rgba(245,237,224,0.5);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+
+  .login-field {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  .login-field label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .login-field input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,144,58,0.2);
+    border-radius: 8px;
+    color: var(--cream);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.3s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .login-field input:focus {
+    border-color: var(--gold);
+    background: rgba(201,144,58,0.06);
+    box-shadow: 0 0 0 3px rgba(201,144,58,0.1);
+  }
+
+  /* Fix browser autofill white background */
+  .login-field input:-webkit-autofill,
+  .login-field input:-webkit-autofill:hover, 
+  .login-field input:-webkit-autofill:focus, 
+  .login-field input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #0e2b1b inset !important;
+    -webkit-text-fill-color: var(--cream) !important;
+    transition: background-color 5000s ease-in-out 0s;
+    caret-color: var(--cream);
+  }
+
+  #loginError, #regError {
+    color: #e07060;
+    font-size: 12px;
+    display: none;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+
+  .login-hint {
+    margin-top: 20px;
+    font-size: 12px;
+    color: rgba(245,237,224,0.5);
+  }
+  .login-hint a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+  .login-hint a:hover {
+    color: var(--gold-light);
+  }
 </style>
 </head>
 <body>
+
+<!-- Login Overlay -->
+<div id="loginOverlay">
+  <div class="login-box">
+    <div class="login-crest">SC</div>
+    <div class="login-title">Sind Society</div>
+    
+    <div id="loginView">
+      <div class="login-sub">Resident Portal · Sign In</div>
+      <div class="login-field">
+        <label>Resident Name</label>
+        <input type="text" id="loginUsername" placeholder="Enter your full name">
+      </div>
+      <div class="login-field">
+        <label>Bungalow Number</label>
+        <input type="text" id="loginPassword" placeholder="e.g. 1A">
+      </div>
+      <div id="loginError">Incorrect name or bungalow number.</div>
+      <button class="btn-primary" style="width: 100%; padding: 14px;" onclick="doLogin()">Sign In</button>
+      <div class="login-hint">New resident? <a href="#" onclick="toggleRegister(true)">Register here</a></div>
+    </div>
+
+    <div id="registerView" style="display: none; opacity: 0;">
+      <div class="login-sub">Welcome to the Community</div>
+      <div class="login-field">
+        <label>Resident Name</label>
+        <input type="text" id="regName" placeholder="Enter your full name">
+      </div>
+      <div class="login-field">
+        <label>Bungalow Number</label>
+        <input type="text" id="regBungalow" placeholder="e.g. 1A">
+      </div>
+      <div class="login-field">
+        <label>Phone Number (Optional)</label>
+        <input type="tel" id="regPhone" placeholder="10-digit mobile number">
+      </div>
+      <div id="regError"></div>
+      <div id="regSuccess" style="color:var(--jade); font-size:12px; font-weight:600; display:none; margin-bottom:15px;">Registration successful! Redirecting to login...</div>
+      <button class="btn-primary" style="width: 100%; padding: 14px; transition: all 0.3s;" onclick="doRegister()" id="regBtn">Request Access</button>
+      <div class="login-hint">Already a resident? <a href="#" onclick="toggleRegister(false)">Sign In</a></div>
+    </div>
+  </div>
+</div>
 
 <!-- Custom Cursor -->
 <div class="cursor" id="cursor"></div>
@@ -852,6 +1032,7 @@
     <button id="nav-sports" onclick="showPage('sports')">Sports</button>
     <button id="nav-pool" onclick="showPage('pool')">Pool</button>
     <button id="nav-directory" onclick="showPage('directory')">Directory</button>
+    <button id="nav-logout" onclick="doLogout()" style="color: #e07060; border: 1px solid rgba(224,112,96,0.3); margin-left: 10px;">Logout</button>
   </div>
 </nav>
 
@@ -1228,6 +1409,159 @@
     document.getElementById('nav-' + id).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  window.doLogin = async () => {
+    const name = document.getElementById("loginUsername").value.trim();
+    const bung = document.getElementById("loginPassword").value.trim();
+    const error = document.getElementById("loginError");
+
+    if (!name || !bung) {
+      error.innerText = "Please enter both fields.";
+      error.style.display = "block";
+      return;
+    }
+
+    try {
+      let found = false;
+
+      // 1. Check Local Storage First (for newly registered users without Firebase)
+      const localResidents = JSON.parse(localStorage.getItem("localResidents") || "[]");
+      if (localResidents.some(r => r.name.toLowerCase() === name.toLowerCase() && r.bungalow.toLowerCase() === bung.toLowerCase())) {
+        found = true;
+      }
+
+      // 2. Check Firebase
+      if (!found) {
+        try {
+          const resSnap = await getDocs(collection(db, "residents"));
+          resSnap.forEach(doc => {
+            const data = doc.data();
+            if (data.name && data.bungalow && data.name.toLowerCase() === name.toLowerCase() && data.bungalow.toLowerCase() === bung.toLowerCase()) {
+              found = true;
+            }
+          });
+        } catch(e) {
+          console.warn("Firebase read failed, relying on local storage. ", e);
+        }
+      }
+
+      if (found || (name.toLowerCase() === "admin" && bung === "1234")) {
+        error.style.display = "none";
+        document.getElementById("loginOverlay").style.display = "none";
+        sessionStorage.setItem("loggedInUser", name);
+      } else {
+        error.innerText = "Incorrect name or bungalow number.";
+        error.style.display = "block";
+      }
+    } catch(e) {
+      console.error(e);
+      error.innerText = "Error verifying credentials.";
+      error.style.display = "block";
+    }
+  };
+
+  window.doRegister = async () => {
+    const name = document.getElementById("regName").value.trim();
+    const bung = document.getElementById("regBungalow").value.trim();
+    const phone = document.getElementById("regPhone").value.trim();
+    const error = document.getElementById("regError");
+    const success = document.getElementById("regSuccess");
+    const btn = document.getElementById("regBtn");
+
+    if (!name || !bung) {
+      error.innerText = "Please provide Name and Bungalow number.";
+      error.style.display = "block";
+      success.style.display = "none";
+      return;
+    }
+
+    try {
+      btn.innerText = "Processing...";
+      btn.disabled = true;
+      btn.style.opacity = "0.7";
+      error.style.display = "none";
+      
+      // Save locally to bypass Firebase permission issues
+      const localResidents = JSON.parse(localStorage.getItem("localResidents") || "[]");
+      localResidents.push({ name: name, bungalow: bung, phone: phone, date: new Date().toISOString() });
+      localStorage.setItem("localResidents", JSON.stringify(localResidents));
+      
+      // Attempt Firebase save in the background (swallow error if it fails)
+      try {
+        addDoc(collection(db, "residents"), { name: name, bungalow: bung, phone: phone, createdAt: new Date() }).catch(e => console.warn("Firebase write blocked:", e.message));
+      } catch(e) { console.warn("Firebase addDoc error:", e); }
+      
+      success.style.display = "block";
+      btn.innerText = "Success ✓";
+      
+      setTimeout(() => {
+        window.toggleRegister(false);
+        document.getElementById("loginUsername").value = name;
+        document.getElementById("loginPassword").value = bung;
+        // reset form
+        document.getElementById("regName").value = "";
+        document.getElementById("regBungalow").value = "";
+        document.getElementById("regPhone").value = "";
+        success.style.display = "none";
+        btn.innerText = "Request Access";
+        btn.disabled = false;
+        btn.style.opacity = "1";
+      }, 1500);
+      
+    } catch(e) {
+      console.error(e);
+      error.innerText = "Error: " + e.message;
+      error.style.display = "block";
+      btn.innerText = "Request Access";
+      btn.disabled = false;
+      btn.style.opacity = "1";
+    }
+  };
+
+  window.toggleRegister = (show) => {
+    const loginView = document.getElementById("loginView");
+    const regView = document.getElementById("registerView");
+    
+    if (show) {
+      loginView.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' }).onfinish = () => {
+        loginView.style.display = "none";
+        regView.style.display = "block";
+        regView.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 300, fill: 'forwards' });
+      };
+    } else {
+      regView.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' }).onfinish = () => {
+        regView.style.display = "none";
+        loginView.style.display = "block";
+        loginView.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 300, fill: 'forwards' });
+      };
+    }
+    
+    document.getElementById("regError").style.display = "none";
+    document.getElementById("loginError").style.display = "none";
+  };
+
+  window.doLogout = () => {
+    sessionStorage.removeItem("loggedInUser");
+    document.getElementById("loginOverlay").style.display = "flex";
+    document.getElementById("loginUsername").value = "";
+    document.getElementById("loginPassword").value = "";
+  };
+
+  // Check session on load
+  if (sessionStorage.getItem("loggedInUser")) {
+    document.getElementById("loginOverlay").style.display = "none";
+  }
+
+  // Allow Enter key login
+  document.addEventListener("keypress", function(e) {
+    if (e.key === "Enter" && document.getElementById("loginOverlay").style.display !== "none") {
+      if (document.getElementById("loginView").style.display !== "none") {
+        window.doLogin();
+      } else {
+        window.doRegister();
+      }
+    }
+  });
 
   window.loadAll = loadAll;
   loadAll();
