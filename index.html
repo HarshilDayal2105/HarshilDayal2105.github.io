@@ -31,51 +31,20 @@
   }
 
   /* ===== CURSOR ===== */
-  .cursor {
-    width: 8px; height: 8px;
-    background: var(--gold);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 99999;
-    transition: transform 0.1s;
-    mix-blend-mode: difference;
-  }
-  .cursor-ring {
-    width: 36px; height: 36px;
-    border: 1px solid rgba(201,144,58,0.5);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 99998;
-    transition: transform 0.15s, width 0.3s, height 0.3s, opacity 0.3s;
-  }
+  .cursor { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 99999; transition: transform 0.1s; mix-blend-mode: difference; }
+  .cursor-ring { width: 36px; height: 36px; border: 1px solid rgba(201,144,58,0.5); border-radius: 50%; position: fixed; pointer-events: none; z-index: 99998; transition: transform 0.15s, width 0.3s, height 0.3s, opacity 0.3s; }
 
   /* ===== NOISE OVERLAY ===== */
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-    opacity: 0.035;
-    pointer-events: none;
-    z-index: 9999;
+    opacity: 0.035; pointer-events: none; z-index: 9999;
   }
 
-  /* ===== AMBIENT BACKGROUND ===== */
-  .ambient {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .ambient-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    animation: drift 18s ease-in-out infinite alternate;
-  }
+  /* ===== AMBIENT ===== */
+  .ambient { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .ambient-orb { position: absolute; border-radius: 50%; filter: blur(80px); animation: drift 18s ease-in-out infinite alternate; }
   .orb1 { width: 600px; height: 600px; top: -200px; left: -200px; background: radial-gradient(circle, rgba(26,102,64,0.35) 0%, transparent 70%); }
   .orb2 { width: 500px; height: 500px; bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(201,144,58,0.2) 0%, transparent 70%); animation-delay: -8s; animation-duration: 22s; }
   .orb3 { width: 400px; height: 400px; top: 40%; left: 40%; background: radial-gradient(circle, rgba(10,40,24,0.5) 0%, transparent 70%); animation-delay: -4s; animation-duration: 15s; }
@@ -83,210 +52,57 @@
 
   /* ===== NAV ===== */
   nav {
-    position: fixed;
-    top: 0;
-    left: 0; right: 0;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 40px;
-    height: 72px;
-    background: rgba(6,13,8,0.7);
-    backdrop-filter: blur(20px);
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 72px;
+    background: rgba(6,13,8,0.7); backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(201,144,58,0.15);
   }
-  nav::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  }
-  .nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  .crest {
-    width: 42px; height: 42px;
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--deep);
-    font-weight: 800;
-    font-size: 14px;
-    letter-spacing: 1px;
-    position: relative;
-    box-shadow: 0 0 20px rgba(201,144,58,0.4);
-  }
-  .crest::after {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border-radius: 50%;
-    border: 1px solid rgba(201,144,58,0.3);
-  }
-  .logo-text {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    color: var(--cream);
-  }
-  .logo-sub {
-    font-size: 9px;
-    letter-spacing: 4px;
-    color: var(--gold);
-    text-transform: uppercase;
-    font-weight: 500;
-    line-height: 1;
-  }
-  .nav-links { display: flex; gap: 4px; }
-  .nav-links button {
-    background: none; border: none;
-    color: rgba(245,237,224,0.55);
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    font-family: 'Syne', sans-serif;
-    transition: all 0.3s;
-    border-radius: 4px;
-    position: relative;
-  }
-  .nav-links button::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 50%; right: 50%;
-    height: 2px;
-    background: var(--gold);
-    transition: left 0.3s, right 0.3s;
-  }
-  .nav-links button.active::after,
-  .nav-links button:hover::after { left: 15%; right: 15%; }
+  nav::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; cursor: pointer; }
+  .crest { width: 42px; height: 42px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--deep); font-weight: 800; font-size: 14px; letter-spacing: 1px; position: relative; box-shadow: 0 0 20px rgba(201,144,58,0.4); }
+  .crest::after { content: ''; position: absolute; inset: -3px; border-radius: 50%; border: 1px solid rgba(201,144,58,0.3); }
+  .logo-text { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; letter-spacing: 2px; color: var(--cream); }
+  .logo-sub { font-size: 9px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; font-weight: 500; line-height: 1; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+  .nav-links button { background: none; border: none; color: rgba(245,237,224,0.55); padding: 8px 16px; cursor: pointer; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Syne', sans-serif; transition: all 0.3s; border-radius: 4px; position: relative; }
+  .nav-links button::after { content: ''; position: absolute; bottom: 0; left: 50%; right: 50%; height: 2px; background: var(--gold); transition: left 0.3s, right 0.3s; }
+  .nav-links button.active::after, .nav-links button:hover::after { left: 15%; right: 15%; }
   .nav-links button.active, .nav-links button:hover { color: var(--cream); }
 
-  /* ===== HERO ===== */
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    overflow: hidden;
-    padding: 120px 40px 80px;
-  }
-  .hero-bg {
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 70% 50% at 50% 60%, rgba(26,102,64,0.25) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 20% 20%, rgba(201,144,58,0.08) 0%, transparent 60%),
-      var(--deep);
-  }
-  .hero-lines {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(201,144,58,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(201,144,58,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
-  }
-  .hero-content { position: relative; z-index: 2; }
-  .hero-eyebrow {
-    font-size: 11px;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 24px;
-    opacity: 0;
-    animation: slideUp 1s ease 0.3s forwards;
-  }
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(52px, 10vw, 120px);
-    font-weight: 300;
-    line-height: 0.9;
-    letter-spacing: -2px;
-    color: var(--cream);
-    margin-bottom: 30px;
-    opacity: 0;
-    animation: slideUp 1s ease 0.5s forwards;
-  }
-  .hero-title em {
-    font-style: italic;
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero-desc {
-    font-size: 15px;
-    color: rgba(245,237,224,0.6);
-    max-width: 520px;
-    margin: 0 auto 50px;
-    line-height: 1.8;
-    letter-spacing: 0.3px;
-    opacity: 0;
-    animation: slideUp 1s ease 0.7s forwards;
-  }
-  .hero-cards {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-    opacity: 0;
-    animation: slideUp 1s ease 0.9s forwards;
-  }
-  .hero-card-btn {
-    background: rgba(255,255,255,0.04);
+  /* User chip in nav */
+  .nav-user-chip {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(201,144,58,0.08);
     border: 1px solid rgba(201,144,58,0.2);
-    color: var(--cream);
-    padding: 14px 24px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 600;
-    text-transform: uppercase;
-    transition: all 0.4s;
-    backdrop-filter: blur(10px);
+    border-radius: 30px; padding: 6px 16px 6px 8px;
+    margin-left: 8px;
   }
-  .hero-card-btn:hover {
-    background: rgba(201,144,58,0.15);
-    border-color: var(--gold);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(201,144,58,0.15);
+  .nav-user-avatar {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: var(--deep);
   }
+  .nav-user-name { font-size: 11px; font-weight: 700; color: var(--cream); letter-spacing: 0.5px; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .nav-user-bung { font-size: 9px; color: var(--gold); letter-spacing: 1px; }
 
-  /* Scroll indicator */
-  .scroll-indicator {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    opacity: 0;
-    animation: fadeIn 1s ease 1.5s forwards;
-  }
-  .scroll-line {
-    width: 1px;
-    height: 50px;
-    background: linear-gradient(to bottom, var(--gold), transparent);
-    animation: scrollPulse 2s ease-in-out infinite;
-  }
+  /* ===== HERO ===== */
+  .hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; padding: 120px 40px 80px; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 50% at 50% 60%, rgba(26,102,64,0.25) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 20% 20%, rgba(201,144,58,0.08) 0%, transparent 60%), var(--deep); }
+  .hero-lines { position: absolute; inset: 0; background-image: linear-gradient(rgba(201,144,58,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,144,58,0.04) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%); }
+  .hero-content { position: relative; z-index: 2; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; opacity: 0; animation: slideUp 1s ease 0.3s forwards; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 10vw, 120px); font-weight: 300; line-height: 0.9; letter-spacing: -2px; color: var(--cream); margin-bottom: 30px; opacity: 0; animation: slideUp 1s ease 0.5s forwards; }
+  .hero-title em { font-style: italic; background: linear-gradient(135deg, var(--gold), var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-desc { font-size: 15px; color: rgba(245,237,224,0.6); max-width: 520px; margin: 0 auto 50px; line-height: 1.8; letter-spacing: 0.3px; opacity: 0; animation: slideUp 1s ease 0.7s forwards; }
+  .hero-cards { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; opacity: 0; animation: slideUp 1s ease 0.9s forwards; }
+  .hero-card-btn { background: rgba(255,255,255,0.04); border: 1px solid rgba(201,144,58,0.2); color: var(--cream); padding: 14px 24px; border-radius: 6px; cursor: pointer; font-size: 12px; letter-spacing: 1.5px; font-family: 'Syne', sans-serif; font-weight: 600; text-transform: uppercase; transition: all 0.4s; backdrop-filter: blur(10px); }
+  .hero-card-btn:hover { background: rgba(201,144,58,0.15); border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(201,144,58,0.15); }
+  .scroll-indicator { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; animation: fadeIn 1s ease 1.5s forwards; }
+  .scroll-line { width: 1px; height: 50px; background: linear-gradient(to bottom, var(--gold), transparent); animation: scrollPulse 2s ease-in-out infinite; }
   .scroll-text { font-size: 9px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
   @keyframes scrollPulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
-
   @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -295,521 +111,141 @@
   .page-section.active { display: block; }
   .hero-section { display: none; }
   .hero-section.active { display: block; }
-
   .section-inner { max-width: 1200px; margin: 0 auto; padding: 60px 40px; }
+  .section-header { margin-bottom: 50px; border-bottom: 1px solid rgba(201,144,58,0.15); padding-bottom: 30px; }
+  .section-header .eyebrow { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  .section-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(40px, 6vw, 72px); font-weight: 300; line-height: 1; letter-spacing: -1px; color: var(--cream); }
+  .section-header p { margin-top: 16px; font-size: 14px; color: rgba(245,237,224,0.5); line-height: 1.7; max-width: 600px; }
 
-  .section-header {
-    margin-bottom: 50px;
-    border-bottom: 1px solid rgba(201,144,58,0.15);
-    padding-bottom: 30px;
-  }
-  .section-header .eyebrow {
-    font-size: 10px;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 12px;
-  }
-  .section-header h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(40px, 6vw, 72px);
-    font-weight: 300;
-    line-height: 1;
-    letter-spacing: -1px;
-    color: var(--cream);
-  }
-  .section-header p {
-    margin-top: 16px;
-    font-size: 14px;
-    color: rgba(245,237,224,0.5);
-    line-height: 1.7;
-    max-width: 600px;
-  }
-
-  /* ===== GLASS CARDS ===== */
-  .glass {
-    background: rgba(255,255,255,0.03);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(201,144,58,0.12);
-    border-radius: 16px;
-  }
-  .glass-gold { border-color: rgba(201,144,58,0.3); background: rgba(201,144,58,0.04); }
-
-  /* ===== HOME GRID ===== */
+  /* ===== FEATURE GRID ===== */
   #page-home .section-inner { padding-top: 0; }
-  .feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-    margin-top: 80px;
-  }
-  .feature-card {
-    padding: 40px;
-    border-radius: 16px;
-    background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(201,144,58,0.1);
-    cursor: pointer;
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    position: relative;
-    overflow: hidden;
-    min-height: 220px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-  .feature-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(26,102,64,0.1), transparent);
-    opacity: 0;
-    transition: opacity 0.5s;
-  }
-  .feature-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  }
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 80px; }
+  .feature-card { padding: 40px; border-radius: 16px; background: rgba(255,255,255,0.025); border: 1px solid rgba(201,144,58,0.1); cursor: pointer; transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); position: relative; overflow: hidden; min-height: 220px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .feature-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(26,102,64,0.1), transparent); opacity: 0; transition: opacity 0.5s; }
+  .feature-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
   .feature-card:hover::before { opacity: 1; }
   .feature-card:hover::after { transform: scaleX(1); }
   .feature-card:hover { transform: translateY(-8px); border-color: rgba(201,144,58,0.35); box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
-  .fc-icon {
-    font-size: 48px;
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    opacity: 0.15;
-    transition: all 0.5s;
-  }
+  .fc-icon { font-size: 48px; position: absolute; top: 30px; right: 30px; opacity: 0.15; transition: all 0.5s; }
   .feature-card:hover .fc-icon { opacity: 0.4; transform: scale(1.1) rotate(-5deg); }
-  .fc-num {
-    font-size: 11px;
-    letter-spacing: 4px;
-    color: var(--gold);
-    margin-bottom: 12px;
-    font-weight: 600;
-  }
-  .fc-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 600;
-    color: var(--cream);
-    margin-bottom: 10px;
-  }
-  .fc-desc {
-    font-size: 13px;
-    color: rgba(245,237,224,0.45);
-    line-height: 1.6;
-  }
-  .fc-arrow {
-    position: absolute;
-    top: 30px; left: 40px;
-    font-size: 18px;
-    color: var(--gold);
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.4s;
-  }
+  .fc-num { font-size: 11px; letter-spacing: 4px; color: var(--gold); margin-bottom: 12px; font-weight: 600; }
+  .fc-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: var(--cream); margin-bottom: 10px; }
+  .fc-desc { font-size: 13px; color: rgba(245,237,224,0.45); line-height: 1.6; }
+  .fc-arrow { position: absolute; top: 30px; left: 40px; font-size: 18px; color: var(--gold); opacity: 0; transform: translateX(-10px); transition: all 0.4s; }
   .feature-card:hover .fc-arrow { opacity: 1; transform: translateX(0); }
 
   /* ===== BOOKING PANEL ===== */
-  .booking-panel {
-    padding: 40px;
-    border-radius: 16px;
-    background: rgba(15,64,37,0.15);
-    border: 1px solid rgba(201,144,58,0.2);
-    margin-bottom: 40px;
-    position: relative;
-    overflow: hidden;
-  }
-  .booking-panel::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  }
-  .panel-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 300;
-    color: var(--cream);
-    margin-bottom: 6px;
-  }
-  .panel-subtitle {
-    font-size: 12px;
-    color: rgba(245,237,224,0.4);
-    letter-spacing: 1px;
-    margin-bottom: 30px;
-  }
+  .booking-panel { padding: 40px; border-radius: 16px; background: rgba(15,64,37,0.15); border: 1px solid rgba(201,144,58,0.2); margin-bottom: 40px; position: relative; overflow: hidden; }
+  .booking-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .panel-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; color: var(--cream); margin-bottom: 6px; }
+  .panel-subtitle { font-size: 12px; color: rgba(245,237,224,0.4); letter-spacing: 1px; margin-bottom: 30px; }
   .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 20px; }
-  .form-group label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    display: block;
-    margin-bottom: 8px;
-  }
-  input, select, textarea {
-    width: 100%;
-    padding: 12px 16px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(201,144,58,0.2);
-    border-radius: 8px;
-    color: var(--cream);
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    outline: none;
-    transition: all 0.3s;
-    -webkit-appearance: none;
-    appearance: none;
-  }
+  .form-group label { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 8px; }
+  input, select, textarea { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,144,58,0.2); border-radius: 8px; color: var(--cream); font-family: 'Syne', sans-serif; font-size: 13px; outline: none; transition: all 0.3s; -webkit-appearance: none; appearance: none; }
   input::placeholder { color: rgba(245,237,224,0.25); }
-  input:focus, select:focus {
-    border-color: var(--gold);
-    background: rgba(201,144,58,0.06);
-    box-shadow: 0 0 0 3px rgba(201,144,58,0.1);
-  }
+  input:focus, select:focus { border-color: var(--gold); background: rgba(201,144,58,0.06); box-shadow: 0 0 0 3px rgba(201,144,58,0.1); }
   select option { background: var(--forest); color: var(--cream); }
 
-  .btn-primary {
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    color: var(--deep);
-    border: none;
-    padding: 16px 32px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-family: 'Syne', sans-serif;
-    width: 100%;
-    transition: all 0.4s;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn-primary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(255,255,255,0.15);
-    transform: translateX(-100%);
-    transition: transform 0.4s;
-  }
+  .btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--deep); border: none; padding: 16px 32px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; font-family: 'Syne', sans-serif; width: 100%; transition: all 0.4s; position: relative; overflow: hidden; }
+  .btn-primary::before { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.15); transform: translateX(-100%); transition: transform 0.4s; }
   .btn-primary:hover::before { transform: translateX(0); }
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(201,144,58,0.35); }
 
+  /* Read-only prefilled fields */
+  input[readonly] { opacity: 0.7; cursor: not-allowed; border-style: dashed; }
+
   /* ===== SCHEDULE TABLE ===== */
-  .schedule-wrapper {
-    background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(201,144,58,0.1);
-    border-radius: 12px;
-    overflow-x: auto;
-    position: relative;
-  }
-  .schedule-header-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 25px;
-    border-bottom: 1px solid rgba(201,144,58,0.1);
-  }
-  .schedule-header-bar h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 400;
-    color: var(--cream);
-  }
-  .date-pill {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(201,144,58,0.2);
-    border-radius: 8px;
-    padding: 8px 16px;
-  }
-  .date-pill label {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--gold);
-    text-transform: uppercase;
-    font-weight: 700;
-  }
-  .date-pill input {
-    background: none;
-    border: none;
-    color: var(--cream);
-    font-size: 13px;
-    width: auto;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-  }
+  .schedule-wrapper { background: rgba(0,0,0,0.3); border: 1px solid rgba(201,144,58,0.1); border-radius: 12px; overflow-x: auto; position: relative; }
+  .schedule-header-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; border-bottom: 1px solid rgba(201,144,58,0.1); }
+  .schedule-header-bar h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--cream); }
+  .date-pill { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,144,58,0.2); border-radius: 8px; padding: 8px 16px; }
+  .date-pill label { font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; font-weight: 700; }
+  .date-pill input { background: none; border: none; color: var(--cream); font-size: 13px; width: auto; padding: 0; margin: 0; box-shadow: none; }
   .date-pill input:focus { box-shadow: none; }
   table { width: 100%; border-collapse: collapse; min-width: 1500px; font-size: 11px; }
-  th {
-    background: rgba(10,41,24,0.8);
-    color: var(--gold);
-    font-weight: 700;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 12px 8px;
-    border: 1px solid rgba(255,255,255,0.04);
-    white-space: nowrap;
-  }
-  td {
-    padding: 10px 8px;
-    border: 1px solid rgba(255,255,255,0.03);
-    text-align: center;
-    vertical-align: middle;
-    transition: background 0.2s;
-  }
-  .fac-col {
-    text-align: left !important;
-    font-weight: 700;
-    font-size: 12px;
-    color: var(--cream);
-    background: rgba(10,41,24,0.5) !important;
-    border-right: 2px solid rgba(201,144,58,0.2) !important;
-    min-width: 180px;
-    padding: 10px 16px !important;
-    letter-spacing: 0.5px;
-  }
-  .status-free {
-    color: var(--jade);
-    font-weight: 700;
-    font-size: 10px;
-    letter-spacing: 1px;
-    cursor: pointer;
-  }
+  th { background: rgba(10,41,24,0.8); color: var(--gold); font-weight: 700; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 12px 8px; border: 1px solid rgba(255,255,255,0.04); white-space: nowrap; }
+  td { padding: 10px 8px; border: 1px solid rgba(255,255,255,0.03); text-align: center; vertical-align: middle; transition: background 0.2s; }
+  .fac-col { text-align: left !important; font-weight: 700; font-size: 12px; color: var(--cream); background: rgba(10,41,24,0.5) !important; border-right: 2px solid rgba(201,144,58,0.2) !important; min-width: 180px; padding: 10px 16px !important; letter-spacing: 0.5px; }
+  .status-free { color: var(--jade); font-weight: 700; font-size: 10px; letter-spacing: 1px; cursor: pointer; }
   .status-free:hover { background: rgba(45,156,95,0.08) !important; }
-  .status-booked {
-    background: rgba(176,53,31,0.08) !important;
-    color: #e07060;
-    font-weight: 700;
-    font-size: 10px;
-  }
-  .status-maint {
-    background: rgba(255,255,255,0.04) !important;
-    color: rgba(245,237,224,0.3);
-    font-weight: 700;
-    font-size: 9px;
-    letter-spacing: 1px;
-    cursor: pointer;
-  }
-  .cancel-link {
-    display: block;
-    margin-top: 5px;
-    color: #e07060;
-    font-size: 9px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    text-decoration: underline;
-    font-family: 'Syne', sans-serif;
-    letter-spacing: 0.5px;
-    width: 100%;
-    text-align: center;
-  }
+  .status-booked { background: rgba(176,53,31,0.08) !important; color: #e07060; font-weight: 700; font-size: 10px; }
+  .status-maint { background: rgba(255,255,255,0.04) !important; color: rgba(245,237,224,0.3); font-weight: 700; font-size: 9px; letter-spacing: 1px; }
+  .cancel-link { display: block; margin-top: 5px; color: #e07060; font-size: 9px; cursor: pointer; background: none; border: none; text-decoration: underline; font-family: 'Syne', sans-serif; letter-spacing: 0.5px; width: 100%; text-align: center; }
+  .my-booking { background: rgba(201,144,58,0.08) !important; }
+  .my-booking-label { color: var(--gold-light); font-weight: 700; font-size: 10px; }
 
   /* ===== NOTICES ===== */
   .notice-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-  .notice-card {
-    padding: 32px;
-    border-radius: 16px;
-    background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(201,144,58,0.1);
-    transition: all 0.4s;
-    position: relative;
-    overflow: hidden;
-  }
-  .notice-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px;
-    height: 100%;
-    background: linear-gradient(to bottom, var(--gold), transparent);
-  }
+  .notice-card { padding: 32px; border-radius: 16px; background: rgba(255,255,255,0.025); border: 1px solid rgba(201,144,58,0.1); transition: all 0.4s; position: relative; overflow: hidden; }
+  .notice-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: linear-gradient(to bottom, var(--gold), transparent); }
   .notice-card:hover { transform: translateY(-4px); border-color: rgba(201,144,58,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-  .notice-date {
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: var(--gold);
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 12px;
-    font-weight: 700;
-  }
-  .notice-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--cream);
-    margin-bottom: 12px;
-    line-height: 1.2;
-  }
-  .notice-body {
-    font-size: 13px;
-    color: rgba(245,237,224,0.5);
-    line-height: 1.7;
-    white-space: pre-wrap;
-  }
-  .pdf-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 20px;
-    background: rgba(201,144,58,0.1);
-    border: 1px solid rgba(201,144,58,0.3);
-    color: var(--gold);
-    padding: 10px 18px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: all 0.3s;
-    font-family: 'Syne', sans-serif;
-  }
+  .notice-date { font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; display: block; margin-bottom: 12px; font-weight: 700; }
+  .notice-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--cream); margin-bottom: 12px; line-height: 1.2; }
+  .notice-body { font-size: 13px; color: rgba(245,237,224,0.5); line-height: 1.7; white-space: pre-wrap; }
+  .pdf-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; background: rgba(201,144,58,0.1); border: 1px solid rgba(201,144,58,0.3); color: var(--gold); padding: 10px 18px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; transition: all 0.3s; font-family: 'Syne', sans-serif; }
   .pdf-btn:hover { background: var(--gold); color: var(--deep); }
 
   /* ===== DIRECTORY ===== */
-  .search-bar {
-    padding: 30px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(201,144,58,0.15);
-    margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
+  .search-bar { padding: 30px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(201,144,58,0.15); margin-bottom: 30px; display: flex; align-items: center; gap: 16px; }
   .search-bar span { font-size: 20px; }
-  .search-bar input {
-    border: none;
-    background: none;
-    font-size: 18px;
-    font-family: 'Cormorant Garamond', serif;
-    flex: 1;
-    padding: 0;
-  }
+  .search-bar input { border: none; background: none; font-size: 18px; font-family: 'Cormorant Garamond', serif; flex: 1; padding: 0; }
   .search-bar input:focus { box-shadow: none; border: none; background: none; }
-
   .dir-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
-  .dir-card {
-    padding: 24px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(201,144,58,0.08);
-    transition: all 0.3s;
-  }
+  .dir-card { padding: 24px; border-radius: 12px; background: rgba(255,255,255,0.025); border: 1px solid rgba(201,144,58,0.08); transition: all 0.3s; }
   .dir-card:hover { border-color: rgba(201,144,58,0.25); background: rgba(201,144,58,0.04); transform: translateY(-2px); }
-  .dir-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--cream);
-    margin-bottom: 6px;
-  }
-  .dir-bung {
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: var(--gold);
-    text-transform: uppercase;
-    font-weight: 700;
-  }
+  .dir-card.me { border-color: rgba(201,144,58,0.35); background: rgba(201,144,58,0.07); }
+  .dir-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--cream); margin-bottom: 6px; }
+  .dir-bung { font-size: 11px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; font-weight: 700; }
+  .dir-me-badge { font-size: 9px; letter-spacing: 2px; color: var(--jade); text-transform: uppercase; font-weight: 700; margin-top: 6px; }
 
   /* ===== POOL ===== */
-  .pool-hero {
-    text-align: center;
-    padding: 60px 0 40px;
-  }
-  .pool-icon {
-    font-size: 80px;
-    margin-bottom: 20px;
-    display: block;
-    filter: drop-shadow(0 0 30px rgba(45,156,95,0.4));
-  }
+  .pool-icon { font-size: 80px; margin-bottom: 20px; display: block; filter: drop-shadow(0 0 30px rgba(45,156,95,0.4)); }
 
-  /* ===== INFO BANNER ===== */
-  .info-banner {
-    padding: 24px 30px;
-    border-radius: 12px;
-    background: rgba(201,144,58,0.06);
-    border: 1px solid rgba(201,144,58,0.2);
-    border-left: 4px solid var(--gold);
-    margin-bottom: 30px;
-    font-size: 13px;
-    color: rgba(245,237,224,0.65);
-    line-height: 1.7;
-  }
-  .info-banner strong { color: var(--gold); }
-
-  /* ===== HALL NOTICE ===== */
-  .hall-notice {
-    padding: 30px;
-    border-radius: 16px;
-    background: rgba(201,144,58,0.05);
-    border: 1px solid rgba(201,144,58,0.2);
-    margin-bottom: 30px;
-    text-align: center;
-  }
-  .hall-notice h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 26px;
-    font-weight: 400;
-    color: var(--cream);
-    margin-bottom: 10px;
-  }
-  .hall-notice p { font-size: 13px; color: rgba(245,237,224,0.5); line-height: 1.7; }
-
-  /* ===== LOADING STATE ===== */
-  .loading-state {
-    text-align: center;
-    padding: 60px;
-    color: rgba(245,237,224,0.3);
-    font-size: 13px;
-    letter-spacing: 2px;
-  }
-  .loading-state::before {
-    content: '◈';
-    display: block;
-    font-size: 30px;
-    color: var(--gold);
-    margin-bottom: 16px;
-    animation: spin 3s linear infinite;
-  }
+  /* ===== LOADING ===== */
+  .loading-state { text-align: center; padding: 60px; color: rgba(245,237,224,0.3); font-size: 13px; letter-spacing: 2px; }
+  .loading-state::before { content: '◈'; display: block; font-size: 30px; color: var(--gold); margin-bottom: 16px; animation: spin 3s linear infinite; }
   @keyframes spin { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
 
   /* ===== FOOTER ===== */
-  .site-footer {
-    border-top: 1px solid rgba(201,144,58,0.1);
-    padding: 40px;
+  .site-footer { border-top: 1px solid rgba(201,144,58,0.1); padding: 40px; text-align: center; color: rgba(245,237,224,0.2); font-size: 11px; letter-spacing: 2px; position: relative; }
+  .site-footer::before { content: ''; position: absolute; top: 0; left: 20%; right: 20%; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,144,58,0.3), transparent); }
+
+  /* ===== LOGIN OVERLAY ===== */
+  #loginOverlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(6,13,8,0.97);
+    backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10000;
+    transition: opacity 0.4s;
+  }
+  .login-box {
+    background: rgba(10,41,24,0.4);
+    padding: 50px 44px;
+    border-radius: 20px;
+    width: 400px;
     text-align: center;
-    color: rgba(245,237,224,0.2);
-    font-size: 11px;
-    letter-spacing: 2px;
-    position: relative;
+    border: 1px solid rgba(201,144,58,0.25);
+    position: relative; overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
   }
-  .site-footer::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 20%; right: 20%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(201,144,58,0.3), transparent);
-  }
+  .login-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .login-crest { font-size: 15px; font-weight: 800; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--deep); width: 54px; height: 54px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 0 30px rgba(201,144,58,0.35); font-family: 'Syne', sans-serif; }
+  .login-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--cream); margin-bottom: 4px; }
+  .login-sub { font-size: 10px; color: rgba(245,237,224,0.4); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 32px; }
+  .login-field { text-align: left; margin-bottom: 16px; }
+  .login-field label { font-size: 9px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 7px; }
+  .login-field input { width: 100%; padding: 13px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,144,58,0.2); border-radius: 8px; color: var(--cream); font-family: 'Syne', sans-serif; font-size: 13px; outline: none; transition: all 0.3s; appearance: none; -webkit-appearance: none; }
+  .login-field input:focus { border-color: var(--gold); background: rgba(201,144,58,0.06); box-shadow: 0 0 0 3px rgba(201,144,58,0.1); }
+  .login-field input:-webkit-autofill, .login-field input:-webkit-autofill:hover, .login-field input:-webkit-autofill:focus { -webkit-box-shadow: 0 0 0 30px #0e2b1b inset !important; -webkit-text-fill-color: var(--cream) !important; transition: background-color 5000s ease-in-out 0s; caret-color: var(--cream); }
+  .login-error { color: #e07060; font-size: 12px; margin-bottom: 14px; font-weight: 600; min-height: 18px; text-align: left; }
+  .login-hint { margin-top: 18px; font-size: 12px; color: rgba(245,237,224,0.4); }
+  .login-hint a { color: var(--gold); text-decoration: none; font-weight: 600; transition: color 0.3s; }
+  .login-hint a:hover { color: var(--gold-light); }
+
+  /* View transitions */
+  .auth-view { transition: opacity 0.25s, transform 0.25s; }
+  .auth-view.hidden { display: none; }
 
   /* ===== RESPONSIVE ===== */
   @media (max-width: 768px) {
@@ -820,188 +256,42 @@
     .booking-panel { padding: 24px 20px; }
     .form-row { grid-template-columns: 1fr; }
     .feature-grid { grid-template-columns: 1fr; }
-    .date-pill input { width: 120px; }
-  }
-
-  /* ===== LOGIN OVERLAY ===== */
-  #loginOverlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(6,13,8,0.95);
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-
-  .login-box {
-    background: rgba(15,64,37,0.15);
-    padding: 40px;
-    border-radius: 16px;
-    width: 340px;
-    text-align: center;
-    border: 1px solid rgba(201,144,58,0.2);
-    color: var(--cream);
-    position: relative;
-    overflow: hidden;
-  }
-  .login-box::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  }
-
-  .login-crest {
-    font-size: 24px;
-    font-weight: bold;
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    color: var(--deep);
-    padding: 10px;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    margin: 0 auto 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 20px rgba(201,144,58,0.4);
-    font-family: 'Syne', sans-serif;
-  }
-
-  .login-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 300;
-    color: var(--cream);
-    margin-bottom: 6px;
-  }
-
-  .login-sub {
-    font-size: 11px;
-    color: rgba(245,237,224,0.5);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 30px;
-  }
-
-  .login-field {
-    text-align: left;
-    margin-bottom: 20px;
-  }
-
-  .login-field label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  .login-field input {
-    width: 100%;
-    padding: 12px 16px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(201,144,58,0.2);
-    border-radius: 8px;
-    color: var(--cream);
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    outline: none;
-    transition: all 0.3s;
-    appearance: none;
-    -webkit-appearance: none;
-  }
-
-  .login-field input:focus {
-    border-color: var(--gold);
-    background: rgba(201,144,58,0.06);
-    box-shadow: 0 0 0 3px rgba(201,144,58,0.1);
-  }
-
-  /* Fix browser autofill white background */
-  .login-field input:-webkit-autofill,
-  .login-field input:-webkit-autofill:hover, 
-  .login-field input:-webkit-autofill:focus, 
-  .login-field input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px #0e2b1b inset !important;
-    -webkit-text-fill-color: var(--cream) !important;
-    transition: background-color 5000s ease-in-out 0s;
-    caret-color: var(--cream);
-  }
-
-  #loginError, #regError {
-    color: #e07060;
-    font-size: 12px;
-    display: none;
-    margin-bottom: 15px;
-    font-weight: 600;
-  }
-
-  .login-hint {
-    margin-top: 20px;
-    font-size: 12px;
-    color: rgba(245,237,224,0.5);
-  }
-  .login-hint a {
-    color: var(--gold);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s;
-  }
-  .login-hint a:hover {
-    color: var(--gold-light);
+    .nav-user-name { max-width: 70px; }
   }
 </style>
 </head>
 <body>
 
-<!-- Login Overlay -->
+<!-- ===== LOGIN OVERLAY ===== -->
 <div id="loginOverlay">
   <div class="login-box">
     <div class="login-crest">SC</div>
     <div class="login-title">Sind Society</div>
-    
-    <div id="loginView">
+
+    <!-- LOGIN VIEW -->
+    <div id="loginView" class="auth-view">
       <div class="login-sub">Resident Portal · Sign In</div>
-      <div class="login-field">
-        <label>Resident Name</label>
-        <input type="text" id="loginUsername" placeholder="Enter your full name">
-      </div>
-      <div class="login-field">
-        <label>Bungalow Number</label>
-        <input type="text" id="loginPassword" placeholder="e.g. 1A">
-      </div>
-      <div id="loginError">Incorrect name or bungalow number.</div>
-      <button class="btn-primary" style="width: 100%; padding: 14px;" onclick="doLogin()">Sign In</button>
-      <div class="login-hint">New resident? <a href="#" onclick="toggleRegister(true)">Register here</a></div>
+      <div class="login-field"><label>Full Name</label><input type="text" id="loginName" placeholder="Enter your full name" autocomplete="name"></div>
+      <div class="login-field"><label>Bungalow Number</label><input type="text" id="loginBung" placeholder="e.g. B-12" autocomplete="off"></div>
+      <div class="login-field"><label>Password</label><input type="password" id="loginPass" placeholder="Your password" autocomplete="current-password"></div>
+      <div class="login-error" id="loginError"></div>
+      <button class="btn-primary" style="padding:14px;" onclick="doLogin()">Sign In →</button>
+      <div class="login-hint">New resident? <a href="#" onclick="toggleView('register')">Create an account</a></div>
     </div>
 
-    <div id="registerView" style="display: none; opacity: 0;">
-      <div class="login-sub">Welcome to the Community</div>
-      <div class="login-field">
-        <label>Resident Name</label>
-        <input type="text" id="regName" placeholder="Enter your full name">
-      </div>
-      <div class="login-field">
-        <label>Bungalow Number</label>
-        <input type="text" id="regBungalow" placeholder="e.g. 1A">
-      </div>
-      <div class="login-field">
-        <label>Phone Number (Optional)</label>
-        <input type="tel" id="regPhone" placeholder="10-digit mobile number">
-      </div>
-      <div id="regError"></div>
-      <div id="regSuccess" style="color:var(--jade); font-size:12px; font-weight:600; display:none; margin-bottom:15px;">Registration successful! Redirecting to login...</div>
-      <button class="btn-primary" style="width: 100%; padding: 14px; transition: all 0.3s;" onclick="doRegister()" id="regBtn">Request Access</button>
-      <div class="login-hint">Already a resident? <a href="#" onclick="toggleRegister(false)">Sign In</a></div>
+    <!-- REGISTER VIEW -->
+    <div id="registerView" class="auth-view hidden">
+      <div class="login-sub">Join the Community</div>
+      <div class="login-field"><label>Full Name</label><input type="text" id="regName" placeholder="Enter your full name" autocomplete="name"></div>
+      <div class="login-field"><label>Bungalow Number</label><input type="text" id="regBung" placeholder="e.g. B-12"></div>
+      <div class="login-field"><label>Phone Number (Optional)</label><input type="tel" id="regPhone" placeholder="10-digit mobile number"></div>
+      <div class="login-field"><label>Password</label><input type="password" id="regPass" placeholder="Choose a password" autocomplete="new-password"></div>
+      <div class="login-field"><label>Confirm Password</label><input type="password" id="regPass2" placeholder="Repeat password" autocomplete="new-password"></div>
+      <div class="login-error" id="regError"></div>
+      <button class="btn-primary" style="padding:14px;" id="regBtn" onclick="doRegister()">Create Account →</button>
+      <div class="login-hint">Already registered? <a href="#" onclick="toggleView('login')">Sign In</a></div>
     </div>
+
   </div>
 </div>
 
@@ -1032,7 +322,15 @@
     <button id="nav-sports" onclick="showPage('sports')">Sports</button>
     <button id="nav-pool" onclick="showPage('pool')">Pool</button>
     <button id="nav-directory" onclick="showPage('directory')">Directory</button>
-    <button id="nav-logout" onclick="doLogout()" style="color: #e07060; border: 1px solid rgba(224,112,96,0.3); margin-left: 10px;">Logout</button>
+    <!-- User chip -->
+    <div class="nav-user-chip" id="navUserChip" style="display:none;">
+      <div class="nav-user-avatar" id="navUserAvatar"></div>
+      <div>
+        <div class="nav-user-name" id="navUserName"></div>
+        <div class="nav-user-bung" id="navUserBung"></div>
+      </div>
+    </div>
+    <button id="nav-logout" onclick="doLogout()" style="color:#e07060; border:1px solid rgba(224,112,96,0.3); margin-left:4px;">Logout</button>
   </div>
 </nav>
 
@@ -1058,44 +356,13 @@
       <span class="scroll-text">Explore</span>
     </div>
   </div>
-
   <div class="section-inner">
-    <div class="feature-grid" id="featureGrid">
-      <div class="feature-card" onclick="showPage('notices')">
-        <div class="fc-icon">📢</div>
-        <div class="fc-arrow">→</div>
-        <div class="fc-num">01</div>
-        <div class="fc-title">Notice Board</div>
-        <div class="fc-desc">Latest society announcements, events, and official documents from management.</div>
-      </div>
-      <div class="feature-card" onclick="showPage('halls')">
-        <div class="fc-icon">🎪</div>
-        <div class="fc-arrow">→</div>
-        <div class="fc-num">02</div>
-        <div class="fc-title">Hall Availability</div>
-        <div class="fc-desc">View the booking schedule for Club House Halls & Lawns. Admin-managed reservations.</div>
-      </div>
-      <div class="feature-card" onclick="showPage('sports')">
-        <div class="fc-icon">🎾</div>
-        <div class="fc-arrow">→</div>
-        <div class="fc-num">03</div>
-        <div class="fc-title">Sports Booking</div>
-        <div class="fc-desc">Live court & ground availability. Reserve your slot with a PIN-protected booking.</div>
-      </div>
-      <div class="feature-card" onclick="showPage('pool')">
-        <div class="fc-icon">🏊</div>
-        <div class="fc-arrow">→</div>
-        <div class="fc-num">04</div>
-        <div class="fc-title">Pool Register</div>
-        <div class="fc-desc">Mandatory safety and entry log for all swimming pool users. Quick and easy.</div>
-      </div>
-      <div class="feature-card" onclick="showPage('directory')">
-        <div class="fc-icon">👥</div>
-        <div class="fc-arrow">→</div>
-        <div class="fc-num">05</div>
-        <div class="fc-title">Resident Directory</div>
-        <div class="fc-desc">Search and connect with your neighbors by name or bungalow number.</div>
-      </div>
+    <div class="feature-grid">
+      <div class="feature-card" onclick="showPage('notices')"><div class="fc-icon">📢</div><div class="fc-arrow">→</div><div class="fc-num">01</div><div class="fc-title">Notice Board</div><div class="fc-desc">Latest society announcements, events, and official documents from management.</div></div>
+      <div class="feature-card" onclick="showPage('halls')"><div class="fc-icon">🎪</div><div class="fc-arrow">→</div><div class="fc-num">02</div><div class="fc-title">Hall Availability</div><div class="fc-desc">View the booking schedule for Club House Halls & Lawns. Admin-managed reservations.</div></div>
+      <div class="feature-card" onclick="showPage('sports')"><div class="fc-icon">🎾</div><div class="fc-arrow">→</div><div class="fc-num">03</div><div class="fc-title">Sports Booking</div><div class="fc-desc">Live court & ground availability. Reserve and manage your own slots with your account.</div></div>
+      <div class="feature-card" onclick="showPage('pool')"><div class="fc-icon">🏊</div><div class="fc-arrow">→</div><div class="fc-num">04</div><div class="fc-title">Pool Register</div><div class="fc-desc">Mandatory safety and entry log for all swimming pool users. Quick and easy.</div></div>
+      <div class="feature-card" onclick="showPage('directory')"><div class="fc-icon">👥</div><div class="fc-arrow">→</div><div class="fc-num">05</div><div class="fc-title">Resident Directory</div><div class="fc-desc">Search and connect with your neighbors by name or bungalow number.</div></div>
     </div>
   </div>
 </div>
@@ -1111,10 +378,7 @@
     <div class="schedule-wrapper">
       <div class="schedule-header-bar">
         <h3>Live Schedule</h3>
-        <div class="date-pill">
-          <label>Date</label>
-          <input type="date" id="viewHallDateFilter" onchange="loadAll()">
-        </div>
+        <div class="date-pill"><label>Date</label><input type="date" id="viewHallDateFilter" onchange="loadAll()"></div>
       </div>
       <div style="overflow-x:auto;">
         <table>
@@ -1132,28 +396,24 @@
     <div class="section-header">
       <div class="eyebrow">Recreation</div>
       <h1>Sports Booking</h1>
-      <p>Reserve courts and grounds in seconds. Your PIN protects your booking and allows future cancellation.</p>
+      <p>Reserve courts and grounds instantly. You can cancel your own bookings anytime from this page — only you can manage your reservations.</p>
     </div>
     <div class="booking-panel">
       <div class="panel-title">New Reservation</div>
-      <div class="panel-subtitle">All fields required</div>
+      <div class="panel-subtitle">Your name and bungalow are prefilled from your account</div>
       <div class="form-row">
         <div class="form-group"><label>Date</label><input type="date" id="inDate"></div>
         <div class="form-group"><label>Ground / Court</label><select id="inFac"></select></div>
         <div class="form-group"><label>Time Slot</label><select id="inTime"></select></div>
-        <div class="form-group"><label>Full Name</label><input type="text" id="inName" placeholder="Resident Name"></div>
-        <div class="form-group"><label>Bungalow No.</label><input type="text" id="inBung" placeholder="e.g. A-12"></div>
-        <div class="form-group"><label>Secret PIN (4 digits)</label><input type="text" id="inPin" placeholder="To cancel later" maxlength="4"></div>
+        <div class="form-group"><label>Your Name</label><input type="text" id="inName" readonly placeholder="From your account"></div>
+        <div class="form-group"><label>Bungalow No.</label><input type="text" id="inBung" readonly placeholder="From your account"></div>
       </div>
       <button class="btn-primary" onclick="handleBooking()">Confirm Reservation</button>
     </div>
     <div class="schedule-wrapper">
       <div class="schedule-header-bar">
         <h3>Live Schedule — <span id="viewingDateText" style="color:var(--gold);font-size:18px;"></span></h3>
-        <div class="date-pill">
-          <label>Date</label>
-          <input type="date" id="viewDateFilter" onchange="loadAll()">
-        </div>
+        <div class="date-pill"><label>Date</label><input type="date" id="viewDateFilter" onchange="loadAll()"></div>
       </div>
       <div style="overflow-x:auto;">
         <table>
@@ -1174,14 +434,14 @@
       <p>Mandatory safety log for all swimming pool users. Please complete before entering the pool area.</p>
     </div>
     <div class="booking-panel">
-      <div class="pool-hero">
+      <div style="text-align:center; padding: 30px 0 20px;">
         <span class="pool-icon">🏊</span>
       </div>
       <div class="form-row">
         <div class="form-group"><label>Date</label><input type="date" id="poolDate"></div>
         <div class="form-group"><label>Time of Entry</label><input type="time" id="poolTime"></div>
-        <div class="form-group"><label>Full Name</label><input type="text" id="poolName" placeholder="Resident Name"></div>
-        <div class="form-group"><label>Bungalow No.</label><input type="text" id="poolBung" placeholder="e.g. B-14"></div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="poolName" readonly placeholder="From your account"></div>
+        <div class="form-group"><label>Bungalow No.</label><input type="text" id="poolBung" readonly placeholder="From your account"></div>
         <div class="form-group"><label>Phone No.</label><input type="tel" id="poolPhone" placeholder="10-digit number"></div>
       </div>
       <button class="btn-primary" onclick="registerPool()">Log Pool Entry</button>
@@ -1223,7 +483,10 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import {
+    getFirestore, collection, getDocs, addDoc, deleteDoc, doc,
+    query, where, orderBy, getDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
@@ -1237,18 +500,36 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // ─── Session helpers ───────────────────────────────────────────────────────
+  // We store { name, bungalow, uid } in sessionStorage after login.
+  function getSession() {
+    try { return JSON.parse(sessionStorage.getItem('ssUser') || 'null'); } catch { return null; }
+  }
+  function setSession(obj) { sessionStorage.setItem('ssUser', JSON.stringify(obj)); }
+  function clearSession() { sessionStorage.removeItem('ssUser'); }
+
+  // Hash function (SHA-256 via SubtleCrypto) for password storage
+  async function hashPass(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  // ─── Time slots ────────────────────────────────────────────────────────────
   const times = [
-    "6 AM - 7 AM", "7 AM - 8 AM", "8 AM - 9 AM", "9 AM - 10 AM", "10 AM - 11 AM",
-    "11 AM - 12 PM", "12 PM - 1 PM", "1 PM - 2 PM", "2 PM - 3 PM", "3 PM - 4 PM",
-    "4 PM - 5 PM", "5 PM - 6 PM", "6 PM - 7 PM", "7 PM - 8 PM", "8 PM - 9 PM",
-    "9 PM - 10 PM", "10 PM - 11 PM", "11 PM - 12 AM"
+    "6 AM - 7 AM","7 AM - 8 AM","8 AM - 9 AM","9 AM - 10 AM","10 AM - 11 AM",
+    "11 AM - 12 PM","12 PM - 1 PM","1 PM - 2 PM","2 PM - 3 PM","3 PM - 4 PM",
+    "4 PM - 5 PM","5 PM - 6 PM","6 PM - 7 PM","7 PM - 8 PM","8 PM - 9 PM",
+    "9 PM - 10 PM","10 PM - 11 PM","11 PM - 12 AM"
   ];
 
+  // ─── Init defaults ─────────────────────────────────────────────────────────
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('inDate').value = today;
   document.getElementById('viewDateFilter').value = today;
   document.getElementById('viewHallDateFilter').value = today;
   document.getElementById('poolDate').value = today;
+  const now = new Date(); 
+  document.getElementById('poolTime').value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
   times.forEach(t => {
     document.getElementById('inTime').innerHTML += `<option value="${t}">${t}</option>`;
@@ -1256,16 +537,151 @@
     document.getElementById('hallTableHead').innerHTML += `<th>${t}</th>`;
   });
 
+  // ─── Update nav user chip ──────────────────────────────────────────────────
+  function updateNavChip() {
+    const u = getSession();
+    const chip = document.getElementById('navUserChip');
+    if (!u) { chip.style.display = 'none'; return; }
+    chip.style.display = 'flex';
+    document.getElementById('navUserAvatar').textContent = u.name.charAt(0).toUpperCase();
+    document.getElementById('navUserName').textContent = u.name;
+    document.getElementById('navUserBung').textContent = `Bungalow ${u.bungalow}`;
+  }
+
+  // ─── Prefill logged-in user's fields ──────────────────────────────────────
+  function prefillUser() {
+    const u = getSession();
+    if (!u) return;
+    document.getElementById('inName').value = u.name;
+    document.getElementById('inBung').value = u.bungalow;
+    document.getElementById('poolName').value = u.name;
+    document.getElementById('poolBung').value = u.bungalow;
+  }
+
+  // ─── REGISTER ─────────────────────────────────────────────────────────────
+  window.doRegister = async () => {
+    const name  = document.getElementById('regName').value.trim();
+    const bung  = document.getElementById('regBung').value.trim();
+    const phone = document.getElementById('regPhone').value.trim();
+    const pass  = document.getElementById('regPass').value;
+    const pass2 = document.getElementById('regPass2').value;
+    const errEl = document.getElementById('regError');
+    const btn   = document.getElementById('regBtn');
+
+    errEl.textContent = '';
+    if (!name || !bung || !pass) { errEl.textContent = 'Name, bungalow, and password are required.'; return; }
+    if (pass.length < 6)         { errEl.textContent = 'Password must be at least 6 characters.'; return; }
+    if (pass !== pass2)          { errEl.textContent = 'Passwords do not match.'; return; }
+
+    btn.textContent = 'Creating account…'; btn.disabled = true;
+
+    try {
+      // Check for duplicate (same name + bungalow)
+      const existing = await getDocs(query(
+        collection(db, 'residents'),
+        where('name_lower', '==', name.toLowerCase()),
+        where('bungalow_lower', '==', bung.toLowerCase())
+      ));
+      if (!existing.empty) { errEl.textContent = 'An account with this name and bungalow already exists.'; btn.textContent = 'Create Account →'; btn.disabled = false; return; }
+
+      const hashed = await hashPass(pass);
+      // Add to residents collection (shows in directory + used for auth)
+      await addDoc(collection(db, 'residents'), {
+        name,
+        bungalow: bung,
+        phone,
+        name_lower: name.toLowerCase(),
+        bungalow_lower: bung.toLowerCase(),
+        passwordHash: hashed,
+        createdAt: new Date()
+      });
+
+      // Auto-login
+      setSession({ name, bungalow: bung });
+      document.getElementById('loginOverlay').style.display = 'none';
+      updateNavChip(); prefillUser(); loadAll();
+
+    } catch(e) {
+      errEl.textContent = 'Error: ' + e.message;
+      btn.textContent = 'Create Account →'; btn.disabled = false;
+    }
+  };
+
+  // ─── LOGIN ─────────────────────────────────────────────────────────────────
+  window.doLogin = async () => {
+    const name = document.getElementById('loginName').value.trim();
+    const bung = document.getElementById('loginBung').value.trim();
+    const pass = document.getElementById('loginPass').value;
+    const errEl = document.getElementById('loginError');
+    errEl.textContent = '';
+
+    if (!name || !bung || !pass) { errEl.textContent = 'Please fill in all fields.'; return; }
+
+    try {
+      const hashed = await hashPass(pass);
+      const snap = await getDocs(query(
+        collection(db, 'residents'),
+        where('name_lower', '==', name.toLowerCase()),
+        where('bungalow_lower', '==', bung.toLowerCase())
+      ));
+
+      let matched = false;
+      snap.forEach(d => {
+        const data = d.data();
+        if (data.passwordHash && data.passwordHash === hashed) matched = true;
+      });
+
+      if (matched) {
+        setSession({ name, bungalow: bung });
+        document.getElementById('loginOverlay').style.display = 'none';
+        updateNavChip(); prefillUser(); loadAll();
+      } else {
+        errEl.textContent = 'Incorrect name, bungalow, or password.';
+      }
+    } catch(e) {
+      errEl.textContent = 'Error: ' + e.message;
+    }
+  };
+
+  // ─── LOGOUT ────────────────────────────────────────────────────────────────
+  window.doLogout = () => {
+    clearSession();
+    document.getElementById('loginOverlay').style.display = 'flex';
+    document.getElementById('loginName').value = '';
+    document.getElementById('loginBung').value = '';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('loginError').textContent = '';
+    toggleView('login');
+    document.getElementById('navUserChip').style.display = 'none';
+  };
+
+  // ─── Toggle auth views ─────────────────────────────────────────────────────
+  window.toggleView = (view) => {
+    const lv = document.getElementById('loginView');
+    const rv = document.getElementById('registerView');
+    document.getElementById('loginError').textContent = '';
+    document.getElementById('regError').textContent = '';
+    if (view === 'register') {
+      lv.classList.add('hidden'); rv.classList.remove('hidden');
+    } else {
+      rv.classList.add('hidden'); lv.classList.remove('hidden');
+    }
+  };
+
+  // ─── Load all data ─────────────────────────────────────────────────────────
   async function loadAll() {
     const vDate = document.getElementById('viewDateFilter').value;
     const hDate = document.getElementById('viewHallDateFilter').value;
-    const opts = { year: 'numeric', month: 'long', day: 'numeric' };
+    const opts = { year:'numeric', month:'long', day:'numeric' };
     const vtEl = document.getElementById('viewingDateText');
-    if (vtEl) vtEl.innerText = new Date(vDate).toLocaleDateString('en-US', opts);
+    if (vtEl) vtEl.innerText = new Date(vDate + 'T00:00:00').toLocaleDateString('en-US', opts);
 
-    // Notices
+    const u = getSession();
+    const myKey = u ? u.name.toLowerCase() + '|' + u.bungalow.toLowerCase() : null;
+
+    // ── Notices ──
     try {
-      const notes = await getDocs(collection(db, "notices"));
+      const notes = await getDocs(collection(db, 'notices'));
       const grid = document.getElementById('noticeGrid');
       grid.innerHTML = '';
       notes.forEach(d => {
@@ -1278,15 +694,15 @@
         html += `</div>`;
         grid.innerHTML += html;
       });
-      if (!grid.innerHTML) grid.innerHTML = '<p style="color:rgba(245,237,224,0.3); padding:40px;">No recent announcements.</p>';
-    } catch (e) { console.error(e); }
+      if (!grid.innerHTML) grid.innerHTML = '<p style="color:rgba(245,237,224,0.3);padding:40px;">No recent announcements.</p>';
+    } catch(e) { console.error(e); }
 
-    // Halls
+    // ── Halls ──
     try {
-      const hallsSnap = await getDocs(query(collection(db, "halls"), orderBy("createdAt", "asc")));
+      const hallsSnap = await getDocs(query(collection(db, 'halls'), orderBy('createdAt','asc')));
       const dynamicHalls = [];
       hallsSnap.forEach(d => dynamicHalls.push(d.data().name));
-      const hBooks = await getDocs(query(collection(db, "hall_bookings"), where("date", "==", hDate)));
+      const hBooks = await getDocs(query(collection(db, 'hall_bookings'), where('date','==',hDate)));
       const hMap = {};
       hBooks.forEach(d => hMap[`${d.data().facility}-${d.data().time}`] = { id: d.id, ...d.data() });
       const hBody = document.getElementById('hallTableBody'); hBody.innerHTML = '';
@@ -1301,16 +717,17 @@
         hBody.innerHTML += row + '</tr>';
       });
       if (!hBody.innerHTML) hBody.innerHTML = '<tr><td colspan="19" class="loading-state">No halls configured yet.</td></tr>';
-    } catch (e) { console.error(e); }
+    } catch(e) { console.error(e); }
 
-    // Sports
+    // ── Sports ──
     try {
-      const facs = await getDocs(query(collection(db, "facilities"), orderBy("createdAt", "asc")));
-      const books = await getDocs(query(collection(db, "bookings"), where("date", "==", vDate)));
+      const facs = await getDocs(query(collection(db,'facilities'), orderBy('createdAt','asc')));
+      const books = await getDocs(query(collection(db,'bookings'), where('date','==',vDate)));
       const bMap = {};
       books.forEach(d => bMap[`${d.data().facility}-${d.data().time}`] = { id: d.id, ...d.data() });
       const fSel = document.getElementById('inFac'); fSel.innerHTML = '';
       const body = document.getElementById('tableBody'); body.innerHTML = '';
+
       facs.forEach(d => {
         const f = d.data();
         fSel.innerHTML += `<option value="${f.name}">${f.name}</option>`;
@@ -1318,8 +735,21 @@
         times.forEach(t => {
           const b = bMap[`${f.name}-${t}`];
           if (b) {
-            const isM = b.userName === "MAINTENANCE";
-            row += `<td class="${isM ? 'status-maint' : 'status-booked'}">${isM ? 'MAINT' : b.userName}${b.bungalow && !isM ? `<br><span style="opacity:0.5;font-size:9px;">${b.bungalow}</span>` : ''}<button class="cancel-link" onclick="cancelBooking('${b.id}','${b.pin || ''}')">Cancel</button></td>`;
+            const isM = b.userName === 'MAINTENANCE';
+            // Check if this booking belongs to the current user
+            const isOwner = myKey &&
+              b.ownerKey && b.ownerKey === myKey;
+            if (isM) {
+              row += `<td class="status-maint">MAINT</td>`;
+            } else if (isOwner) {
+              row += `<td class="status-booked my-booking">
+                <span class="my-booking-label">You</span>
+                <br><span style="opacity:0.6;font-size:9px;">${b.bungalow}</span>
+                <button class="cancel-link" onclick="cancelBooking('${b.id}')">Cancel</button>
+              </td>`;
+            } else {
+              row += `<td class="status-booked">${b.userName}<br><span style="opacity:0.5;font-size:9px;">${b.bungalow}</span></td>`;
+            }
           } else {
             row += `<td class="status-free">Free</td>`;
           }
@@ -1327,257 +757,139 @@
         body.innerHTML += row + '</tr>';
       });
       if (!body.innerHTML) body.innerHTML = '<tr><td colspan="19" class="loading-state">No facilities configured yet.</td></tr>';
-    } catch (e) { console.error(e); }
+    } catch(e) { console.error(e); }
 
-    // Directory
+    // ── Directory ──
     try {
-      const res = await getDocs(collection(db, "residents"));
-      window.residents = [];
-      res.forEach(d => window.residents.push(d.data()));
-      renderDir(window.residents);
-    } catch (e) { console.error(e); }
+      const res = await getDocs(collection(db,'residents'));
+      window._residents = [];
+      res.forEach(d => {
+        const r = d.data();
+        // Only include entries that have a name (all accounts do)
+        if (r.name) window._residents.push(r);
+      });
+      renderDir(window._residents);
+    } catch(e) { console.error(e); }
   }
 
+  // ─── Directory render ──────────────────────────────────────────────────────
   function renderDir(data) {
+    const u = getSession();
     const grid = document.getElementById('dirGrid');
-    grid.innerHTML = data.map(r => `
-      <div class="dir-card">
+    grid.innerHTML = data.map(r => {
+      const isMe = u && r.name.toLowerCase() === u.name.toLowerCase() && r.bungalow.toLowerCase() === u.bungalow.toLowerCase();
+      return `<div class="dir-card${isMe ? ' me' : ''}">
         <div class="dir-name">${r.name}</div>
         <div class="dir-bung">Bungalow ${r.bungalow}</div>
-      </div>`).join('');
+        ${isMe ? '<div class="dir-me-badge">● You</div>' : ''}
+      </div>`;
+    }).join('');
     if (!grid.innerHTML) grid.innerHTML = '<p style="color:rgba(245,237,224,0.3);">No residents found.</p>';
   }
 
   window.filterDirectory = () => {
     const q = document.getElementById('dirSearch').value.toLowerCase();
-    renderDir((window.residents || []).filter(r =>
+    renderDir((window._residents || []).filter(r =>
       r.name.toLowerCase().includes(q) || r.bungalow.toLowerCase().includes(q)));
   };
 
+  // ─── Handle sports booking ──────────────────────────────────────────────────
   window.handleBooking = async () => {
+    const u = getSession();
+    if (!u) { alert('Please log in first.'); return; }
     const d = document.getElementById('inDate').value;
     const f = document.getElementById('inFac').value;
     const t = document.getElementById('inTime').value;
-    const n = document.getElementById('inName').value;
-    const b = document.getElementById('inBung').value;
-    const p = document.getElementById('inPin').value;
-    if (!n || !b || !p) return alert("Please fill in all fields including your 4-digit PIN.");
+
+    if (!f) { alert('No facilities available.'); return; }
+
     try {
-      const check = await getDocs(query(collection(db, "bookings"), where("date", "==", d), where("facility", "==", f), where("time", "==", t)));
-      if (!check.empty) return alert("Sorry — this slot is already taken.");
-      await addDoc(collection(db, "bookings"), { facility: f, time: t, userName: n, bungalow: b, date: d, pin: p });
-      alert("Booking confirmed! Keep your PIN safe for cancellations.");
-      document.getElementById('inName').value = '';
-      document.getElementById('inPin').value = '';
+      const check = await getDocs(query(collection(db,'bookings'),
+        where('date','==',d), where('facility','==',f), where('time','==',t)));
+      if (!check.empty) { alert('Sorry — this slot is already taken.'); return; }
+
+      await addDoc(collection(db,'bookings'), {
+        facility: f, time: t, userName: u.name, bungalow: u.bungalow,
+        date: d,
+        ownerKey: (u.name + '|' + u.bungalow).toLowerCase()
+      });
+      alert('Booking confirmed!');
       loadAll();
-    } catch (e) { alert("Error: " + e.message); }
+    } catch(e) { alert('Error: ' + e.message); }
   };
 
-  window.cancelBooking = async (id, correctPin) => {
-    if (!correctPin) { alert("Please contact admin to cancel this booking."); return; }
-    const userPin = prompt("Enter your 4-digit Secret PIN to cancel:");
-    if (userPin === null) return;
-    if (userPin === correctPin) {
-      if (confirm("Cancel this booking?")) { await deleteDoc(doc(db, "bookings", id)); loadAll(); }
-    } else { alert("Incorrect PIN. Only the original booker can cancel."); }
+  // ─── Cancel booking (only owner can call this) ─────────────────────────────
+  window.cancelBooking = async (id) => {
+    if (!confirm('Cancel your booking?')) return;
+    try {
+      await deleteDoc(doc(db,'bookings',id));
+      loadAll();
+    } catch(e) { alert('Error: ' + e.message); }
   };
 
+  // ─── Pool log ──────────────────────────────────────────────────────────────
   window.registerPool = async () => {
+    const u = getSession();
+    if (!u) { alert('Please log in first.'); return; }
     const d = document.getElementById('poolDate').value;
     const t = document.getElementById('poolTime').value;
-    const n = document.getElementById('poolName').value;
-    const b = document.getElementById('poolBung').value;
     const p = document.getElementById('poolPhone').value;
-    if (!d || !t || !n || !b || !p) return alert("Please complete all fields.");
+    if (!d || !t || !p) { alert('Please fill in date, time, and phone number.'); return; }
     try {
-      await addDoc(collection(db, "pool_registrations"), { date: d, time: t, name: n, bungalow: b, phone: p, timestamp: new Date() });
-      alert("Pool entry logged. Enjoy your swim!");
-      document.getElementById('poolName').value = '';
-      document.getElementById('poolBung').value = '';
+      await addDoc(collection(db,'pool_registrations'), {
+        date: d, time: t, name: u.name, bungalow: u.bungalow,
+        phone: p, timestamp: new Date()
+      });
+      alert('Pool entry logged. Enjoy your swim!');
       document.getElementById('poolPhone').value = '';
-    } catch (e) { alert("Error: " + e.message); }
+    } catch(e) { alert('Error: ' + e.message); }
   };
 
+  // ─── Navigation ────────────────────────────────────────────────────────────
   window.showPage = (id) => {
     document.querySelectorAll('.page-section, .hero-section').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
-    if (id === 'home') {
-      document.getElementById('page-home').classList.add('active');
-    } else {
-      document.getElementById('page-' + id).classList.add('active');
-    }
+    document.getElementById(id === 'home' ? 'page-home' : 'page-' + id).classList.add('active');
     document.getElementById('nav-' + id).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  window.doLogin = async () => {
-    const name = document.getElementById("loginUsername").value.trim();
-    const bung = document.getElementById("loginPassword").value.trim();
-    const error = document.getElementById("loginError");
+  window.loadAll = loadAll;
 
-    if (!name || !bung) {
-      error.innerText = "Please enter both fields.";
-      error.style.display = "block";
-      return;
-    }
-
-    try {
-      let found = false;
-
-      // 1. Check Local Storage First (for newly registered users without Firebase)
-      const localResidents = JSON.parse(localStorage.getItem("localResidents") || "[]");
-      if (localResidents.some(r => r.name.toLowerCase() === name.toLowerCase() && r.bungalow.toLowerCase() === bung.toLowerCase())) {
-        found = true;
-      }
-
-      // 2. Check Firebase
-      if (!found) {
-        try {
-          const resSnap = await getDocs(collection(db, "residents"));
-          resSnap.forEach(doc => {
-            const data = doc.data();
-            if (data.name && data.bungalow && data.name.toLowerCase() === name.toLowerCase() && data.bungalow.toLowerCase() === bung.toLowerCase()) {
-              found = true;
-            }
-          });
-        } catch(e) {
-          console.warn("Firebase read failed, relying on local storage. ", e);
-        }
-      }
-
-      if (found || (name.toLowerCase() === "admin" && bung === "1234")) {
-        error.style.display = "none";
-        document.getElementById("loginOverlay").style.display = "none";
-        sessionStorage.setItem("loggedInUser", name);
-      } else {
-        error.innerText = "Incorrect name or bungalow number.";
-        error.style.display = "block";
-      }
-    } catch(e) {
-      console.error(e);
-      error.innerText = "Error verifying credentials.";
-      error.style.display = "block";
-    }
-  };
-
-  window.doRegister = async () => {
-    const name = document.getElementById("regName").value.trim();
-    const bung = document.getElementById("regBungalow").value.trim();
-    const phone = document.getElementById("regPhone").value.trim();
-    const error = document.getElementById("regError");
-    const success = document.getElementById("regSuccess");
-    const btn = document.getElementById("regBtn");
-
-    if (!name || !bung) {
-      error.innerText = "Please provide Name and Bungalow number.";
-      error.style.display = "block";
-      success.style.display = "none";
-      return;
-    }
-
-    try {
-      btn.innerText = "Processing...";
-      btn.disabled = true;
-      btn.style.opacity = "0.7";
-      error.style.display = "none";
-      
-      // Save locally to bypass Firebase permission issues
-      const localResidents = JSON.parse(localStorage.getItem("localResidents") || "[]");
-      localResidents.push({ name: name, bungalow: bung, phone: phone, date: new Date().toISOString() });
-      localStorage.setItem("localResidents", JSON.stringify(localResidents));
-      
-      // Attempt Firebase save in the background (swallow error if it fails)
-      try {
-        addDoc(collection(db, "residents"), { name: name, bungalow: bung, phone: phone, createdAt: new Date() }).catch(e => console.warn("Firebase write blocked:", e.message));
-      } catch(e) { console.warn("Firebase addDoc error:", e); }
-      
-      success.style.display = "block";
-      btn.innerText = "Success ✓";
-      
-      setTimeout(() => {
-        window.toggleRegister(false);
-        document.getElementById("loginUsername").value = name;
-        document.getElementById("loginPassword").value = bung;
-        // reset form
-        document.getElementById("regName").value = "";
-        document.getElementById("regBungalow").value = "";
-        document.getElementById("regPhone").value = "";
-        success.style.display = "none";
-        btn.innerText = "Request Access";
-        btn.disabled = false;
-        btn.style.opacity = "1";
-      }, 1500);
-      
-    } catch(e) {
-      console.error(e);
-      error.innerText = "Error: " + e.message;
-      error.style.display = "block";
-      btn.innerText = "Request Access";
-      btn.disabled = false;
-      btn.style.opacity = "1";
-    }
-  };
-
-  window.toggleRegister = (show) => {
-    const loginView = document.getElementById("loginView");
-    const regView = document.getElementById("registerView");
-    
-    if (show) {
-      loginView.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' }).onfinish = () => {
-        loginView.style.display = "none";
-        regView.style.display = "block";
-        regView.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 300, fill: 'forwards' });
-      };
-    } else {
-      regView.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' }).onfinish = () => {
-        regView.style.display = "none";
-        loginView.style.display = "block";
-        loginView.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 300, fill: 'forwards' });
-      };
-    }
-    
-    document.getElementById("regError").style.display = "none";
-    document.getElementById("loginError").style.display = "none";
-  };
-
-  window.doLogout = () => {
-    sessionStorage.removeItem("loggedInUser");
-    document.getElementById("loginOverlay").style.display = "flex";
-    document.getElementById("loginUsername").value = "";
-    document.getElementById("loginPassword").value = "";
-  };
-
-  // Check session on load
-  if (sessionStorage.getItem("loggedInUser")) {
-    document.getElementById("loginOverlay").style.display = "none";
+  // ─── Boot ──────────────────────────────────────────────────────────────────
+  const existing = getSession();
+  if (existing) {
+    document.getElementById('loginOverlay').style.display = 'none';
+    updateNavChip(); prefillUser(); loadAll();
+  } else {
+    loadAll(); // still load public data but overlay will show
   }
 
-  // Allow Enter key login
-  document.addEventListener("keypress", function(e) {
-    if (e.key === "Enter" && document.getElementById("loginOverlay").style.display !== "none") {
-      if (document.getElementById("loginView").style.display !== "none") {
-        window.doLogin();
-      } else {
-        window.doRegister();
-      }
+  // Enter key support
+  document.addEventListener('keypress', e => {
+    if (e.key !== 'Enter') return;
+    const overlay = document.getElementById('loginOverlay');
+    if (overlay.style.display === 'none') return;
+    if (!document.getElementById('registerView').classList.contains('hidden')) {
+      window.doRegister();
+    } else {
+      window.doLogin();
     }
   });
-
-  window.loadAll = loadAll;
-  loadAll();
 </script>
 
 <script>
-  // Custom cursor
+  // ─── Custom cursor ─────────────────────────────────────────────────────────
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx - 4 + 'px'; cursor.style.top = my - 4 + 'px'; });
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 4 + 'px'; cursor.style.top = my - 4 + 'px';
+  });
   function animateRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx - 18 + 'px';
-    ring.style.top = ry - 18 + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx - 18 + 'px'; ring.style.top = ry - 18 + 'px';
     requestAnimationFrame(animateRing);
   }
   animateRing();
@@ -1586,16 +898,11 @@
     el.addEventListener('mouseleave', () => { ring.style.width = '36px'; ring.style.height = '36px'; ring.style.opacity = '1'; });
   });
 
-  // Feature card stagger animation
-  const cards = document.querySelectorAll('.feature-card');
-  cards.forEach((card, i) => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(30px)';
+  // ─── Feature card stagger ─────────────────────────────────────────────────
+  document.querySelectorAll('.feature-card').forEach((card, i) => {
+    card.style.opacity = '0'; card.style.transform = 'translateY(30px)';
     card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    setTimeout(() => {
-      card.style.opacity = '1';
-      card.style.transform = 'translateY(0)';
-    }, 200 + i * 100);
+    setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 200 + i * 100);
   });
 </script>
 </body>
