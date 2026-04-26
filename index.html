@@ -956,24 +956,28 @@
       if (myKey && u) {
         let activities = [];
         // Fetch Sports Bookings
-        const sportsBooks = await getDocs(query(collection(db,'bookings'), where('ownerKey','==',myKey)));
-        sportsBooks.forEach(d => {
-          const b = d.data();
-          // Assuming time is like "10 AM - 11 AM", sort by date/time
-          let tStr = b.time.split(' - ')[0] || '00:00';
-          let timeVal = new Date(`${b.date} ${tStr}`).getTime();
-          if (isNaN(timeVal)) timeVal = new Date(b.date).getTime();
-          activities.push({ icon: '🎾', title: `Sports: ${b.facility}`, date: b.date, time: b.time, timestamp: timeVal });
-        });
+        try {
+          const sportsBooks = await getDocs(query(collection(db,'bookings'), where('ownerKey','==',myKey)));
+          sportsBooks.forEach(d => {
+            const b = d.data();
+            // Assuming time is like "10 AM - 11 AM", sort by date/time
+            let tStr = b.time.split(' - ')[0] || '00:00';
+            let timeVal = new Date(`${b.date} ${tStr}`).getTime();
+            if (isNaN(timeVal)) timeVal = new Date(b.date).getTime();
+            activities.push({ icon: '🎾', title: `Sports: ${b.facility}`, date: b.date, time: b.time, timestamp: timeVal });
+          });
+        } catch(err) { console.warn('Could not fetch sports bookings:', err); }
         
         // Fetch Pool Entries
-        const poolRegs = await getDocs(query(collection(db,'pool_registrations'), where('name','==',u.name), where('bungalow','==',u.bungalow)));
-        poolRegs.forEach(d => {
-          const b = d.data();
-          let timeVal = new Date(`${b.date}T${b.time}:00`).getTime();
-          if (isNaN(timeVal)) timeVal = new Date(b.date).getTime();
-          activities.push({ icon: '🏊', title: 'Pool Entry', date: b.date, time: b.time, timestamp: timeVal });
-        });
+        try {
+          const poolRegs = await getDocs(query(collection(db,'pool_registrations'), where('name','==',u.name), where('bungalow','==',u.bungalow)));
+          poolRegs.forEach(d => {
+            const b = d.data();
+            let timeVal = new Date(`${b.date}T${b.time}:00`).getTime();
+            if (isNaN(timeVal)) timeVal = new Date(b.date).getTime();
+            activities.push({ icon: '🏊', title: 'Pool Entry', date: b.date, time: b.time, timestamp: timeVal });
+          });
+        } catch(err) { console.warn('Could not fetch pool registrations:', err); }
         
         // Sort descending by timestamp
         activities.sort((a,b) => b.timestamp - a.timestamp);
