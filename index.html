@@ -328,7 +328,6 @@
 </head>
 <body>
 
-<!-- LOGIN OVERLAY -->
 <div id="loginOverlay">
   <div class="login-box">
     <div class="login-crest">SC</div>
@@ -358,18 +357,15 @@
   </div>
 </div>
 
-<!-- Custom Cursor (desktop) -->
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- Ambient -->
 <div class="ambient">
   <div class="ambient-orb orb1"></div>
   <div class="ambient-orb orb2"></div>
   <div class="ambient-orb orb3"></div>
 </div>
 
-<!-- TOP NAV -->
 <nav>
   <div class="nav-logo" onclick="showPage('home')">
     <div class="crest">SC</div>
@@ -379,7 +375,6 @@
     </div>
   </div>
 
-  <!-- Desktop links -->
   <div class="nav-links">
     <button id="nav-home" class="active" onclick="showPage('home')">Home</button>
     <button id="nav-notices" onclick="showPage('notices')">Notices</button>
@@ -397,7 +392,6 @@
     <button id="nav-logout" onclick="doLogout()" style="color:#e07060; border:1px solid rgba(224,112,96,0.3); margin-left:4px;">Logout</button>
   </div>
 
-  <!-- Mobile: user chip + profile -->
   <div class="nav-mobile-actions">
     <div class="nav-mobile-chip" id="mobileUserChip" style="display:none;" onclick="showPage('profile')">
       <div class="nav-user-avatar" id="mobileUserAvatar"></div>
@@ -406,7 +400,6 @@
   </div>
 </nav>
 
-<!-- BOTTOM TAB BAR (mobile) -->
 <div class="bottom-nav">
   <div class="bottom-nav-inner">
     <button class="tab-btn active" id="btab-home" onclick="showPage('home')">
@@ -432,7 +425,6 @@
   </div>
 </div>
 
-<!-- More menu overlay -->
 <div class="more-menu-overlay" id="moreOverlay" onclick="closeMore()"></div>
 <div class="more-menu" id="moreMenu">
   <button class="more-menu-item" onclick="showPage('halls'); closeMore()"><span class="mi-icon">🎪</span> Halls</button>
@@ -441,7 +433,6 @@
   <button class="more-menu-item" onclick="doLogout(); closeMore()" style="color:#e07060;"><span class="mi-icon">⏻</span> Sign Out</button>
 </div>
 
-<!-- HOME -->
 <div id="page-home" class="hero-section active">
   <div class="hero">
     <div class="hero-bg"></div>
@@ -479,7 +470,6 @@
   </div>
 </div>
 
-<!-- HALLS -->
 <div id="page-halls" class="page-section">
   <div class="section-inner">
     <div class="section-header">
@@ -503,7 +493,6 @@
   </div>
 </div>
 
-<!-- SPORTS -->
 <div id="page-sports" class="page-section">
   <div class="section-inner">
     <div class="section-header">
@@ -518,7 +507,7 @@
         <div class="form-group"><label>Date</label><input type="date" id="inDate"></div>
         <div class="form-group"><label>Ground / Court</label><select id="inFac"></select></div>
         <div class="form-group"><label>Time Slot</label><select id="inTime"></select></div>
-        <div class="form-group"><label>Your Name</label><input type="text" id="inName" readonly placeholder="From your account"></div>
+        <div class="form-group"><label>Booking Name</label><input type="text" id="inName" placeholder="Enter name"></div>
         <div class="form-group"><label>Bungalow No.</label><input type="text" id="inBung" readonly placeholder="From your account"></div>
       </div>
       <button class="btn-primary" onclick="handleBooking()">Confirm Reservation</button>
@@ -539,7 +528,6 @@
   </div>
 </div>
 
-<!-- POOL -->
 <div id="page-pool" class="page-section">
   <div class="section-inner">
     <div class="section-header">
@@ -554,7 +542,7 @@
       <div class="form-row">
         <div class="form-group"><label>Date</label><input type="date" id="poolDate"></div>
         <div class="form-group"><label>Time of Entry</label><input type="time" id="poolTime"></div>
-        <div class="form-group"><label>Full Name</label><input type="text" id="poolName" readonly placeholder="From your account"></div>
+        <div class="form-group"><label>Swimmer Name</label><input type="text" id="poolName" placeholder="Enter name"></div>
         <div class="form-group"><label>Bungalow No.</label><input type="text" id="poolBung" readonly placeholder="From your account"></div>
         <div class="form-group"><label>Phone No.</label><input type="tel" id="poolPhone" placeholder="10-digit number" inputmode="numeric"></div>
       </div>
@@ -563,7 +551,6 @@
   </div>
 </div>
 
-<!-- NOTICES -->
 <div id="page-notices" class="page-section">
   <div class="section-inner">
     <div class="section-header">
@@ -575,7 +562,6 @@
   </div>
 </div>
 
-<!-- PROFILE -->
 <div id="page-profile" class="page-section">
   <div class="section-inner">
     <div class="section-header">
@@ -615,7 +601,6 @@
   </div>
 </div>
 
-<!-- DIRECTORY -->
 <div id="page-directory" class="page-section">
   <div class="section-inner">
     <div class="section-header">
@@ -937,11 +922,24 @@
     const d = document.getElementById('inDate').value;
     const f = document.getElementById('inFac').value;
     const t = document.getElementById('inTime').value;
+    const bookingName = document.getElementById('inName').value.trim();
+    
     if (!f) { alert('No facilities available.'); return; }
+    if (!bookingName) { alert('Please enter a name for the booking.'); return; }
+    
     try {
       const check = await getDocs(query(collection(db,'bookings'), where('date','==',d), where('facility','==',f), where('time','==',t)));
       if (!check.empty) { alert('Sorry — this slot is already taken.'); return; }
-      await addDoc(collection(db,'bookings'), { facility: f, time: t, userName: u.name, bungalow: u.bungalow, date: d, ownerKey: (u.name + '|' + u.bungalow).toLowerCase() });
+      
+      await addDoc(collection(db,'bookings'), { 
+        facility: f, 
+        time: t, 
+        userName: bookingName, 
+        bungalow: u.bungalow, 
+        date: d, 
+        ownerKey: (u.name + '|' + u.bungalow).toLowerCase() 
+      });
+      
       alert('Booking confirmed!');
       loadAll();
     } catch(e) { alert('Error: ' + e.message); }
@@ -958,9 +956,20 @@
     const d = document.getElementById('poolDate').value;
     const t = document.getElementById('poolTime').value;
     const p = document.getElementById('poolPhone').value;
-    if (!d || !t || !p) { alert('Please fill in date, time, and phone number.'); return; }
+    const poolName = document.getElementById('poolName').value.trim();
+    
+    if (!d || !t || !p || !poolName) { alert('Please fill in all fields (date, time, name, phone).'); return; }
+    
     try {
-      await addDoc(collection(db,'pool_registrations'), { date: d, time: t, name: u.name, bungalow: u.bungalow, phone: p, timestamp: new Date() });
+      await addDoc(collection(db,'pool_registrations'), { 
+        date: d, 
+        time: t, 
+        name: poolName, 
+        bungalow: u.bungalow, 
+        phone: p, 
+        timestamp: new Date() 
+      });
+      
       alert('Pool entry logged. Enjoy your swim!');
       document.getElementById('poolPhone').value = '';
     } catch(e) { alert('Error: ' + e.message); }
