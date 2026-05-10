@@ -21,25 +21,10 @@
     --nav-h: 64px;
     --bottom-h: 64px;
   }
-
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Syne', sans-serif; background: var(--deep); color: var(--cream); overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.035; pointer-events: none; z-index: 9999; }
 
-  body {
-    font-family: 'Syne', sans-serif;
-    background: var(--deep);
-    color: var(--cream);
-    overflow-x: hidden;
-  }
-
-  /* NOISE */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-    opacity: 0.035; pointer-events: none; z-index: 9999;
-  }
-
-  /* CURSOR */
   .cursor, .cursor-ring { display: none; }
   @media (pointer: fine) {
     .cursor { display: block; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 99999; mix-blend-mode: difference; }
@@ -53,86 +38,47 @@
   .orb3 { width: 400px; height: 400px; top: 40%; left: 40%; background: radial-gradient(circle, rgba(10,40,24,0.5) 0%, transparent 70%); animation-delay: -4s; animation-duration: 15s; }
   @keyframes drift { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(40px,30px) scale(1.1); } }
 
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px; height: var(--nav-h);
-    background: rgba(6,13,8,0.9); backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(201,144,58,0.15);
-  }
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: var(--nav-h); background: rgba(6,13,8,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(201,144,58,0.15); }
   nav::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
-
   .nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
   .crest { width: 38px; height: 38px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--deep); font-weight: 800; font-size: 13px; box-shadow: 0 0 16px rgba(201,144,58,0.4); flex-shrink: 0; }
   .logo-text { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; letter-spacing: 1.5px; color: var(--cream); }
   .logo-sub { font-size: 8px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
-
-  .nav-links { display: none; gap: 4px; align-items: center; }
-  @media (min-width: 769px) {
-    .nav-links { display: flex; }
-    nav { padding: 0 40px; }
-  }
-  .nav-links button { background: none; border: none; color: rgba(245,237,224,0.55); padding: 8px 14px; cursor: pointer; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Syne', sans-serif; transition: all 0.3s; border-radius: 4px; position: relative; }
+  .nav-links { display: none; gap: 4px; align-items: center; flex-wrap: wrap; }
+  @media (min-width: 769px) { .nav-links { display: flex; } nav { padding: 0 32px; } }
+  .nav-links button { background: none; border: none; color: rgba(245,237,224,0.55); padding: 7px 10px; cursor: pointer; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; font-family: 'Syne', sans-serif; transition: all 0.3s; border-radius: 4px; position: relative; }
   .nav-links button::after { content: ''; position: absolute; bottom: 0; left: 50%; right: 50%; height: 2px; background: var(--gold); transition: left 0.3s, right 0.3s; }
   .nav-links button.active::after, .nav-links button:hover::after { left: 15%; right: 15%; }
   .nav-links button.active, .nav-links button:hover { color: var(--cream); }
-
   .nav-user-chip { display: flex; align-items: center; gap: 8px; background: rgba(201,144,58,0.08); border: 1px solid rgba(201,144,58,0.2); border-radius: 30px; padding: 5px 12px 5px 6px; cursor: pointer; transition: all 0.3s; }
   .nav-user-chip:hover { background: rgba(201,144,58,0.15); border-color: var(--gold); }
   .nav-user-avatar { width: 26px; height: 26px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: var(--deep); }
-  .nav-user-name { font-size: 11px; font-weight: 700; color: var(--cream); max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .nav-user-name { font-size: 11px; font-weight: 700; color: var(--cream); max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .nav-user-bung { font-size: 9px; color: var(--gold); letter-spacing: 1px; }
-
   .nav-mobile-actions { display: flex; align-items: center; gap: 8px; }
   @media (min-width: 769px) { .nav-mobile-actions { display: none; } }
   .nav-mobile-chip { display: flex; align-items: center; gap: 6px; background: rgba(201,144,58,0.08); border: 1px solid rgba(201,144,58,0.2); border-radius: 30px; padding: 4px 10px 4px 4px; cursor: pointer; }
   .nav-mobile-chip .nav-user-avatar { width: 28px; height: 28px; font-size: 12px; }
   .nav-mobile-chip .nav-user-name { font-size: 11px; font-weight: 700; color: var(--cream); max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  .bottom-nav {
-    display: none;
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
-    background: rgba(6,13,8,0.96); backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(201,144,58,0.15);
-    height: var(--bottom-h);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
+  /* BOTTOM NAV */
+  .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; background: rgba(6,13,8,0.96); backdrop-filter: blur(20px); border-top: 1px solid rgba(201,144,58,0.15); height: var(--bottom-h); padding-bottom: env(safe-area-inset-bottom); }
   @media (max-width: 768px) { .bottom-nav { display: flex; } }
   .bottom-nav-inner { display: flex; width: 100%; height: 100%; }
-  .tab-btn {
-    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background: none; border: none; cursor: pointer; gap: 3px;
-    color: rgba(245,237,224,0.35); font-family: 'Syne', sans-serif;
-    transition: color 0.2s; padding: 0; min-height: 44px;
-    border-top: 2px solid transparent;
-    -webkit-tap-highlight-color: transparent;
-  }
+  .tab-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; gap: 3px; color: rgba(245,237,224,0.35); font-family: 'Syne', sans-serif; transition: color 0.2s; padding: 0; min-height: 44px; border-top: 2px solid transparent; -webkit-tap-highlight-color: transparent; }
   .tab-btn.active { color: var(--gold); border-top-color: var(--gold); }
   .tab-btn .tab-icon { font-size: 18px; line-height: 1; }
   .tab-btn .tab-label { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
-  
-  .more-menu {
-    position: fixed; bottom: calc(var(--bottom-h) + 8px); left: 8px; right: 8px;
-    background: rgba(10,41,24,0.98); backdrop-filter: blur(20px);
-    border: 1px solid rgba(201,144,58,0.2); border-radius: 16px;
-    padding: 8px; display: none; flex-direction: column; gap: 4px;
-    box-shadow: 0 -20px 40px rgba(0,0,0,0.5);
-    z-index: 1001;
-  }
+  .more-menu { position: fixed; bottom: calc(var(--bottom-h) + 8px); left: 8px; right: 8px; background: rgba(10,41,24,0.98); backdrop-filter: blur(20px); border: 1px solid rgba(201,144,58,0.2); border-radius: 16px; padding: 8px; display: none; flex-direction: column; gap: 4px; box-shadow: 0 -20px 40px rgba(0,0,0,0.5); z-index: 1001; }
   .more-menu.open { display: flex; }
-  .more-menu-item {
-    display: flex; align-items: center; gap: 14px;
-    padding: 14px 16px; border-radius: 10px; cursor: pointer;
-    background: none; border: none; color: var(--cream);
-    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600;
-    transition: background 0.2s; text-align: left;
-    -webkit-tap-highlight-color: transparent;
-  }
+  .more-menu-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 10px; cursor: pointer; background: none; border: none; color: var(--cream); font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; transition: background 0.2s; text-align: left; -webkit-tap-highlight-color: transparent; }
   .more-menu-item:hover, .more-menu-item.active { background: rgba(201,144,58,0.1); color: var(--gold-light); }
   .more-menu-item .mi-icon { font-size: 20px; width: 28px; text-align: center; }
   .more-menu-overlay { position: fixed; inset: 0; z-index: 999; display: none; }
   .more-menu-overlay.open { display: block; }
 
+  /* HERO */
   .hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; padding: 100px 24px 120px; }
   @media (max-width: 768px) { .hero { padding: 80px 20px 140px; min-height: calc(100svh - 0px); } }
   .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 50% at 50% 60%, rgba(26,102,64,0.25) 0%, transparent 70%), var(--deep); }
@@ -154,11 +100,11 @@
   .hero-card-btn:hover, .hero-card-btn:active { background: rgba(201,144,58,0.15); border-color: var(--gold); }
   @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
+  /* SECTIONS */
   .page-section { display: none; min-height: 100svh; padding-top: var(--nav-h); position: relative; z-index: 1; }
   .page-section.active { display: block; }
   .hero-section { display: none; }
   .hero-section.active { display: block; }
-
   .section-inner { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
   @media (max-width: 768px) { .section-inner { padding: 28px 16px 100px; } }
   .section-header { margin-bottom: 36px; border-bottom: 1px solid rgba(201,144,58,0.15); padding-bottom: 24px; }
@@ -166,6 +112,7 @@
   .section-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 8vw, 72px); font-weight: 300; line-height: 1; letter-spacing: -1px; color: var(--cream); }
   .section-header p { margin-top: 14px; font-size: 13px; color: rgba(245,237,224,0.5); line-height: 1.7; }
 
+  /* FEATURE GRID */
   #page-home .section-inner { padding-top: 0; }
   .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 60px; }
   @media (max-width: 768px) { .feature-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 40px; } }
@@ -180,6 +127,7 @@
   .fc-desc { font-size: 12px; color: rgba(245,237,224,0.45); line-height: 1.5; display: none; }
   @media (min-width: 769px) { .fc-desc { display: block; } .fc-icon { font-size: 48px; } .fc-title { font-size: 28px; } .feature-card { min-height: 220px; padding: 40px; } }
 
+  /* FORMS & PANELS */
   .booking-panel { padding: 24px; border-radius: 14px; background: rgba(15,64,37,0.15); border: 1px solid rgba(201,144,58,0.2); margin-bottom: 28px; position: relative; overflow: hidden; }
   @media (min-width: 769px) { .booking-panel { padding: 40px; } }
   .booking-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
@@ -189,31 +137,26 @@
   @media (min-width: 500px) { .form-row { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); } }
   .form-group label { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 8px; }
   input, select, textarea { width: 100%; padding: 13px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,144,58,0.2); border-radius: 10px; color: var(--cream); font-family: 'Syne', sans-serif; font-size: 15px; outline: none; transition: all 0.3s; -webkit-appearance: none; appearance: none; }
-  input::placeholder { color: rgba(245,237,224,0.25); }
-  input:focus, select:focus { border-color: var(--gold); background: rgba(201,144,58,0.06); box-shadow: 0 0 0 3px rgba(201,144,58,0.1); }
+  input::placeholder, textarea::placeholder { color: rgba(245,237,224,0.25); }
+  input:focus, select:focus, textarea:focus { border-color: var(--gold); background: rgba(201,144,58,0.06); box-shadow: 0 0 0 3px rgba(201,144,58,0.1); }
   select option { background: var(--forest); color: var(--cream); }
   input[readonly] { opacity: 0.7; cursor: default; border-style: dashed; }
-
+  textarea { resize: vertical; min-height: 100px; }
   .btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--deep); border: none; padding: 16px 32px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; font-family: 'Syne', sans-serif; width: 100%; transition: all 0.4s; min-height: 52px; -webkit-tap-highlight-color: transparent; }
   .btn-primary:hover, .btn-primary:active { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(201,144,58,0.35); }
 
-  .schedule-wrapper { background: rgba(0,0,0,0.3); border: 1px solid rgba(201,144,58,0.1); border-radius: 12px; overflow: hidden; }
+  /* SCHEDULE */
+  .schedule-wrapper { background: rgba(0,0,0,0.3); border: 1px solid rgba(201,144,58,0.1); border-radius: 12px; overflow: hidden; margin-bottom: 28px; }
   .schedule-header-bar { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid rgba(201,144,58,0.1); flex-wrap: wrap; gap: 12px; }
   .schedule-header-bar h3 { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--cream); }
   .date-pill { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,144,58,0.2); border-radius: 8px; padding: 8px 14px; }
   .date-pill label { font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; font-weight: 700; white-space: nowrap; }
   .date-pill input { background: none; border: none; color: var(--cream); font-size: 13px; width: auto; padding: 0; margin: 0; box-shadow: none; min-width: 120px; }
   .date-pill input:focus { box-shadow: none; }
-
   .scroll-hint { display: flex; align-items: center; gap: 8px; padding: 10px 20px; font-size: 11px; color: rgba(201,144,58,0.6); border-bottom: 1px solid rgba(201,144,58,0.06); letter-spacing: 1px; }
   @media (min-width: 769px) { .scroll-hint { display: none; } }
   .scroll-hint::before { content: '↔'; font-size: 14px; }
-
   .table-scroll-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .table-scroll-wrap::-webkit-scrollbar { height: 4px; }
-  .table-scroll-wrap::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
-  .table-scroll-wrap::-webkit-scrollbar-thumb { background: rgba(201,144,58,0.3); border-radius: 2px; }
-
   table { width: 100%; border-collapse: collapse; min-width: 1400px; font-size: 11px; }
   th { background: rgba(10,41,24,0.8); color: var(--gold); font-weight: 700; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 11px 8px; border: 1px solid rgba(255,255,255,0.04); white-space: nowrap; }
   td { padding: 10px 8px; border: 1px solid rgba(255,255,255,0.03); text-align: center; vertical-align: middle; transition: background 0.2s; }
@@ -226,22 +169,108 @@
   .my-booking { background: rgba(201,144,58,0.08) !important; }
   .my-booking-label { color: var(--gold-light); font-weight: 700; font-size: 10px; }
 
+  /* CLUBHOUSE TABS */
+  .ch-tabs { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .ch-tab { padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(201,144,58,0.15); color: rgba(245,237,224,0.5); cursor: pointer; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s; }
+  .ch-tab.active { background: rgba(201,144,58,0.12); border-color: var(--gold); color: var(--gold); }
+  .ch-tab:hover { color: var(--cream); border-color: rgba(201,144,58,0.4); }
+  .ch-panel { display: none; }
+  .ch-panel.active { display: block; }
+
+  /* NOTICE */
   .notice-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
   @media (max-width: 500px) { .notice-grid { grid-template-columns: 1fr; } }
   .notice-card { padding: 24px; border-radius: 14px; background: rgba(255,255,255,0.025); border: 1px solid rgba(201,144,58,0.1); transition: all 0.4s; position: relative; overflow: hidden; }
   .notice-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: linear-gradient(to bottom, var(--gold), transparent); }
   .notice-date { font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; display: block; margin-bottom: 10px; font-weight: 700; }
   .notice-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--cream); margin-bottom: 10px; line-height: 1.2; }
-  
-  /* UPDATED NOTICE BODY CSS FOR HTML/RICH TEXT */
   .notice-body { font-size: 13px; color: rgba(245,237,224,0.6); line-height: 1.7; }
   .notice-body p { margin-bottom: 10px; }
   .notice-body p:last-child { margin-bottom: 0; }
   .notice-body ul { margin-left: 20px; margin-bottom: 10px; list-style-type: disc; }
   .notice-body b, .notice-body strong { color: var(--cream); font-weight: 700; }
-  
   .pdf-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; background: rgba(201,144,58,0.1); border: 1px solid rgba(201,144,58,0.3); color: var(--gold); padding: 10px 16px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; transition: all 0.3s; font-family: 'Syne', sans-serif; min-height: 44px; }
+  .pdf-btn:hover { background: rgba(201,144,58,0.2); }
 
+  /* DOCUMENTS PAGE */
+  .doc-category { margin-bottom: 36px; }
+  .doc-category-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; color: var(--cream); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(201,144,58,0.15); display: flex; align-items: center; gap: 10px; }
+  .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .doc-card { padding: 20px; border-radius: 12px; background: rgba(255,255,255,0.025); border: 1px solid rgba(201,144,58,0.1); transition: all 0.3s; display: flex; align-items: flex-start; gap: 14px; }
+  .doc-card:hover { border-color: rgba(201,144,58,0.3); background: rgba(201,144,58,0.04); }
+  .doc-icon { width: 40px; height: 40px; border-radius: 8px; background: rgba(201,144,58,0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .doc-info { flex: 1; min-width: 0; }
+  .doc-name { font-size: 13px; font-weight: 700; color: var(--cream); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .doc-meta { font-size: 10px; color: rgba(245,237,224,0.4); letter-spacing: 1px; }
+  .doc-download { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: none; border: 1px solid rgba(201,144,58,0.3); color: var(--gold); padding: 6px 12px; border-radius: 5px; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-decoration: none; font-family: 'Syne', sans-serif; transition: all 0.3s; }
+  .doc-download:hover { background: rgba(201,144,58,0.1); }
+
+  /* DISCUSSIONS */
+  .discussion-thread { background: rgba(255,255,255,0.025); border: 1px solid rgba(201,144,58,0.1); border-radius: 14px; margin-bottom: 14px; overflow: hidden; transition: all 0.3s; }
+  .discussion-thread:hover { border-color: rgba(201,144,58,0.25); }
+  .thread-header { padding: 20px 24px; cursor: pointer; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .thread-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--cream); margin-bottom: 6px; line-height: 1.2; }
+  .thread-meta { font-size: 11px; color: rgba(245,237,224,0.4); display: flex; gap: 14px; flex-wrap: wrap; }
+  .thread-tag { font-size: 9px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; font-weight: 700; background: rgba(201,144,58,0.08); padding: 3px 8px; border-radius: 4px; }
+  .thread-replies { font-size: 11px; color: rgba(245,237,224,0.3); white-space: nowrap; flex-shrink: 0; padding-top: 2px; }
+  .thread-body { padding: 0 24px 20px; display: none; border-top: 1px solid rgba(201,144,58,0.08); }
+  .thread-body.open { display: block; }
+  .thread-desc { font-size: 13px; color: rgba(245,237,224,0.65); line-height: 1.7; padding-top: 16px; margin-bottom: 20px; }
+  .reply-list { margin-bottom: 16px; }
+  .reply { padding: 14px 16px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-bottom: 10px; }
+  .reply-author { font-size: 11px; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+  .reply-text { font-size: 13px; color: rgba(245,237,224,0.7); line-height: 1.5; }
+  .reply-time { font-size: 10px; color: rgba(245,237,224,0.3); margin-top: 4px; }
+  .reply-form { display: flex; gap: 10px; }
+  .reply-form textarea { min-height: 60px; font-size: 13px; padding: 10px 14px; flex: 1; }
+  .reply-form button { background: rgba(201,144,58,0.15); border: 1px solid rgba(201,144,58,0.3); color: var(--gold); padding: 10px 16px; border-radius: 8px; cursor: pointer; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; transition: all 0.3s; white-space: nowrap; }
+  .reply-form button:hover { background: var(--gold); color: var(--deep); }
+  .new-thread-btn { display: flex; align-items: center; gap: 10px; background: rgba(201,144,58,0.08); border: 1px solid rgba(201,144,58,0.25); color: var(--gold); padding: 14px 20px; border-radius: 10px; cursor: pointer; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s; margin-bottom: 24px; width: 100%; justify-content: center; }
+  .new-thread-btn:hover { background: rgba(201,144,58,0.15); border-color: var(--gold); }
+  .new-thread-form { background: rgba(15,64,37,0.1); border: 1px solid rgba(201,144,58,0.2); border-radius: 14px; padding: 24px; margin-bottom: 24px; display: none; }
+  .new-thread-form.open { display: block; }
+
+  /* PAYMENTS */
+  .payment-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 28px; }
+  .pay-stat { padding: 20px; background: rgba(255,255,255,0.025); border: 1px solid rgba(201,144,58,0.1); border-radius: 12px; text-align: center; }
+  .pay-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; color: var(--cream); }
+  .pay-stat-label { font-size: 10px; letter-spacing: 2px; color: rgba(245,237,224,0.4); text-transform: uppercase; margin-top: 6px; font-weight: 700; }
+  .pay-stat.outstanding .pay-stat-num { color: #e07060; }
+  .pay-stat.paid .pay-stat-num { color: var(--jade); }
+  .pay-history { background: rgba(0,0,0,0.2); border: 1px solid rgba(201,144,58,0.08); border-radius: 12px; overflow: hidden; }
+  .pay-history-header { padding: 16px 20px; border-bottom: 1px solid rgba(201,144,58,0.08); background: rgba(10,41,24,0.5); }
+  .pay-history-header h3 { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--cream); }
+  .pay-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.03); gap: 12px; flex-wrap: wrap; }
+  .pay-row:last-child { border-bottom: none; }
+  .pay-desc { flex: 1; min-width: 120px; }
+  .pay-name { font-size: 13px; font-weight: 700; color: var(--cream); margin-bottom: 3px; }
+  .pay-period { font-size: 11px; color: rgba(245,237,224,0.4); }
+  .pay-amount { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--cream); font-weight: 600; }
+  .badge { font-size: 9px; letter-spacing: 1.5px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
+  .badge-paid { background: rgba(45,156,95,0.1); color: var(--jade); border: 1px solid rgba(45,156,95,0.3); }
+  .badge-pending { background: rgba(201,144,58,0.1); color: var(--gold); border: 1px solid rgba(201,144,58,0.3); }
+  .badge-overdue { background: rgba(176,53,31,0.1); color: #e07060; border: 1px solid rgba(176,53,31,0.3); }
+  .pay-btn { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--deep); border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Syne', sans-serif; transition: all 0.3s; min-height: 40px; white-space: nowrap; }
+  .pay-btn:hover { box-shadow: 0 8px 20px rgba(201,144,58,0.3); }
+  .upi-box { background: rgba(15,64,37,0.15); border: 1px solid rgba(45,156,95,0.2); border-radius: 12px; padding: 24px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .upi-qr { width: 80px; height: 80px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 36px; flex-shrink: 0; }
+  .upi-info { flex: 1; }
+  .upi-id { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--cream); margin-bottom: 4px; }
+  .upi-note { font-size: 12px; color: rgba(245,237,224,0.5); line-height: 1.6; }
+
+  /* COMPLAINTS */
+  .complaint-card { background: rgba(255,255,255,0.025); border: 1px solid rgba(201,144,58,0.1); border-radius: 14px; padding: 20px 24px; margin-bottom: 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .complaint-info { flex: 1; min-width: 180px; }
+  .complaint-subject { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--cream); margin-bottom: 6px; }
+  .complaint-meta { font-size: 11px; color: rgba(245,237,224,0.4); margin-bottom: 8px; }
+  .complaint-desc { font-size: 12px; color: rgba(245,237,224,0.55); line-height: 1.6; }
+  .complaint-status-col { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .badge-open { background: rgba(201,144,58,0.1); color: var(--gold); border: 1px solid rgba(201,144,58,0.3); }
+  .badge-progress { background: rgba(45,156,95,0.1); color: var(--jade); border: 1px solid rgba(45,156,95,0.3); }
+  .badge-resolved { background: rgba(255,255,255,0.03); color: rgba(245,237,224,0.35); border: 1px solid rgba(255,255,255,0.06); }
+  .complaint-cat { font-size: 9px; letter-spacing: 2px; color: rgba(245,237,224,0.35); text-transform: uppercase; }
+
+  /* DIRECTORY */
   .search-bar { padding: 16px 18px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(201,144,58,0.15); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
   .search-bar input { border: none; background: none; font-size: 16px; font-family: 'Cormorant Garamond', serif; flex: 1; padding: 0; }
   .search-bar input:focus { box-shadow: none; border: none; background: none; }
@@ -253,9 +282,7 @@
   .dir-bung { font-size: 11px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; font-weight: 700; }
   .dir-me-badge { font-size: 9px; letter-spacing: 2px; color: var(--jade); text-transform: uppercase; font-weight: 700; margin-top: 5px; }
 
-  .pool-icon { font-size: 64px; margin-bottom: 16px; display: block; filter: drop-shadow(0 0 20px rgba(45,156,95,0.3)); }
-  @media (min-width: 769px) { .pool-icon { font-size: 80px; } }
-
+  /* PROFILE */
   .digital-id-card { max-width: 360px; margin: 0 auto 28px; background: linear-gradient(135deg, rgba(201,144,58,0.15), rgba(26,102,64,0.15)); border: 1px solid rgba(201,144,58,0.3); border-radius: 18px; padding: 26px 22px; position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
   .digital-id-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(125deg, transparent 30%, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.06) 60%, transparent 70%); background-size: 200% 200%; animation: hologram 4s ease-in-out infinite; pointer-events: none; }
   @keyframes hologram { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
@@ -270,8 +297,7 @@
   .id-footer { display: flex; justify-content: space-between; align-items: flex-end; }
   .id-valid { font-size: 9px; color: rgba(245,237,224,0.4); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
   .id-barcode { font-family: monospace; font-size: 20px; color: rgba(201,144,58,0.3); letter-spacing: -2px; }
-
-  .activity-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(201,144,58,0.1); padding: 14px 16px; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; transition: all 0.3s; }
+  .activity-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(201,144,58,0.1); padding: 14px 16px; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; }
   .ac-icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(201,144,58,0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
   .ac-details { flex: 1; min-width: 0; }
   .ac-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--cream); font-weight: 600; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -280,10 +306,15 @@
   .status-badge-active { background: rgba(45,156,95,0.1); color: var(--jade); border: 1px solid rgba(45,156,95,0.3); }
   .status-badge-past { background: rgba(255,255,255,0.02); color: rgba(245,237,224,0.3); border: 1px solid rgba(255,255,255,0.05); }
 
+  /* POOL */
+  .pool-icon { font-size: 64px; margin-bottom: 16px; display: block; filter: drop-shadow(0 0 20px rgba(45,156,95,0.3)); }
+  @media (min-width: 769px) { .pool-icon { font-size: 80px; } }
+
   .loading-state { text-align: center; padding: 50px; color: rgba(245,237,224,0.3); font-size: 13px; letter-spacing: 2px; }
   .loading-state::before { content: '◈'; display: block; font-size: 28px; color: var(--gold); margin-bottom: 14px; animation: spin 3s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* LOGIN */
   #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(6,13,8,0.97); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 16px; }
   .login-box { background: rgba(10,41,24,0.4); padding: 36px 28px; border-radius: 18px; width: 100%; max-width: 400px; text-align: center; border: 1px solid rgba(201,144,58,0.25); position: relative; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.6); max-height: 90svh; overflow-y: auto; }
   @media (min-width: 500px) { .login-box { padding: 50px 44px; } }
@@ -307,6 +338,10 @@
 
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-thumb { background: rgba(201,144,58,0.2); border-radius: 2px; }
+
+  .empty-state { text-align: center; padding: 48px 24px; color: rgba(245,237,224,0.3); }
+  .empty-state .es-icon { font-size: 40px; margin-bottom: 14px; display: block; opacity: 0.4; }
+  .empty-state p { font-size: 13px; letter-spacing: 1px; }
 </style>
 </head>
 <body>
@@ -315,7 +350,6 @@
   <div class="login-box">
     <div class="login-crest">SC</div>
     <div class="login-title">Sind Society</div>
-
     <div id="loginView" class="auth-view">
       <div class="login-sub">Resident Portal · Sign In</div>
       <div class="login-field"><label>Full Name</label><input type="text" id="loginName" placeholder="Enter your full name" autocomplete="name"></div>
@@ -328,7 +362,6 @@
         <span>New? <a href="#" onclick="toggleView('register')">Create account</a></span>
       </div>
     </div>
-
     <div id="registerView" class="auth-view hidden">
       <div class="login-sub">Join the Community</div>
       <div class="login-field"><label>Full Name</label><input type="text" id="regName" placeholder="Enter your full name" autocomplete="name"></div>
@@ -340,7 +373,6 @@
       <button class="btn-primary" style="padding:15px;" id="regBtn" onclick="doRegister()">Create Account →</button>
       <div class="login-hint"><span style="width:100%;text-align:center;">Already registered? <a href="#" onclick="toggleView('login')">Sign In</a></span></div>
     </div>
-
     <div id="forgotView" class="auth-view hidden">
       <div class="login-sub">Password Reset</div>
       <div class="login-field"><label>Full Name</label><input type="text" id="forgName" placeholder="Enter your registered name"></div>
@@ -356,34 +388,25 @@
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
-
-<div class="ambient">
-  <div class="ambient-orb orb1"></div>
-  <div class="ambient-orb orb2"></div>
-  <div class="ambient-orb orb3"></div>
-</div>
+<div class="ambient"><div class="ambient-orb orb1"></div><div class="ambient-orb orb2"></div><div class="ambient-orb orb3"></div></div>
 
 <nav>
   <div class="nav-logo" onclick="showPage('home')">
     <div class="crest">SC</div>
-    <div>
-      <div class="logo-text">Sind Society</div>
-      <div class="logo-sub">Resident Portal</div>
-    </div>
+    <div><div class="logo-text">Sind Society</div><div class="logo-sub">Resident Portal</div></div>
   </div>
   <div class="nav-links">
     <button id="nav-home" class="active" onclick="showPage('home')">Home</button>
     <button id="nav-notices" onclick="showPage('notices')">Notices</button>
-    <button id="nav-halls" onclick="showPage('halls')">Halls</button>
-    <button id="nav-sports" onclick="showPage('sports')">Sports</button>
-    <button id="nav-pool" onclick="showPage('pool')">Pool</button>
+    <button id="nav-clubhouse" onclick="showPage('clubhouse')">Clubhouse</button>
+    <button id="nav-documents" onclick="showPage('documents')">Documents</button>
+    <button id="nav-discussions" onclick="showPage('discussions')">Discussions</button>
+    <button id="nav-payments" onclick="showPage('payments')">Payments</button>
+    <button id="nav-complaints" onclick="showPage('complaints')">Complaints</button>
     <button id="nav-directory" onclick="showPage('directory')">Directory</button>
     <div class="nav-user-chip" id="navUserChip" style="display:none;" onclick="showPage('profile')">
       <div class="nav-user-avatar" id="navUserAvatar"></div>
-      <div>
-        <div class="nav-user-name" id="navUserName"></div>
-        <div class="nav-user-bung" id="navUserBung"></div>
-      </div>
+      <div><div class="nav-user-name" id="navUserName"></div><div class="nav-user-bung" id="navUserBung"></div></div>
     </div>
     <button id="nav-logout" onclick="doLogout()" style="color:#e07060; border:1px solid rgba(224,112,96,0.3); margin-left:4px;">Logout</button>
   </div>
@@ -397,37 +420,25 @@
 
 <div class="bottom-nav">
   <div class="bottom-nav-inner">
-    <button class="tab-btn active" id="btab-home" onclick="showPage('home')">
-      <span class="tab-icon">🏡</span>
-      <span class="tab-label">Home</span>
-    </button>
-    <button class="tab-btn" id="btab-notices" onclick="showPage('notices')">
-      <span class="tab-icon">📢</span>
-      <span class="tab-label">Notices</span>
-    </button>
-    <button class="tab-btn" id="btab-sports" onclick="showPage('sports')">
-      <span class="tab-icon">🎾</span>
-      <span class="tab-label">Sports</span>
-    </button>
-    <button class="tab-btn" id="btab-pool" onclick="showPage('pool')">
-      <span class="tab-icon">🏊</span>
-      <span class="tab-label">Pool</span>
-    </button>
-    <button class="tab-btn more-btn" id="btab-more" onclick="toggleMore()">
-      <span class="tab-icon">☰</span>
-      <span class="tab-label">More</span>
-    </button>
+    <button class="tab-btn active" id="btab-home" onclick="showPage('home')"><span class="tab-icon">🏡</span><span class="tab-label">Home</span></button>
+    <button class="tab-btn" id="btab-notices" onclick="showPage('notices')"><span class="tab-icon">📢</span><span class="tab-label">Notices</span></button>
+    <button class="tab-btn" id="btab-clubhouse" onclick="showPage('clubhouse')"><span class="tab-icon">🏛️</span><span class="tab-label">Club</span></button>
+    <button class="tab-btn" id="btab-payments" onclick="showPage('payments')"><span class="tab-icon">💳</span><span class="tab-label">Pay</span></button>
+    <button class="tab-btn more-btn" id="btab-more" onclick="toggleMore()"><span class="tab-icon">☰</span><span class="tab-label">More</span></button>
   </div>
 </div>
 
 <div class="more-menu-overlay" id="moreOverlay" onclick="closeMore()"></div>
 <div class="more-menu" id="moreMenu">
-  <button class="more-menu-item" onclick="showPage('halls'); closeMore()"><span class="mi-icon">🎪</span> Halls</button>
+  <button class="more-menu-item" onclick="showPage('documents'); closeMore()"><span class="mi-icon">📁</span> Documents</button>
+  <button class="more-menu-item" onclick="showPage('discussions'); closeMore()"><span class="mi-icon">💬</span> Discussions</button>
+  <button class="more-menu-item" onclick="showPage('complaints'); closeMore()"><span class="mi-icon">📋</span> Complaints</button>
   <button class="more-menu-item" onclick="showPage('directory'); closeMore()"><span class="mi-icon">👥</span> Directory</button>
   <button class="more-menu-item" onclick="showPage('profile'); closeMore()"><span class="mi-icon">👤</span> My Profile</button>
   <button class="more-menu-item" onclick="doLogout(); closeMore()" style="color:#e07060;"><span class="mi-icon">⏻</span> Sign Out</button>
 </div>
 
+<!-- HOME -->
 <div id="page-home" class="hero-section active">
   <div class="hero">
     <div class="hero-bg"></div>
@@ -435,152 +446,227 @@
     <div class="hero-content">
       <div class="hero-eyebrow">Est. Pune · Members Portal</div>
       <h1 class="hero-title">Sind<br><em>Society</em></h1>
-      <p class="hero-desc">Your exclusive gateway to community living — bookings, notices, and resident services in one place.</p>
-      <div class="hero-ticker">
-        <div class="ticker-content" id="tickerContent">
-          <span>🌟 Welcome to the Sind Society Portal!</span>
-          <span class="dot">•</span>
-          <span>📅 Book sports courts and log pool entries online</span>
-          <span class="dot">•</span>
-          <span>🏊 Log your pool entry before swimming</span>
-        </div>
-      </div>
+      <p class="hero-desc">Your exclusive gateway to community living — bookings, notices, payments, and resident services in one place.</p>
+      <div class="hero-ticker"><div class="ticker-content" id="tickerContent"><span>🌟 Welcome to the Sind Society Portal!</span><span class="dot">•</span><span>📅 Book sports courts and log pool entries online</span><span class="dot">•</span><span>💳 Pay maintenance fees securely online</span></div></div>
       <div class="hero-cards">
         <button class="hero-card-btn" onclick="showPage('notices')">📢 Notices</button>
-        <button class="hero-card-btn" onclick="showPage('halls')">🎪 Halls</button>
-        <button class="hero-card-btn" onclick="showPage('sports')">🎾 Sports</button>
-        <button class="hero-card-btn" onclick="showPage('pool')">🏊 Pool</button>
-        <button class="hero-card-btn" onclick="showPage('directory')">👥 Directory</button>
+        <button class="hero-card-btn" onclick="showPage('clubhouse')">🏛️ Clubhouse</button>
+        <button class="hero-card-btn" onclick="showPage('documents')">📁 Documents</button>
+        <button class="hero-card-btn" onclick="showPage('discussions')">💬 Discussions</button>
+        <button class="hero-card-btn" onclick="showPage('payments')">💳 Payments</button>
+        <button class="hero-card-btn" onclick="showPage('complaints')">📋 Complaints</button>
       </div>
     </div>
   </div>
   <div class="section-inner">
     <div class="feature-grid">
       <div class="feature-card" onclick="showPage('notices')"><div class="fc-icon">📢</div><div class="fc-num">01</div><div class="fc-title">Notice Board</div><div class="fc-desc">Latest announcements and official documents from management.</div></div>
-      <div class="feature-card" onclick="showPage('halls')"><div class="fc-icon">🎪</div><div class="fc-num">02</div><div class="fc-title">Hall Availability</div><div class="fc-desc">View booking schedules for Club House Halls & Lawns.</div></div>
-      <div class="feature-card" onclick="showPage('sports')"><div class="fc-icon">🎾</div><div class="fc-num">03</div><div class="fc-title">Sports Booking</div><div class="fc-desc">Reserve courts and grounds instantly. Cancel anytime.</div></div>
-      <div class="feature-card" onclick="showPage('pool')"><div class="fc-icon">🏊</div><div class="fc-num">04</div><div class="fc-title">Pool Register</div><div class="fc-desc">Mandatory safety log for all swimming pool users.</div></div>
-      <div class="feature-card" onclick="showPage('directory')"><div class="fc-icon">👥</div><div class="fc-num">05</div><div class="fc-title">Resident Directory</div><div class="fc-desc">Search and connect with your neighbors.</div></div>
+      <div class="feature-card" onclick="showPage('clubhouse')"><div class="fc-icon">🏛️</div><div class="fc-num">02</div><div class="fc-title">Clubhouse</div><div class="fc-desc">Book halls, sports courts, and log pool entries.</div></div>
+      <div class="feature-card" onclick="showPage('documents')"><div class="fc-icon">📁</div><div class="fc-num">03</div><div class="fc-title">Documents</div><div class="fc-desc">AGM minutes, financial statements, bylaws, and official records.</div></div>
+      <div class="feature-card" onclick="showPage('discussions')"><div class="fc-icon">💬</div><div class="fc-num">04</div><div class="fc-title">Discussions</div><div class="fc-desc">Community forum for residents to discuss society matters.</div></div>
+      <div class="feature-card" onclick="showPage('payments')"><div class="fc-icon">💳</div><div class="fc-num">05</div><div class="fc-title">Payments</div><div class="fc-desc">Pay maintenance fees and view your payment history.</div></div>
+      <div class="feature-card" onclick="showPage('complaints')"><div class="fc-icon">📋</div><div class="fc-num">06</div><div class="fc-title">Complaints</div><div class="fc-desc">Lodge complaints and track their resolution status.</div></div>
+      <div class="feature-card" onclick="showPage('directory')"><div class="fc-icon">👥</div><div class="fc-num">07</div><div class="fc-title">Directory</div><div class="fc-desc">Search and connect with your neighbors.</div></div>
     </div>
   </div>
 </div>
 
-<div id="page-halls" class="page-section">
-  <div class="section-inner">
-    <div class="section-header">
-      <div class="eyebrow">Community Spaces</div>
-      <h1>Hall Availability</h1>
-      <p>Hall and Lawn reservations are managed by Society Admin. View live availability and contact the office to book.</p>
-    </div>
-    <div class="schedule-wrapper">
-      <div class="schedule-header-bar">
-        <h3>Live Schedule</h3>
-        <div class="date-pill"><label>Date</label><input type="date" id="viewHallDateFilter" onchange="loadAll()"></div>
-      </div>
-      <div class="scroll-hint">Scroll sideways to see all time slots</div>
-      <div class="table-scroll-wrap">
-        <table>
-          <thead><tr id="hallTableHead"><th style="min-width:140px;">Venue</th></tr></thead>
-          <tbody id="hallTableBody"><tr><td colspan="19" class="loading-state">Loading schedule...</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="page-sports" class="page-section">
-  <div class="section-inner">
-    <div class="section-header">
-      <div class="eyebrow">Recreation</div>
-      <h1>Sports Booking</h1>
-      <p>Reserve courts and grounds instantly. Cancel your own bookings anytime from this page.</p>
-    </div>
-    <div class="booking-panel">
-      <div class="panel-title">New Reservation</div>
-      <div class="panel-subtitle">Your name and bungalow are prefilled from your account</div>
-      <div class="form-row">
-        <div class="form-group"><label>Date</label><input type="date" id="inDate"></div>
-        <div class="form-group"><label>Ground / Court</label><select id="inFac"></select></div>
-        <div class="form-group"><label>Time Slot</label><select id="inTime"></select></div>
-        <div class="form-group"><label>Booking Name</label><input type="text" id="inName" placeholder="Enter name"></div>
-        <div class="form-group"><label>Bungalow No.</label><input type="text" id="inBung" readonly placeholder="From your account"></div>
-      </div>
-      <button class="btn-primary" onclick="handleBooking()">Confirm Reservation</button>
-    </div>
-    <div class="schedule-wrapper">
-      <div class="schedule-header-bar">
-        <h3>Live Schedule — <span id="viewingDateText" style="color:var(--gold);font-size:17px;"></span></h3>
-        <div class="date-pill"><label>Date</label><input type="date" id="viewDateFilter" onchange="loadAll()"></div>
-      </div>
-      <div class="scroll-hint">Scroll sideways to see all time slots</div>
-      <div class="table-scroll-wrap">
-        <table>
-          <thead><tr id="tableHead"><th style="min-width:140px;">Facility</th></tr></thead>
-          <tbody id="tableBody"><tr><td colspan="19" class="loading-state">Loading schedule...</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="page-pool" class="page-section">
-  <div class="section-inner">
-    <div class="section-header">
-      <div class="eyebrow">Aquatics</div>
-      <h1>Pool Entry Register</h1>
-      <p>Mandatory safety log for all swimming pool users. Please complete before entering.</p>
-    </div>
-    <div class="booking-panel">
-      <div style="text-align:center; padding: 20px 0 10px;">
-        <span class="pool-icon">🏊</span>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Date</label><input type="date" id="poolDate"></div>
-        <div class="form-group"><label>Time of Entry</label><input type="time" id="poolTime"></div>
-        <div class="form-group"><label>Swimmer Name</label><input type="text" id="poolName" placeholder="Enter name"></div>
-        <div class="form-group"><label>Bungalow No.</label><input type="text" id="poolBung" readonly placeholder="From your account"></div>
-        <div class="form-group"><label>Phone No.</label><input type="tel" id="poolPhone" placeholder="10-digit number" inputmode="numeric"></div>
-      </div>
-      <button class="btn-primary" onclick="registerPool()">Log Pool Entry</button>
-    </div>
-  </div>
-</div>
-
+<!-- NOTICES -->
 <div id="page-notices" class="page-section">
   <div class="section-inner">
-    <div class="section-header">
-      <div class="eyebrow">Announcements</div>
-      <h1>Notice Board</h1>
-      <p>Official society announcements, events, and important community updates.</p>
-    </div>
+    <div class="section-header"><div class="eyebrow">Announcements</div><h1>Notice Board</h1><p>Official society announcements, events, and important community updates.</p></div>
     <div id="noticeGrid" class="notice-grid"><div class="loading-state">Loading announcements...</div></div>
   </div>
 </div>
 
+<!-- CLUBHOUSE -->
+<div id="page-clubhouse" class="page-section">
+  <div class="section-inner">
+    <div class="section-header"><div class="eyebrow">Community Spaces</div><h1>The Clubhouse</h1><p>Book halls, reserve sports courts, and log pool entries — all in one place.</p></div>
+    <div class="ch-tabs">
+      <button class="ch-tab active" onclick="switchCHTab('halls')">🎪 Halls & Lawns</button>
+      <button class="ch-tab" onclick="switchCHTab('sports')">🎾 Sports Booking</button>
+      <button class="ch-tab" onclick="switchCHTab('pool')">🏊 Pool Register</button>
+    </div>
+
+    <!-- Halls -->
+    <div id="ch-halls" class="ch-panel active">
+      <p style="font-size:13px;color:rgba(245,237,224,0.5);margin-bottom:20px;line-height:1.7;">Hall and Lawn reservations are managed by Society Admin. View live availability and contact the office to book.</p>
+      <div class="schedule-wrapper">
+        <div class="schedule-header-bar">
+          <h3>Live Hall Schedule</h3>
+          <div class="date-pill"><label>Date</label><input type="date" id="viewHallDateFilter" onchange="loadAll()"></div>
+        </div>
+        <div class="scroll-hint">Scroll sideways to see all time slots</div>
+        <div class="table-scroll-wrap">
+          <table><thead><tr id="hallTableHead"><th style="min-width:140px;">Venue</th></tr></thead><tbody id="hallTableBody"><tr><td colspan="19" class="loading-state">Loading schedule...</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sports -->
+    <div id="ch-sports" class="ch-panel">
+      <div class="booking-panel">
+        <div class="panel-title">New Sports Reservation</div>
+        <div class="panel-subtitle">Your bungalow is prefilled from your account</div>
+        <div class="form-row">
+          <div class="form-group"><label>Date</label><input type="date" id="inDate"></div>
+          <div class="form-group"><label>Ground / Court</label><select id="inFac"></select></div>
+          <div class="form-group"><label>Time Slot</label><select id="inTime"></select></div>
+          <div class="form-group"><label>Booking Name</label><input type="text" id="inName" placeholder="Enter name"></div>
+          <div class="form-group"><label>Bungalow No.</label><input type="text" id="inBung" readonly placeholder="From your account"></div>
+        </div>
+        <button class="btn-primary" onclick="handleBooking()">Confirm Reservation</button>
+      </div>
+      <div class="schedule-wrapper">
+        <div class="schedule-header-bar">
+          <h3>Live Schedule — <span id="viewingDateText" style="color:var(--gold);font-size:17px;"></span></h3>
+          <div class="date-pill"><label>Date</label><input type="date" id="viewDateFilter" onchange="loadAll()"></div>
+        </div>
+        <div class="scroll-hint">Scroll sideways to see all time slots</div>
+        <div class="table-scroll-wrap">
+          <table><thead><tr id="tableHead"><th style="min-width:140px;">Facility</th></tr></thead><tbody id="tableBody"><tr><td colspan="19" class="loading-state">Loading schedule...</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pool -->
+    <div id="ch-pool" class="ch-panel">
+      <div class="booking-panel">
+        <div style="text-align:center; padding: 20px 0 10px;"><span class="pool-icon">🏊</span></div>
+        <div class="form-row">
+          <div class="form-group"><label>Date</label><input type="date" id="poolDate"></div>
+          <div class="form-group"><label>Time of Entry</label><input type="time" id="poolTime"></div>
+          <div class="form-group"><label>Swimmer Name</label><input type="text" id="poolName" placeholder="Enter name"></div>
+          <div class="form-group"><label>Bungalow No.</label><input type="text" id="poolBung" readonly placeholder="From your account"></div>
+          <div class="form-group"><label>Phone No.</label><input type="tel" id="poolPhone" placeholder="10-digit number" inputmode="numeric"></div>
+        </div>
+        <button class="btn-primary" onclick="registerPool()">Log Pool Entry</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DOCUMENTS -->
+<div id="page-documents" class="page-section">
+  <div class="section-inner">
+    <div class="section-header"><div class="eyebrow">Official Records</div><h1>Documents & Minutes</h1><p>AGM minutes, financial statements, society bylaws, and other official documents.</p></div>
+    <div id="documentsContainer"><div class="loading-state">Loading documents...</div></div>
+  </div>
+</div>
+
+<!-- DISCUSSIONS -->
+<div id="page-discussions" class="page-section">
+  <div class="section-inner">
+    <div class="section-header"><div class="eyebrow">Community Forum</div><h1>Discussions</h1><p>Open forum for residents to discuss society matters, suggestions, and community topics.</p></div>
+    <button class="new-thread-btn" onclick="toggleNewThread()">✚ Start New Discussion</button>
+    <div class="new-thread-form" id="newThreadForm">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--cream);margin-bottom:18px;">New Discussion</div>
+      <div class="form-group" style="margin-bottom:14px;"><label>Title</label><input type="text" id="threadTitle" placeholder="What would you like to discuss?"></div>
+      <div class="form-group" style="margin-bottom:14px;"><label>Category</label>
+        <select id="threadCategory">
+          <option value="General">General</option>
+          <option value="Maintenance">Maintenance</option>
+          <option value="Events">Events</option>
+          <option value="Suggestions">Suggestions</option>
+          <option value="Safety">Safety</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:18px;"><label>Description</label><textarea id="threadDesc" placeholder="Provide details..."></textarea></div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn-primary" style="flex:1;" onclick="postThread()">Post Discussion</button>
+        <button onclick="toggleNewThread()" style="padding:16px 20px;background:none;border:1px solid rgba(201,144,58,0.2);color:rgba(245,237,224,0.5);border-radius:10px;cursor:pointer;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;">Cancel</button>
+      </div>
+    </div>
+    <div id="threadsList"><div class="loading-state">Loading discussions...</div></div>
+  </div>
+</div>
+
+<!-- PAYMENTS -->
+<div id="page-payments" class="page-section">
+  <div class="section-inner">
+    <div class="section-header"><div class="eyebrow">Financials</div><h1>Maintenance Fees</h1><p>View your outstanding dues, make payments, and track your payment history.</p></div>
+    <div class="upi-box">
+      <div class="upi-qr">📱</div>
+      <div class="upi-info">
+        <div style="font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;font-weight:700;margin-bottom:6px;">Society UPI</div>
+        <div class="upi-id" id="societyUpi">Loading...</div>
+        <div class="upi-note">Transfer your maintenance dues to the society's official UPI ID. Include your bungalow number in the payment note. After payment, submit the confirmation below.</div>
+      </div>
+    </div>
+    <div class="booking-panel" style="margin-bottom:28px;">
+      <div class="panel-title">Submit Payment Confirmation</div>
+      <div class="panel-subtitle">After UPI transfer, submit your transaction details here</div>
+      <div class="form-row">
+        <div class="form-group"><label>Payment Type</label>
+          <select id="payType">
+            <option>Monthly Maintenance</option>
+            <option>Quarterly Maintenance</option>
+            <option>Annual Maintenance</option>
+            <option>Special Levy</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Month / Period</label><input type="month" id="payPeriod"></div>
+        <div class="form-group"><label>Amount (₹)</label><input type="number" id="payAmount" placeholder="e.g. 3500"></div>
+        <div class="form-group"><label>UPI Transaction ID</label><input type="text" id="payTxn" placeholder="12-digit transaction ID"></div>
+      </div>
+      <button class="btn-primary" onclick="submitPayment()">Submit Payment Record</button>
+    </div>
+    <div id="paymentHistory"><div class="loading-state">Loading payment history...</div></div>
+  </div>
+</div>
+
+<!-- COMPLAINTS -->
+<div id="page-complaints" class="page-section">
+  <div class="section-inner">
+    <div class="section-header"><div class="eyebrow">Resident Services</div><h1>Complaints & Requests</h1><p>Lodge maintenance complaints or service requests. Track their status here.</p></div>
+    <div class="booking-panel">
+      <div class="panel-title">New Complaint / Request</div>
+      <div class="panel-subtitle">Your bungalow is prefilled. We aim to respond within 48 hours.</div>
+      <div class="form-row">
+        <div class="form-group"><label>Category</label>
+          <select id="compCategory">
+            <option value="Plumbing">Plumbing</option>
+            <option value="Electrical">Electrical</option>
+            <option value="Garden / Lawn">Garden / Lawn</option>
+            <option value="Security">Security</option>
+            <option value="Noise">Noise Disturbance</option>
+            <option value="Roads / Paths">Roads / Paths</option>
+            <option value="Cleanliness">Cleanliness</option>
+            <option value="Water Supply">Water Supply</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Subject</label><input type="text" id="compSubject" placeholder="Brief subject line"></div>
+        <div class="form-group"><label>Your Bungalow</label><input type="text" id="compBung" readonly></div>
+      </div>
+      <div class="form-group" style="margin-bottom:18px;"><label>Description</label><textarea id="compDesc" placeholder="Describe the issue in detail..."></textarea></div>
+      <button class="btn-primary" onclick="submitComplaint()">Submit Complaint</button>
+    </div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--cream);margin-bottom:16px;margin-top:8px;">My Complaints</div>
+    <div id="complaintsList"><div class="loading-state">Loading complaints...</div></div>
+  </div>
+</div>
+
+<!-- DIRECTORY -->
+<div id="page-directory" class="page-section">
+  <div class="section-inner">
+    <div class="section-header"><div class="eyebrow">Community</div><h1>Resident Directory</h1><p>Find and connect with your neighbors. Search by name or bungalow number.</p></div>
+    <div class="search-bar"><span>🔍</span><input type="text" id="dirSearch" placeholder="Search by name or bungalow..." oninput="filterDirectory()"></div>
+    <div id="dirGrid" class="dir-grid"><div class="loading-state">Loading directory...</div></div>
+  </div>
+</div>
+
+<!-- PROFILE -->
 <div id="page-profile" class="page-section">
   <div class="section-inner">
-    <div class="section-header">
-      <div class="eyebrow">Account</div>
-      <h1>My Profile</h1>
-    </div>
+    <div class="section-header"><div class="eyebrow">Account</div><h1>My Profile</h1></div>
     <div class="booking-panel" style="max-width:600px; margin:0 auto;">
       <div class="digital-id-card">
-        <div class="id-header">
-          <div class="crest" style="width:26px;height:26px;font-size:9px;box-shadow:none;">SC</div>
-          <div class="id-title">SIND SOCIETY</div>
-        </div>
-        <div class="id-body">
-          <div class="id-avatar" id="idAvatar">U</div>
-          <div class="id-info">
-            <div class="id-name" id="idNameDisplay">Guest</div>
-            <div class="id-role">RESIDENT</div>
-          </div>
-          <div class="id-bungalow" id="idBungDisplay">B-00</div>
-        </div>
-        <div class="id-footer">
-          <div class="id-valid">VALID THRU 2027</div>
-          <div class="id-barcode">||| | || ||| |</div>
-        </div>
+        <div class="id-header"><div class="crest" style="width:26px;height:26px;font-size:9px;box-shadow:none;">SC</div><div class="id-title">SIND SOCIETY</div></div>
+        <div class="id-body"><div class="id-avatar" id="idAvatar">U</div><div class="id-info"><div class="id-name" id="idNameDisplay">Guest</div><div class="id-role">RESIDENT</div></div><div class="id-bungalow" id="idBungDisplay">B-00</div></div>
+        <div class="id-footer"><div class="id-valid">VALID THRU 2027</div><div class="id-barcode">||| | || ||| |</div></div>
       </div>
       <div class="form-row">
         <div class="form-group"><label>Full Name</label><input type="text" id="profileName" readonly></div>
@@ -588,7 +674,7 @@
       </div>
       <div class="form-group"><label>Phone Number</label><input type="tel" id="profilePhone" readonly placeholder="Not provided"></div>
       <div style="margin-top:32px; border-top:1px solid rgba(201,144,58,0.2); padding-top:24px;">
-        <div class="panel-title" style="font-size:22px;margin-bottom:16px;">Activity & Bookings</div>
+        <div class="panel-title" style="font-size:22px;margin-bottom:16px;">Recent Activity</div>
         <div id="profileDashboard"><div class="loading-state">Loading activity...</div></div>
       </div>
       <button class="btn-primary" onclick="doLogout()" style="margin-top:24px;background:rgba(176,53,31,0.1);border:1px solid rgba(176,53,31,0.5);color:#e07060;box-shadow:none;">Sign Out</button>
@@ -596,28 +682,11 @@
   </div>
 </div>
 
-<div id="page-directory" class="page-section">
-  <div class="section-inner">
-    <div class="section-header">
-      <div class="eyebrow">Community</div>
-      <h1>Resident Directory</h1>
-      <p>Find and connect with your neighbors. Search by name or bungalow number.</p>
-    </div>
-    <div class="search-bar">
-      <span>🔍</span>
-      <input type="text" id="dirSearch" placeholder="Search by name or bungalow..." oninput="filterDirectory()">
-    </div>
-    <div id="dirGrid" class="dir-grid"><div class="loading-state">Loading directory...</div></div>
-  </div>
-</div>
-
-<footer class="site-footer">
-  <div>SIND SOCIETY · PUNE · RESIDENT PORTAL · ALL RIGHTS RESERVED</div>
-</footer>
+<footer class="site-footer"><div>SIND SOCIETY · PUNE · RESIDENT PORTAL · ALL RIGHTS RESERVED</div></footer>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, where, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAcBGrOG5cfRRSrIsSFykV8BNo2Gc0VVcU",
@@ -640,12 +709,7 @@
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
   }
 
-  const times = [
-    "6 AM - 7 AM","7 AM - 8 AM","8 AM - 9 AM","9 AM - 10 AM","10 AM - 11 AM",
-    "11 AM - 12 PM","12 PM - 1 PM","1 PM - 2 PM","2 PM - 3 PM","3 PM - 4 PM",
-    "4 PM - 5 PM","5 PM - 6 PM","6 PM - 7 PM","7 PM - 8 PM","8 PM - 9 PM",
-    "9 PM - 10 PM","10 PM - 11 PM","11 PM - 12 AM"
-  ];
+  const times = ["6 AM - 7 AM","7 AM - 8 AM","8 AM - 9 AM","9 AM - 10 AM","10 AM - 11 AM","11 AM - 12 PM","12 PM - 1 PM","1 PM - 2 PM","2 PM - 3 PM","3 PM - 4 PM","4 PM - 5 PM","5 PM - 6 PM","6 PM - 7 PM","7 PM - 8 PM","8 PM - 9 PM","9 PM - 10 PM","10 PM - 11 PM","11 PM - 12 AM"];
 
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('inDate').value = today;
@@ -654,6 +718,7 @@
   document.getElementById('poolDate').value = today;
   const now = new Date();
   document.getElementById('poolTime').value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  document.getElementById('payPeriod').value = today.substring(0, 7);
 
   times.forEach(t => {
     document.getElementById('inTime').innerHTML += `<option value="${t}">${t}</option>`;
@@ -682,6 +747,7 @@
     document.getElementById('inBung').value = u.bungalow;
     document.getElementById('poolName').value = u.name;
     document.getElementById('poolBung').value = u.bungalow;
+    document.getElementById('compBung').value = u.bungalow;
   }
 
   window.doRegister = async () => {
@@ -736,27 +802,18 @@
     const errEl = document.getElementById('forgError');
     const btn = document.getElementById('forgBtn');
     errEl.textContent = '';
-
     if (!name || !bung || !phone || !pass) { errEl.textContent = 'All fields are required.'; return; }
     if (pass.length < 6) { errEl.textContent = 'New password must be at least 6 characters.'; return; }
-
     btn.textContent = 'Verifying...'; btn.disabled = true;
     try {
       const snap = await getDocs(query(collection(db,'residents'), where('name_lower','==',name.toLowerCase()), where('bungalow_lower','==',bung.toLowerCase())));
-      if (snap.empty) { errEl.textContent = 'No account found with this name and bungalow.'; btn.textContent = 'Reset Password →'; btn.disabled = false; return; }
-
+      if (snap.empty) { errEl.textContent = 'No account found.'; btn.textContent = 'Reset Password →'; btn.disabled = false; return; }
       let matchedDocId = null;
       snap.forEach(d => { if (d.data().phone === phone) matchedDocId = d.id; });
-
-      if (!matchedDocId) {
-        errEl.textContent = 'Phone number does not match our records. Please contact the Society Admin.';
-        btn.textContent = 'Reset Password →'; btn.disabled = false; return;
-      }
-
+      if (!matchedDocId) { errEl.textContent = 'Phone number does not match. Contact Society Admin.'; btn.textContent = 'Reset Password →'; btn.disabled = false; return; }
       const hashed = await hashPass(pass);
       await updateDoc(doc(db, 'residents', matchedDocId), { passwordHash: hashed });
-
-      alert('Password successfully reset! Please sign in with your new password.');
+      alert('Password reset! Please sign in with your new password.');
       document.getElementById('forgPass').value = '';
       toggleView('login');
     } catch(e) { errEl.textContent = 'Error: ' + e.message; }
@@ -776,16 +833,11 @@
   };
 
   window.toggleView = (view) => {
-    document.getElementById('loginError').textContent = '';
-    document.getElementById('regError').textContent = '';
-    document.getElementById('forgError').textContent = '';
-    const lv = document.getElementById('loginView');
-    const rv = document.getElementById('registerView');
-    const fv = document.getElementById('forgotView');
-    lv.classList.add('hidden'); rv.classList.add('hidden'); fv.classList.add('hidden');
-    if (view === 'register') rv.classList.remove('hidden');
-    else if (view === 'forgot') fv.classList.remove('hidden');
-    else lv.classList.remove('hidden');
+    ['loginError','regError','forgError'].forEach(id => document.getElementById(id).textContent = '');
+    ['loginView','registerView','forgotView'].forEach(id => document.getElementById(id).classList.add('hidden'));
+    if (view === 'register') document.getElementById('registerView').classList.remove('hidden');
+    else if (view === 'forgot') document.getElementById('forgotView').classList.remove('hidden');
+    else document.getElementById('loginView').classList.remove('hidden');
   };
 
   async function loadAll() {
@@ -813,8 +865,8 @@
         grid.innerHTML += html;
         tickerHtml += `<span>📢 ${n.title}</span><span class="dot">•</span>`;
       });
-      if (!grid.innerHTML) grid.innerHTML = '<p style="color:rgba(245,237,224,0.3);padding:40px;">No recent announcements.</p>';
-      if (ticker) { tickerHtml += '<span>📅 Stay updated with portal announcements</span>'; ticker.innerHTML = tickerHtml; }
+      if (!grid.innerHTML) grid.innerHTML = '<div class="empty-state"><span class="es-icon">📢</span><p>No recent announcements.</p></div>';
+      if (ticker) { tickerHtml += '<span>💳 Pay maintenance fees online</span>'; ticker.innerHTML = tickerHtml; }
     } catch(e) { console.error(e); }
 
     // Halls
@@ -830,8 +882,7 @@
         let row = `<tr><td class="fac-col">${f}</td>`;
         times.forEach(t => {
           const b = hMap[`${f}-${t}`];
-          row += b ? `<td class="status-booked">${b.userName}<br><span style="opacity:0.5;font-size:9px;">${b.bungalow}</span></td>`
-                   : `<td class="status-free">Free</td>`;
+          row += b ? `<td class="status-booked">${b.userName}<br><span style="opacity:0.5;font-size:9px;">${b.bungalow}</span></td>` : `<td class="status-free">Free</td>`;
         });
         hBody.innerHTML += row + '</tr>';
       });
@@ -855,16 +906,10 @@
           if (b) {
             const isM = b.userName === 'MAINTENANCE';
             const isOwner = myKey && b.ownerKey && b.ownerKey === myKey;
-            if (isM) {
-              row += `<td class="status-maint">MAINT</td>`;
-            } else if (isOwner) {
-              row += `<td class="status-booked my-booking"><span class="my-booking-label">You</span><br><span style="opacity:0.6;font-size:9px;">${b.bungalow}</span><button class="cancel-link" onclick="cancelBooking('${b.id}')">Cancel</button></td>`;
-            } else {
-              row += `<td class="status-booked">${b.userName}<br><span style="opacity:0.5;font-size:9px;">${b.bungalow}</span></td>`;
-            }
-          } else {
-            row += `<td class="status-free">Free</td>`;
-          }
+            if (isM) { row += `<td class="status-maint">MAINT</td>`; }
+            else if (isOwner) { row += `<td class="status-booked my-booking"><span class="my-booking-label">You</span><br><span style="opacity:0.6;font-size:9px;">${b.bungalow}</span><button class="cancel-link" onclick="cancelBooking('${b.id}')">Cancel</button></td>`; }
+            else { row += `<td class="status-booked">${b.userName}<br><span style="opacity:0.5;font-size:9px;">${b.bungalow}</span></td>`; }
+          } else { row += `<td class="status-free">Free</td>`; }
         });
         body.innerHTML += row + '</tr>';
       });
@@ -890,10 +935,22 @@
         document.getElementById('profileBung').value = p.bungalow || '';
         document.getElementById('profilePhone').value = p.phone || '';
         document.getElementById('idNameDisplay').textContent = p.name;
-        document.getElementById('idBungDisplay').textContent = 'B-' + p.bungalow;
+        document.getElementById('idBungDisplay').textContent = p.bungalow;
         document.getElementById('idAvatar').textContent = (p.name || 'U').charAt(0).toUpperCase();
       }
     } catch(e) { console.error(e); }
+
+    // Documents
+    await loadDocuments();
+
+    // Discussions
+    await loadThreads();
+
+    // Payments
+    await loadPayments();
+
+    // Complaints
+    await loadComplaints();
 
     // Profile dashboard
     try {
@@ -904,35 +961,154 @@
           const sportsBooks = await getDocs(query(collection(db,'bookings'), where('ownerKey','==',myKey)));
           sportsBooks.forEach(d => {
             const b = d.data();
-            let timeVal = new Date(`${b.date} ${b.time.split(' - ')[0]}`).getTime();
-            if (isNaN(timeVal)) timeVal = new Date(b.date).getTime();
-            activities.push({ icon: '🎾', title: `Sports: ${b.facility}`, date: b.date, time: b.time, timestamp: timeVal });
+            let tv = new Date(`${b.date} ${b.time.split(' - ')[0]}`).getTime();
+            if (isNaN(tv)) tv = new Date(b.date).getTime();
+            activities.push({ icon: '🎾', title: `Sports: ${b.facility}`, date: b.date, time: b.time, timestamp: tv });
           });
         } catch(err) {}
         try {
           const poolRegs = await getDocs(query(collection(db,'pool_registrations'), where('name','==',u.name), where('bungalow','==',u.bungalow)));
           poolRegs.forEach(d => {
             const b = d.data();
-            let timeVal = new Date(`${b.date}T${b.time}:00`).getTime();
-            if (isNaN(timeVal)) timeVal = new Date(b.date).getTime();
-            activities.push({ icon: '🏊', title: 'Pool Entry', date: b.date, time: b.time, timestamp: timeVal });
+            let tv = new Date(`${b.date}T${b.time}:00`).getTime();
+            if (isNaN(tv)) tv = new Date(b.date).getTime();
+            activities.push({ icon: '🏊', title: 'Pool Entry', date: b.date, time: b.time, timestamp: tv });
           });
         } catch(err) {}
         activities.sort((a,b) => b.timestamp - a.timestamp);
         dash.innerHTML = '';
-        if (!activities.length) {
-          dash.innerHTML = '<div style="color:rgba(245,237,224,0.4);font-size:13px;text-align:center;padding:20px;">No recent activity found.</div>';
-        } else {
+        if (!activities.length) { dash.innerHTML = '<div style="color:rgba(245,237,224,0.4);font-size:13px;text-align:center;padding:20px;">No recent activity found.</div>'; }
+        else {
           const nowMs = Date.now();
           activities.forEach(a => {
             const isPast = a.timestamp < nowMs;
             dash.innerHTML += `<div class="activity-card"><div class="ac-icon">${a.icon}</div><div class="ac-details"><div class="ac-title">${a.title}</div><div class="ac-meta">${a.date} at ${a.time}</div></div><div class="ac-status ${isPast ? 'status-badge-past' : 'status-badge-active'}">${isPast ? 'Done' : 'Upcoming'}</div></div>`;
           });
         }
-      } else if (dash) {
-        dash.innerHTML = '<div style="color:rgba(245,237,224,0.4);font-size:13px;text-align:center;padding:20px;">Please log in to view activity.</div>';
       }
     } catch(e) { console.error(e); }
+
+    // Society settings (UPI etc)
+    try {
+      const settings = await getDocs(collection(db,'settings'));
+      settings.forEach(d => {
+        if (d.data().upiId) document.getElementById('societyUpi').textContent = d.data().upiId;
+      });
+    } catch(e) { document.getElementById('societyUpi').textContent = 'Contact Admin for UPI details'; }
+  }
+
+  async function loadDocuments() {
+    const container = document.getElementById('documentsContainer');
+    try {
+      const snap = await getDocs(query(collection(db,'documents'), orderBy('createdAt','desc')));
+      const categories = {};
+      snap.forEach(d => {
+        const doc = d.data();
+        if (!categories[doc.category]) categories[doc.category] = [];
+        categories[doc.category].push({ id: d.id, ...doc });
+      });
+      if (Object.keys(categories).length === 0) {
+        container.innerHTML = '<div class="empty-state"><span class="es-icon">📁</span><p>No documents uploaded yet.</p></div>'; return;
+      }
+      container.innerHTML = Object.entries(categories).map(([cat, docs]) => `
+        <div class="doc-category">
+          <div class="doc-category-title">📂 ${cat}</div>
+          <div class="doc-grid">
+            ${docs.map(d => `<div class="doc-card">
+              <div class="doc-icon">📄</div>
+              <div class="doc-info">
+                <div class="doc-name">${d.name}</div>
+                <div class="doc-meta">${d.date || ''} ${d.description ? '· ' + d.description : ''}</div>
+                ${d.pdfUrl ? `<a href="${d.pdfUrl}" target="_blank" class="doc-download">↓ Download</a>` : ''}
+              </div>
+            </div>`).join('')}
+          </div>
+        </div>`).join('');
+    } catch(e) { container.innerHTML = '<div class="empty-state"><span class="es-icon">📁</span><p>Could not load documents.</p></div>'; }
+  }
+
+  async function loadThreads() {
+    const container = document.getElementById('threadsList');
+    try {
+      const snap = await getDocs(query(collection(db,'discussions'), orderBy('createdAt','desc')));
+      if (snap.empty) { container.innerHTML = '<div class="empty-state"><span class="es-icon">💬</span><p>No discussions yet. Be the first to start one!</p></div>'; return; }
+      container.innerHTML = '';
+      for (const d of snap.docs) {
+        const t = d.data();
+        const replies = await getDocs(collection(db, 'discussions', d.id, 'replies'));
+        const replyList = [];
+        replies.forEach(r => replyList.push({ id: r.id, ...r.data() }));
+        replyList.sort((a,b) => (a.createdAt?.seconds||0) - (b.createdAt?.seconds||0));
+        const dateStr = t.createdAt ? new Date(t.createdAt.seconds*1000).toLocaleDateString() : 'Recently';
+        const replyHtml = replyList.map(r => `<div class="reply"><div class="reply-author">${r.author} · ${r.bungalow}</div><div class="reply-text">${r.text}</div><div class="reply-time">${r.createdAt ? new Date(r.createdAt.seconds*1000).toLocaleString() : ''}</div></div>`).join('');
+        container.innerHTML += `<div class="discussion-thread">
+          <div class="thread-header" onclick="toggleThread('thread-${d.id}')">
+            <div>
+              <div style="margin-bottom:6px;"><span class="thread-tag">${t.category || 'General'}</span></div>
+              <div class="thread-title">${t.title}</div>
+              <div class="thread-meta"><span>By ${t.author} · ${t.bungalow}</span><span>${dateStr}</span></div>
+            </div>
+            <div class="thread-replies">${replyList.length} repl${replyList.length === 1 ? 'y' : 'ies'}</div>
+          </div>
+          <div class="thread-body" id="thread-${d.id}">
+            <div class="thread-desc">${t.description || ''}</div>
+            <div class="reply-list">${replyHtml}</div>
+            <div class="reply-form">
+              <textarea id="reply-input-${d.id}" placeholder="Write a reply..."></textarea>
+              <button onclick="postReply('${d.id}')">Reply</button>
+            </div>
+          </div>
+        </div>`;
+      }
+    } catch(e) { container.innerHTML = '<div class="empty-state"><span class="es-icon">💬</span><p>Could not load discussions.</p></div>'; }
+  }
+
+  async function loadPayments() {
+    const u = getSession();
+    const container = document.getElementById('paymentHistory');
+    if (!u) { container.innerHTML = '<div class="empty-state"><span class="es-icon">💳</span><p>Log in to view payment history.</p></div>'; return; }
+    try {
+      const snap = await getDocs(query(collection(db,'payments'), where('bungalow_lower','==',u.bungalow.toLowerCase()), orderBy('createdAt','desc')));
+      if (snap.empty) { container.innerHTML = '<div class="empty-state"><span class="es-icon">💳</span><p>No payment records found.</p></div>'; return; }
+      let html = `<div class="pay-history"><div class="pay-history-header"><h3>Payment History</h3></div>`;
+      snap.forEach(d => {
+        const p = d.data();
+        const badgeClass = p.status === 'Verified' ? 'badge-paid' : p.status === 'Overdue' ? 'badge-overdue' : 'badge-pending';
+        html += `<div class="pay-row">
+          <div class="pay-desc"><div class="pay-name">${p.type}</div><div class="pay-period">${p.period} · TXN: ${p.txnId || 'N/A'}</div></div>
+          <div class="pay-amount">₹${p.amount}</div>
+          <span class="badge ${badgeClass}">${p.status || 'Pending'}</span>
+        </div>`;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    } catch(e) { container.innerHTML = '<div class="empty-state"><span class="es-icon">💳</span><p>Could not load payment history.</p></div>'; }
+  }
+
+  async function loadComplaints() {
+    const u = getSession();
+    const container = document.getElementById('complaintsList');
+    if (!u) { container.innerHTML = '<div class="empty-state"><span class="es-icon">📋</span><p>Log in to view your complaints.</p></div>'; return; }
+    try {
+      const snap = await getDocs(query(collection(db,'complaints'), where('bungalow_lower','==',u.bungalow.toLowerCase()), orderBy('createdAt','desc')));
+      if (snap.empty) { container.innerHTML = '<div class="empty-state"><span class="es-icon">📋</span><p>No complaints filed yet.</p></div>'; return; }
+      container.innerHTML = '';
+      snap.forEach(d => {
+        const c = d.data();
+        const statusClass = c.status === 'Resolved' ? 'badge-resolved' : c.status === 'In Progress' ? 'badge-progress' : 'badge-open';
+        const dateStr = c.createdAt ? new Date(c.createdAt.seconds*1000).toLocaleDateString() : 'Recently';
+        container.innerHTML += `<div class="complaint-card">
+          <div class="complaint-info">
+            <div class="complaint-meta">${c.category} · ${dateStr}</div>
+            <div class="complaint-subject">${c.subject}</div>
+            <div class="complaint-desc">${c.description}</div>
+          </div>
+          <div class="complaint-status-col">
+            <span class="badge ${statusClass}">${c.status || 'Open'}</span>
+          </div>
+        </div>`;
+      });
+    } catch(e) { container.innerHTML = '<div class="empty-state"><span class="es-icon">📋</span><p>Could not load complaints.</p></div>'; }
   }
 
   function renderDir(data) {
@@ -942,7 +1118,7 @@
       const isMe = u && r.name.toLowerCase() === u.name.toLowerCase() && r.bungalow.toLowerCase() === u.bungalow.toLowerCase();
       return `<div class="dir-card${isMe ? ' me' : ''}"><div class="dir-name">${r.name}</div><div class="dir-bung">Bungalow ${r.bungalow}</div>${isMe ? '<div class="dir-me-badge">● You</div>' : ''}</div>`;
     }).join('');
-    if (!grid.innerHTML) grid.innerHTML = '<p style="color:rgba(245,237,224,0.3);">No residents found.</p>';
+    if (!grid.innerHTML) grid.innerHTML = '<div class="empty-state"><span class="es-icon">👥</span><p>No residents found.</p></div>';
   }
 
   window.filterDirectory = () => {
@@ -957,17 +1133,13 @@
     const f = document.getElementById('inFac').value;
     const t = document.getElementById('inTime').value;
     const bookingName = document.getElementById('inName').value.trim();
-    
     if (!f) { alert('No facilities available.'); return; }
     if (!bookingName) { alert('Please enter a name for the booking.'); return; }
-    
     try {
       const check = await getDocs(query(collection(db,'bookings'), where('date','==',d), where('facility','==',f), where('time','==',t)));
       if (!check.empty) { alert('Sorry — this slot is already taken.'); return; }
-      
       await addDoc(collection(db,'bookings'), { facility: f, time: t, userName: bookingName, bungalow: u.bungalow, date: d, ownerKey: (u.name + '|' + u.bungalow).toLowerCase() });
-      alert('Booking confirmed!');
-      loadAll();
+      alert('Booking confirmed!'); loadAll();
     } catch(e) { alert('Error: ' + e.message); }
   };
 
@@ -983,13 +1155,83 @@
     const t = document.getElementById('poolTime').value;
     const p = document.getElementById('poolPhone').value;
     const poolName = document.getElementById('poolName').value.trim();
-    
-    if (!d || !t || !p || !poolName) { alert('Please fill in all fields (date, time, name, phone).'); return; }
-    
+    if (!d || !t || !p || !poolName) { alert('Please fill in all fields.'); return; }
     try {
       await addDoc(collection(db,'pool_registrations'), { date: d, time: t, name: poolName, bungalow: u.bungalow, phone: p, timestamp: new Date() });
       alert('Pool entry logged. Enjoy your swim!');
       document.getElementById('poolPhone').value = '';
+    } catch(e) { alert('Error: ' + e.message); }
+  };
+
+  window.toggleNewThread = () => {
+    const form = document.getElementById('newThreadForm');
+    form.classList.toggle('open');
+  };
+
+  window.postThread = async () => {
+    const u = getSession();
+    if (!u) { alert('Please log in first.'); return; }
+    const title = document.getElementById('threadTitle').value.trim();
+    const desc = document.getElementById('threadDesc').value.trim();
+    const category = document.getElementById('threadCategory').value;
+    if (!title) { alert('Please enter a title.'); return; }
+    try {
+      await addDoc(collection(db,'discussions'), { title, description: desc, category, author: u.name, bungalow: u.bungalow, createdAt: serverTimestamp() });
+      document.getElementById('threadTitle').value = '';
+      document.getElementById('threadDesc').value = '';
+      document.getElementById('newThreadForm').classList.remove('open');
+      await loadThreads();
+    } catch(e) { alert('Error: ' + e.message); }
+  };
+
+  window.postReply = async (threadId) => {
+    const u = getSession();
+    if (!u) { alert('Please log in first.'); return; }
+    const text = document.getElementById(`reply-input-${threadId}`).value.trim();
+    if (!text) return;
+    try {
+      await addDoc(collection(db, 'discussions', threadId, 'replies'), { text, author: u.name, bungalow: u.bungalow, createdAt: serverTimestamp() });
+      await loadThreads();
+      document.getElementById(`thread-${threadId}`).classList.add('open');
+    } catch(e) { alert('Error: ' + e.message); }
+  };
+
+  window.toggleThread = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('open');
+  };
+
+  window.submitPayment = async () => {
+    const u = getSession();
+    if (!u) { alert('Please log in first.'); return; }
+    const type = document.getElementById('payType').value;
+    const period = document.getElementById('payPeriod').value;
+    const amount = document.getElementById('payAmount').value;
+    const txnId = document.getElementById('payTxn').value.trim();
+    if (!period || !amount || !txnId) { alert('Please fill in all payment details.'); return; }
+    try {
+      await addDoc(collection(db,'payments'), { type, period, amount, txnId, name: u.name, bungalow: u.bungalow, bungalow_lower: u.bungalow.toLowerCase(), status: 'Pending Verification', createdAt: serverTimestamp() });
+      alert('Payment submitted for verification. Admin will confirm within 24 hours.');
+      document.getElementById('payAmount').value = '';
+      document.getElementById('payTxn').value = '';
+      await loadPayments();
+    } catch(e) { alert('Error: ' + e.message); }
+  };
+
+  window.submitComplaint = async () => {
+    const u = getSession();
+    if (!u) { alert('Please log in first.'); return; }
+    const category = document.getElementById('compCategory').value;
+    const subject = document.getElementById('compSubject').value.trim();
+    const description = document.getElementById('compDesc').value.trim();
+    const bungalow = u.bungalow;
+    if (!subject || !description) { alert('Please fill in subject and description.'); return; }
+    try {
+      await addDoc(collection(db,'complaints'), { category, subject, description, name: u.name, bungalow, bungalow_lower: bungalow.toLowerCase(), status: 'Open', createdAt: serverTimestamp() });
+      alert('Complaint submitted. Admin will review within 48 hours.');
+      document.getElementById('compSubject').value = '';
+      document.getElementById('compDesc').value = '';
+      await loadComplaints();
     } catch(e) { alert('Error: ' + e.message); }
   };
 
@@ -1003,6 +1245,15 @@
     if (tabBtn) tabBtn.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     closeMore();
+  };
+
+  window.switchCHTab = (id) => {
+    document.querySelectorAll('.ch-tab').forEach((b,i) => b.classList.remove('active'));
+    document.querySelectorAll('.ch-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('ch-' + id).classList.add('active');
+    document.querySelectorAll('.ch-tab').forEach(b => { if (b.onclick.toString().includes(id)) b.classList.add('active'); });
+    // simpler: find by text
+    document.querySelectorAll('.ch-tab').forEach(b => { if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(id)) b.classList.add('active'); });
   };
 
   window.loadAll = loadAll;
@@ -1028,35 +1279,17 @@
   const ring = document.getElementById('cursorRing');
   if (cursor) {
     let mx = 0, my = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      cursor.style.left = mx - 4 + 'px'; cursor.style.top = my - 4 + 'px';
-    });
-    function animateRing() {
-      rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-      ring.style.left = rx - 18 + 'px'; ring.style.top = ry - 18 + 'px';
-      requestAnimationFrame(animateRing);
-    }
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx-4+'px'; cursor.style.top = my-4+'px'; });
+    function animateRing() { rx += (mx-rx)*0.12; ry += (my-ry)*0.12; ring.style.left = rx-18+'px'; ring.style.top = ry-18+'px'; requestAnimationFrame(animateRing); }
     animateRing();
   }
-
   window.toggleMore = () => {
-    const menu = document.getElementById('moreMenu');
-    const overlay = document.getElementById('moreOverlay');
+    const menu = document.getElementById('moreMenu'), overlay = document.getElementById('moreOverlay');
     const isOpen = menu.classList.contains('open');
     if (isOpen) { menu.classList.remove('open'); overlay.classList.remove('open'); }
     else { menu.classList.add('open'); overlay.classList.add('open'); }
   };
-  window.closeMore = () => {
-    document.getElementById('moreMenu').classList.remove('open');
-    document.getElementById('moreOverlay').classList.remove('open');
-  };
-
-  document.querySelectorAll('.feature-card').forEach((card, i) => {
-    card.style.opacity = '0'; card.style.transform = 'translateY(20px)';
-    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 200 + i * 80);
-  });
+  window.closeMore = () => { document.getElementById('moreMenu').classList.remove('open'); document.getElementById('moreOverlay').classList.remove('open'); };
 </script>
 </body>
 </html>
