@@ -278,6 +278,15 @@
       text-transform: uppercase; transition: all 0.3s;
     }
     .btn-danger-sm:hover { background: var(--danger); color: white; border-color: var(--danger); }
+    
+    .btn-action-sm {
+      background: none; border: 1px solid rgba(201,144,58,0.3);
+      color: var(--gold); padding: 5px 12px;
+      font-size: 9px; border-radius: 5px; cursor: pointer;
+      font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; transition: all 0.3s; margin-right: 4px;
+    }
+    .btn-action-sm:hover { background: rgba(201,144,58,0.1); border-color: var(--gold); }
 
     /* SCHEDULE TABLE */
     .schedule-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid rgba(201,144,58,0.08); }
@@ -295,25 +304,25 @@
     .date-input-row label { font-size: 9px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; font-weight: 700; white-space: nowrap; }
     .date-input-row input { width: 150px; margin: 0; font-size: 12px; }
 
-    table { width: 100%; border-collapse: collapse; min-width: 1500px; font-size: 11px; }
+    table { width: 100%; border-collapse: collapse; min-width: 800px; font-size: 11px; }
     th {
       background: rgba(10,41,24,0.9); color: var(--gold);
       font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase;
-      padding: 11px 7px; border: 1px solid rgba(255,255,255,0.03);
-      white-space: nowrap; font-weight: 700;
+      padding: 11px 12px; border: 1px solid rgba(255,255,255,0.03);
+      white-space: nowrap; font-weight: 700; text-align: left;
     }
-    td { padding: 9px 7px; border: 1px solid rgba(255,255,255,0.025); text-align: center; vertical-align: middle; }
+    td { padding: 12px; border: 1px solid rgba(255,255,255,0.025); vertical-align: middle; }
     .fac-col {
       text-align: left !important; font-weight: 700; font-size: 12px;
       color: var(--cream); background: rgba(10,41,24,0.5) !important;
       border-right: 2px solid rgba(201,144,58,0.15) !important;
       min-width: 200px; padding: 10px 16px !important; letter-spacing: 0.5px;
     }
-    .status-free { color: var(--jade); font-weight: 700; font-size: 9px; letter-spacing: 1px; cursor: pointer; }
+    .status-free { color: var(--jade); font-weight: 700; font-size: 9px; letter-spacing: 1px; cursor: pointer; text-align: center; }
     .status-free:hover { background: rgba(45,156,95,0.08) !important; }
-    .status-booked { background: rgba(176,53,31,0.08) !important; color: #e07060; font-weight: 700; font-size: 10px; cursor: pointer; }
+    .status-booked { background: rgba(176,53,31,0.08) !important; color: #e07060; font-weight: 700; font-size: 10px; cursor: pointer; text-align: center; }
     .status-booked:hover { background: rgba(176,53,31,0.15) !important; }
-    .status-maint { background: var(--maint) !important; color: rgba(245,237,224,0.3); font-weight: 700; font-size: 9px; letter-spacing: 1px; cursor: pointer; }
+    .status-maint { background: var(--maint) !important; color: rgba(245,237,224,0.3); font-weight: 700; font-size: 9px; letter-spacing: 1px; cursor: pointer; text-align: center; }
 
     /* LIST ITEMS */
     .list-item {
@@ -343,28 +352,6 @@
       text-transform: uppercase; font-weight: 700; margin-bottom: 5px; display: block;
     }
     .notice-t { font-size: 14px; color: var(--cream); font-weight: 600; }
-
-    /* STATS ROW */
-    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 30px; }
-    .stat-card {
-      padding: 24px;
-      background: rgba(255,255,255,0.025);
-      border: 1px solid rgba(201,144,58,0.1);
-      border-radius: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-    .stat-card::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--gold), transparent);
-    }
-    .stat-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 40px; font-weight: 300; color: var(--cream); line-height: 1;
-    }
-    .stat-label { font-size: 10px; letter-spacing: 2px; color: rgba(245,237,224,0.4); text-transform: uppercase; margin-top: 8px; font-weight: 700; }
 
     /* FILE INPUT */
     input[type="file"] { color: rgba(245,237,224,0.5); padding: 10px; cursor: pointer; }
@@ -427,6 +414,13 @@
       <button id="btn-facs" onclick="switchTab('facs')"><span class="icon">🏗️</span> Facilities & Halls</button>
       <button id="btn-notices" onclick="switchTab('notices')"><span class="icon">📢</span> Notice Board</button>
       <button id="btn-res" onclick="switchTab('res')"><span class="icon">👥</span> Residents</button>
+      
+      <div class="nav-section-label">Portal Features</div>
+      <button id="btn-docs" onclick="switchTab('docs')"><span class="icon">📁</span> Documents</button>
+      <button id="btn-payments" onclick="switchTab('payments')"><span class="icon">💳</span> Payments</button>
+      <button id="btn-complaints" onclick="switchTab('complaints')"><span class="icon">📋</span> Complaints</button>
+      <button id="btn-discussions" onclick="switchTab('discussions')"><span class="icon">💬</span> Moderation</button>
+      <button id="btn-settings" onclick="switchTab('settings')"><span class="icon">⚙️</span> Settings</button>
     </div>
     <div class="sidebar-footer">
       <button class="logout-btn" onclick="logout()">⏻ Sign Out</button>
@@ -464,8 +458,8 @@
           </div>
         </div>
         <div class="schedule-wrapper">
-          <table>
-            <thead><tr id="adminHallHead"><th style="min-width:200px;">Venue</th></tr></thead>
+          <table style="min-width: 1500px; text-align: center;">
+            <thead><tr id="adminHallHead"><th style="min-width:200px; text-align:center;">Venue</th></tr></thead>
             <tbody id="adminHallBody"></tbody>
           </table>
         </div>
@@ -489,8 +483,8 @@
           </div>
         </div>
         <div class="schedule-wrapper">
-          <table>
-            <thead><tr id="adminHead"><th style="min-width:200px;">Facility</th></tr></thead>
+          <table style="min-width: 1500px; text-align: center;">
+            <thead><tr id="adminHead"><th style="min-width:200px; text-align:center;">Facility</th></tr></thead>
             <tbody id="adminBody"></tbody>
           </table>
         </div>
@@ -524,7 +518,7 @@
         <div class="eyebrow">Infrastructure</div>
         <h2>Facilities & Halls</h2>
       </div>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
         <div>
           <div class="panel panel-green">
             <div class="panel-title"><span style="background:var(--jade);"></span>Add Sports Ground</div>
@@ -595,6 +589,80 @@
         <div id="resList" style="color: rgba(245,237,224,0.4); font-size:13px;">Loading...</div>
       </div>
     </div>
+    
+    <div id="tab-docs" class="tab">
+      <div class="page-header">
+        <div class="eyebrow">Records</div>
+        <h2>Documents & Minutes</h2>
+      </div>
+      <div class="panel panel-gold">
+        <div class="panel-title"><span></span>Upload Document</div>
+        <div class="form-row">
+          <div class="form-group"><label>Document Name</label><input type="text" id="docName" placeholder="e.g. March AGM Minutes"></div>
+          <div class="form-group"><label>Category</label><input type="text" id="docCat" placeholder="e.g. AGM Minutes, Financials, Bylaws"></div>
+          <div class="form-group"><label>Date</label><input type="date" id="docDate"></div>
+        </div>
+        <div class="form-group" style="margin-bottom:14px;"><label>Description (Optional)</label><input type="text" id="docDesc" placeholder="Brief description"></div>
+        <div class="form-group"><label>Attach PDF (Required)</label><input type="file" id="docFile" accept="application/pdf"></div>
+        <button class="btn btn-gold" id="upDocBtn" onclick="postDocument()" style="margin-top:14px;">Upload Document</button>
+      </div>
+      <div class="panel">
+        <div class="panel-title"><span></span>Document Library</div>
+        <div id="adminDocsList" style="color: rgba(245,237,224,0.4); font-size:13px;">Loading...</div>
+      </div>
+    </div>
+
+    <div id="tab-payments" class="tab">
+      <div class="page-header">
+        <div class="eyebrow">Financials</div>
+        <h2>Payment Verification</h2>
+      </div>
+      <div class="panel">
+        <div class="schedule-wrapper">
+          <table>
+            <thead><tr><th>Date Submitted</th><th>Resident</th><th>Details</th><th>Amount & Txn</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="adminPaymentsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-complaints" class="tab">
+      <div class="page-header">
+        <div class="eyebrow">Services</div>
+        <h2>Complaints & Requests</h2>
+      </div>
+      <div class="panel">
+        <div class="schedule-wrapper">
+          <table>
+            <thead><tr><th>Date</th><th>Resident</th><th>Category / Subject</th><th>Description</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="adminComplaintsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-discussions" class="tab">
+      <div class="page-header">
+        <div class="eyebrow">Forum</div>
+        <h2>Moderation</h2>
+      </div>
+      <div class="panel">
+        <div id="adminThreadsList" style="color: rgba(245,237,224,0.4); font-size:13px;">Loading...</div>
+      </div>
+    </div>
+
+    <div id="tab-settings" class="tab">
+      <div class="page-header">
+        <div class="eyebrow">Configuration</div>
+        <h2>Society Settings</h2>
+      </div>
+      <div class="panel panel-gold">
+        <div class="panel-title"><span></span>Payment Settings</div>
+        <div class="form-group"><label>Official Society UPI ID</label><input type="text" id="setUpi" placeholder="e.g. society@bank"></div>
+        <button class="btn btn-gold" onclick="saveSettings()" style="margin-top:14px; max-width: 200px;">Save Settings</button>
+      </div>
+    </div>
 
   </div>
 </div>
@@ -602,7 +670,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
   const firebaseConfig = {
@@ -631,10 +699,11 @@
   document.getElementById('adminHallDate').value = today;
   document.getElementById('adminDate').value = today;
   document.getElementById('adminPoolDate').value = today;
+  document.getElementById('docDate').value = today;
 
   times.forEach(t => {
-    document.getElementById('adminHead').innerHTML += `<th>${t}</th>`;
-    document.getElementById('adminHallHead').innerHTML += `<th>${t}</th>`;
+    document.getElementById('adminHead').innerHTML += `<th style="text-align:center;">${t}</th>`;
+    document.getElementById('adminHallHead').innerHTML += `<th style="text-align:center;">${t}</th>`;
     document.getElementById('hallTime').innerHTML += `<option value="${t}">${t}</option>`;
   });
 
@@ -645,13 +714,14 @@
     if (u) {
       document.getElementById('loginSection').classList.add('hidden');
       document.getElementById('dashboardSection').style.display = 'flex';
-      loadAdmin(); loadHallSchedule(); loadExtras(); loadPoolLogs();
+      loadAdmin(); loadHallSchedule(); loadExtras(); loadPoolLogs(); loadAdminFeatures();
     } else {
       document.getElementById('loginSection').classList.remove('hidden');
       document.getElementById('dashboardSection').style.display = 'none';
     }
   });
 
+  /* HALLS & SPORTS */
   window.loadHallSchedule = async () => {
     const d = document.getElementById('adminHallDate').value;
     try {
@@ -758,6 +828,7 @@
     if (confirm("Remove this facility entirely?")) { await deleteDoc(doc(db, "facilities", id)); loadAdmin(); }
   };
 
+  /* POOL */
   window.loadPoolLogs = async () => {
     const d = document.getElementById('adminPoolDate').value;
     const body = document.getElementById('poolBody');
@@ -784,6 +855,7 @@
     if (confirm("Delete this entry?")) { await deleteDoc(doc(db, "pool_registrations", id)); loadPoolLogs(); }
   };
 
+  /* NOTICES & DIRECTORY */
   async function loadExtras() {
     const nList = document.getElementById('noticeList'); nList.innerHTML = '';
     const nSnap = await getDocs(collection(db, "notices"));
@@ -842,6 +914,179 @@
     btn.innerText = 'Post to Society Board';
   };
 
+  /* ----------------------------------------------------- */
+  /* NEW ADMIN PORTAL FEATURES (Documents, Payments, etc.) */
+  /* ----------------------------------------------------- */
+
+  function loadAdminFeatures() {
+    loadDocs();
+    loadPayments();
+    loadComplaints();
+    loadDiscussions();
+    loadSettings();
+  }
+
+  /* DOCUMENTS */
+  window.loadDocs = async () => {
+    const list = document.getElementById('adminDocsList'); list.innerHTML = '';
+    try {
+      const snap = await getDocs(query(collection(db, "documents"), orderBy("createdAt", "desc")));
+      if (snap.empty) list.innerHTML = '<p style="color:rgba(245,237,224,0.3);font-size:13px;">No documents found.</p>';
+      snap.forEach(d => {
+        const doc = d.data();
+        list.innerHTML += `<div class="notice-item">
+          <div>
+            <span class="notice-tag">${doc.category} · ${doc.date}</span>
+            <div class="notice-t">${doc.name}</div>
+          </div>
+          <button class="btn-danger-sm" onclick="delDoc('${d.id}')">Delete</button>
+        </div>`;
+      });
+    } catch (e) { console.error(e); }
+  };
+
+  window.postDocument = async () => {
+    const file = document.getElementById('docFile').files[0], 
+          name = document.getElementById('docName').value, 
+          category = document.getElementById('docCat').value,
+          date = document.getElementById('docDate').value,
+          description = document.getElementById('docDesc').value;
+          
+    if (!name || !category || !file) return alert("Name, Category, and File are required.");
+    const btn = document.getElementById('upDocBtn'); btn.innerText = 'Uploading...';
+    try {
+      const r = ref(storage, 'documents/' + Date.now() + '_' + file.name); 
+      await uploadBytes(r, file); 
+      const url = await getDownloadURL(r);
+      await addDoc(collection(db, "documents"), { name, category, date, description, pdfUrl: url, createdAt: Date.now() });
+      alert("Document uploaded successfully.");
+      document.getElementById('docName').value = ''; 
+      document.getElementById('docCat').value = ''; 
+      document.getElementById('docDesc').value = ''; 
+      document.getElementById('docFile').value = '';
+      loadDocs();
+    } catch (e) { alert("Failed: " + e.message); }
+    btn.innerText = 'Upload Document';
+  };
+
+  window.delDoc = async (id) => {
+    if (confirm("Delete this document permanently?")) { await deleteDoc(doc(db, "documents", id)); loadDocs(); }
+  };
+
+  /* PAYMENTS */
+  window.loadPayments = async () => {
+    const body = document.getElementById('adminPaymentsBody');
+    body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:rgba(245,237,224,0.3);">Loading...</td></tr>';
+    try {
+      const snap = await getDocs(query(collection(db, "payments"), orderBy("createdAt", "desc")));
+      body.innerHTML = '';
+      if (snap.empty) { body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:rgba(245,237,224,0.3);">No payment records.</td></tr>'; return; }
+      snap.forEach(d => {
+        const p = d.data();
+        const dateStr = p.createdAt ? new Date(p.createdAt.seconds*1000).toLocaleDateString() : 'N/A';
+        let statusColor = p.status === 'Verified' ? 'var(--jade)' : p.status === 'Overdue' ? '#e07060' : 'var(--gold)';
+        body.innerHTML += `<tr>
+          <td style="color:rgba(245,237,224,0.5)">${dateStr}</td>
+          <td><strong style="color:var(--cream)">${p.name}</strong><br><span style="color:var(--gold);font-size:9px;">${p.bungalow}</span></td>
+          <td style="color:rgba(245,237,224,0.6)">${p.type}<br><span style="font-size:9px;">${p.period}</span></td>
+          <td style="color:var(--cream)">₹${p.amount}<br><span style="font-size:9px;color:rgba(245,237,224,0.4)">TXN: ${p.txnId}</span></td>
+          <td style="color:${statusColor}; font-weight:700; font-size:10px;">${p.status}</td>
+          <td>
+            <button class="btn-action-sm" onclick="updPayment('${d.id}', 'Verified')">Verify</button>
+            <button class="btn-action-sm" style="color:#e07060; border-color:rgba(224,112,96,0.3)" onclick="updPayment('${d.id}', 'Overdue')">Overdue</button>
+            <button class="btn-action-sm" style="color:rgba(245,237,224,0.4); border-color:rgba(255,255,255,0.1)" onclick="delPayment('${d.id}')">Del</button>
+          </td>
+        </tr>`;
+      });
+    } catch (e) { console.error(e); }
+  };
+
+  window.updPayment = async (id, status) => {
+    try { await updateDoc(doc(db, "payments", id), { status }); loadPayments(); } catch (e) { alert("Error: " + e.message); }
+  };
+
+  window.delPayment = async (id) => {
+    if (confirm("Delete this payment record?")) { await deleteDoc(doc(db, "payments", id)); loadPayments(); }
+  };
+
+  /* COMPLAINTS */
+  window.loadComplaints = async () => {
+    const body = document.getElementById('adminComplaintsBody');
+    body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:rgba(245,237,224,0.3);">Loading...</td></tr>';
+    try {
+      const snap = await getDocs(query(collection(db, "complaints"), orderBy("createdAt", "desc")));
+      body.innerHTML = '';
+      if (snap.empty) { body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:rgba(245,237,224,0.3);">No complaints lodged.</td></tr>'; return; }
+      snap.forEach(d => {
+        const c = d.data();
+        const dateStr = c.createdAt ? new Date(c.createdAt.seconds*1000).toLocaleDateString() : 'N/A';
+        let statusColor = c.status === 'Resolved' ? 'rgba(245,237,224,0.35)' : c.status === 'In Progress' ? 'var(--jade)' : 'var(--gold)';
+        body.innerHTML += `<tr>
+          <td style="color:rgba(245,237,224,0.5)">${dateStr}</td>
+          <td><strong style="color:var(--cream)">${c.name}</strong><br><span style="color:var(--gold);font-size:9px;">${c.bungalow}</span></td>
+          <td style="color:var(--cream)"><strong>${c.subject}</strong><br><span style="font-size:9px;color:var(--gold)">${c.category}</span></td>
+          <td style="color:rgba(245,237,224,0.6); max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${c.description}">${c.description}</td>
+          <td style="color:${statusColor}; font-weight:700; font-size:10px;">${c.status}</td>
+          <td style="white-space:nowrap;">
+            <button class="btn-action-sm" onclick="updComplaint('${d.id}', 'Open')">Open</button>
+            <button class="btn-action-sm" style="color:var(--jade); border-color:rgba(45,156,95,0.3)" onclick="updComplaint('${d.id}', 'In Progress')">Progress</button>
+            <button class="btn-action-sm" style="color:rgba(245,237,224,0.4); border-color:rgba(255,255,255,0.1)" onclick="updComplaint('${d.id}', 'Resolved')">Resolve</button>
+          </td>
+        </tr>`;
+      });
+    } catch (e) { console.error(e); }
+  };
+
+  window.updComplaint = async (id, status) => {
+    try { await updateDoc(doc(db, "complaints", id), { status }); loadComplaints(); } catch (e) { alert("Error: " + e.message); }
+  };
+
+  /* DISCUSSIONS (Moderation) */
+  window.loadDiscussions = async () => {
+    const list = document.getElementById('adminThreadsList'); list.innerHTML = '';
+    try {
+      const snap = await getDocs(query(collection(db, "discussions"), orderBy("createdAt", "desc")));
+      if (snap.empty) list.innerHTML = '<p style="color:rgba(245,237,224,0.3);font-size:13px;">No discussions found.</p>';
+      snap.forEach(d => {
+        const t = d.data();
+        const dateStr = t.createdAt ? new Date(t.createdAt.seconds*1000).toLocaleDateString() : 'Recently';
+        list.innerHTML += `<div class="notice-item">
+          <div>
+            <span class="notice-tag">${t.category} · ${dateStr} · By ${t.author} (${t.bungalow})</span>
+            <div class="notice-t">${t.title}</div>
+            <div style="font-size:12px; color:rgba(245,237,224,0.5); margin-top:4px; max-width:80%;">${t.description}</div>
+          </div>
+          <button class="btn-danger-sm" onclick="delThread('${d.id}')">Delete Thread</button>
+        </div>`;
+      });
+    } catch (e) { console.error(e); }
+  };
+
+  window.delThread = async (id) => {
+    if (confirm("Delete this thread permanently? All replies will become orphaned/inaccessible.")) { 
+      await deleteDoc(doc(db, "discussions", id)); loadDiscussions(); 
+    }
+  };
+
+  /* SETTINGS */
+  window.loadSettings = async () => {
+    try {
+      const snap = await getDocs(collection(db, "settings"));
+      snap.forEach(d => {
+        if (d.data().upiId) document.getElementById('setUpi').value = d.data().upiId;
+      });
+    } catch (e) { console.error(e); }
+  };
+
+  window.saveSettings = async () => {
+    const upiId = document.getElementById('setUpi').value.trim();
+    try {
+      await setDoc(doc(db, "settings", "global"), { upiId }, { merge: true });
+      alert("Settings saved successfully. Residents will now see the updated UPI ID.");
+    } catch (e) { alert("Failed to save settings: " + e.message); }
+  };
+
+  /* TAB SWITCHER */
   window.switchTab = (id) => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
