@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harshil Dayal | Aerospace Engineering Student, CU Boulder</title>
+<meta name="description" content="Aerospace engineering undergraduate at CU Boulder working on CubeSat structures, trajectory simulation and rocket propulsion. Projects, experience and resume.">
+<meta name="theme-color" content="#EDF1F3">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Harshil Dayal | Aerospace Engineering Student, CU Boulder">
+<meta property="og:description" content="CubeSat structures, trajectory simulation and rocket propulsion. Projects, experience and resume.">
+<meta name="twitter:card" content="summary">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Source+Sans+3:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Harshil Dayal",
+  "jobTitle": "Aerospace Engineering Student",
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Colorado Boulder" },
+  "address": { "@type": "PostalAddress", "addressLocality": "Boulder", "addressRegion": "CO", "addressCountry": "US" },
+  "sameAs": ["https://www.linkedin.com/in/harshil-dayal"]
+}
+</script>
+
+<style>
+/* ---------- Tokens ---------- */
+:root {
+  --paper: #EDF1F3;
+  --sheet: #F8FAFB;
+  --ink: #0E2238;
+  --muted: #4A5B6C;
+  --rule: rgba(14, 34, 56, .22);
+  --grid: rgba(14, 34, 56, .06);
+  --blue: #2A5CAA;
+  --signal: #E8501F;
+  --display: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --pad: clamp(20px, 5vw, 56px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+img, svg { max-width: 100%; display: block; }
+
+a { color: var(--ink); text-decoration-color: var(--signal); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+a:hover { color: var(--blue); }
+
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; border-radius: 2px; }
+
+.skip { position: absolute; left: -9999px; top: 8px; background: var(--ink); color: #fff; padding: 8px 14px; z-index: 100; }
+.skip:focus { left: 8px; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 var(--pad); }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(237, 241, 243, .92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.site-header .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 24px; padding-top: 12px; padding-bottom: 12px; }
+.wordmark { font-family: var(--display); font-weight: 800; font-stretch: 125%; font-size: 1.05rem; text-decoration: none; letter-spacing: -.01em; }
+.site-nav { display: flex; flex-wrap: wrap; gap: 4px 22px; }
+.site-nav a { font-family: var(--display); font-weight: 500; font-size: .95rem; text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; }
+.site-nav a:hover { border-bottom-color: var(--signal); color: var(--ink); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block; font-family: var(--display); font-weight: 600; font-size: 1rem;
+  padding: 13px 22px; text-decoration: none; border: 2px solid var(--ink);
+  background: var(--ink); color: #fff; transition: background .15s, color .15s;
+}
+.btn:hover { background: var(--sheet); color: var(--ink); }
+.btn-ghost { background: transparent; color: var(--ink); }
+.btn-ghost:hover { background: var(--ink); color: #fff; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* ---------- Hero ---------- */
+.hero { padding: clamp(40px, 7vw, 88px) 0 clamp(48px, 7vw, 88px); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(24px, 5vw, 64px); align-items: center; }
+.hero h1 {
+  margin: 0 0 24px; font-family: var(--display); font-weight: 800; font-stretch: 125%;
+  font-size: clamp(2.8rem, 8vw, 5.6rem); line-height: .94; letter-spacing: -.025em;
+}
+.hero h1 span { display: block; }
+.hero .lede { max-width: 34em; font-size: clamp(1.15rem, 2vw, 1.35rem); margin: 0 0 32px; }
+
+.orbit-fig { margin: 0; }
+.orbit-fig svg { width: 100%; height: auto; }
+.orbit-fig figcaption { font-size: .95rem; color: var(--muted); margin-top: 10px; max-width: 36em; }
+
+#orbit .o-in, #orbit .o-out { stroke: var(--ink); stroke-width: 1.5; opacity: .55; }
+#orbit .o-ell { stroke: var(--blue); stroke-width: 1.5; stroke-dasharray: 5 6; opacity: .7; }
+#orbit .o-arc { stroke: var(--blue); stroke-width: 3; }
+#orbit .earth { fill: var(--ink); }
+#orbit .burn { fill: var(--signal); }
+#orbit .burn-label { font-family: var(--display); font-weight: 600; font-size: 14px; fill: var(--ink); }
+#orbit .sat { fill: var(--sheet); stroke: var(--signal); stroke-width: 3; }
+#orbit .o { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.8s ease-out .15s forwards; }
+#orbit .o-arc { animation-delay: .9s; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { #orbit .o { animation: none; stroke-dashoffset: 0; } }
+
+.legend { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 20px; padding: 0; margin: 14px 0 0; font-size: .9rem; color: var(--muted); }
+.legend li { display: flex; align-items: center; gap: 8px; }
+.sw { display: inline-block; width: 22px; height: 0; border-top: 2px solid var(--ink); }
+.sw-arc { border-top: 3px solid var(--blue); }
+.sw-ell { border-top: 2px dashed var(--blue); }
+.sw-burn { width: 10px; height: 10px; border: 0; border-radius: 50%; background: var(--signal); }
+
+/* ---------- Sections ---------- */
+.section { padding: clamp(56px, 9vw, 112px) 0; border-top: 2px solid var(--ink); scroll-margin-top: 60px; }
+.section .wrap { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: clamp(24px, 5vw, 64px); }
+.section h2 { margin: 0; font-family: var(--display); font-weight: 800; font-stretch: 112%; font-size: clamp(1.7rem, 3.4vw, 2.3rem); line-height: 1.05; letter-spacing: -.015em; }
+.section-body > :first-child { margin-top: 0; }
+
+/* About */
+.about-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; align-items: start; }
+.about-text p { max-width: 38em; margin: 0 0 1em; }
+.portrait { margin: 0; width: 220px; border: 2px solid var(--ink); background: var(--sheet); }
+.portrait img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 36px 0 0; border-top: 2px solid var(--ink); }
+.facts > div { padding: 16px 20px 0 0; }
+.facts > div + div { padding-left: 20px; border-left: 1px solid var(--rule); }
+.facts dt { font-size: .95rem; color: var(--muted); }
+.facts dd { margin: 2px 0 0; font-family: var(--display); font-weight: 700; font-size: 1.15rem; line-height: 1.25; }
+.facts dd small { display: block; font-family: var(--body); font-weight: 400; font-size: .95rem; color: var(--muted); margin-top: 2px; }
+
+.courses { margin: 28px 0 0; }
+.courses h3 { font-family: var(--display); font-size: 1.05rem; margin: 0 0 6px; }
+.courses p { margin: 0; color: var(--muted); max-width: 42em; }
+
+/* Experience timeline (a real sequence, so it gets a line and nodes) */
+.timeline { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--ink); }
+.role { position: relative; padding: 0 0 44px 32px; }
+.role:last-child { padding-bottom: 0; }
+.role::before { content: ""; position: absolute; left: -8px; top: .45em; width: 14px; height: 14px; background: var(--sheet); border: 2px solid var(--ink); border-radius: 50%; }
+.role.is-current::before { background: var(--signal); border-color: var(--signal); }
+.role h3 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 1.3rem; line-height: 1.25; }
+.role .org { margin: 2px 0 0; font-weight: 600; }
+.role .when { margin: 2px 0 12px; color: var(--muted); font-size: .98rem; }
+.role ul { margin: 0; padding-left: 1.15em; max-width: 42em; }
+.role li { margin-bottom: 6px; }
+.role li::marker { color: var(--blue); }
+
+/* Projects: each one is a drawing sheet with a title block */
+.sheets { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 28px; }
+.sheet { display: flex; flex-direction: column; background: var(--sheet); border: 2px solid var(--ink); }
+.sheet .photo { margin: 0; border-bottom: 2px solid var(--ink); }
+.sheet .photo img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+.sheet-body { padding: 22px 22px 24px; flex: 1; }
+.sheet h3 { margin: 0 0 10px; font-family: var(--display); font-weight: 800; font-size: 1.3rem; line-height: 1.2; letter-spacing: -.01em; }
+.sheet p { margin: 0; }
+.title-block { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 2px solid var(--ink); }
+.title-block > div { padding: 10px 16px 12px; }
+.title-block > div:nth-child(odd) { border-right: 1px solid var(--rule); }
+.title-block > div:nth-child(n+3) { border-top: 1px solid var(--rule); }
+.title-block dt { font-size: .85rem; color: var(--muted); }
+.title-block dd { margin: 0; font-weight: 600; font-size: .98rem; line-height: 1.35; }
+.title-block .wide { grid-column: 1 / -1; border-right: 0 !important; }
+
+/* Skills */
+.skills { margin: 0; border-top: 2px solid var(--ink); }
+.skills > div { display: grid; grid-template-columns: minmax(0, 15em) minmax(0, 1fr); gap: 8px 28px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.skills dt { font-family: var(--display); font-weight: 700; }
+.skills dd { margin: 0; }
+
+/* Contact */
+.contact-lede { font-family: var(--display); font-weight: 700; font-stretch: 108%; font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.2; max-width: 22em; margin: 0 0 18px; letter-spacing: -.01em; }
+.contact-note { color: var(--muted); margin: 0 0 28px; max-width: 36em; }
+
+.site-footer { border-top: 2px solid var(--ink); padding: 22px 0 32px; font-size: .95rem; color: var(--muted); }
+.site-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 880px) {
+  .hero .wrap { grid-template-columns: 1fr; }
+  .section .wrap { grid-template-columns: 1fr; gap: 28px; }
+  .skills > div { grid-template-columns: 1fr; gap: 2px; }
+}
+@media (max-width: 640px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .portrait { width: 180px; }
+  .facts { grid-template-columns: 1fr; }
+  .facts > div, .facts > div + div { padding: 14px 0; border-left: 0; }
+  .facts > div + div { border-top: 1px solid var(--rule); }
+  .title-block { grid-template-columns: 1fr; }
+  .title-block > div:nth-child(odd) { border-right: 0; }
+  .title-block > div:nth-child(n+2) { border-top: 1px solid var(--rule); }
+}
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="#top">Harshil Dayal</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <div class="wrap">
+      <div>
+        <h1><span>Harshil</span><span>Dayal</span></h1>
+        <p class="lede">I'm an aerospace engineering student at CU Boulder. I design CubeSat deployment mechanisms, simulate lunar trajectories, and model rocket engines.</p>
+        <div class="btn-row">
+          <a class="btn" href="#projects">See projects</a>
+          <a class="btn btn-ghost" href="Harshil_Dayal_Resume.pdf">Download resume</a>
+        </div>
+      </div>
+
+      <figure class="orbit-fig">
+        <svg id="orbit" viewBox="0 0 600 500" role="img" aria-labelledby="orbit-title orbit-desc">
+          <title id="orbit-title">Hohmann transfer diagram</title>
+          <desc id="orbit-desc">A spacecraft circles in a small orbit, fires its engine, follows an elliptical path outward, fires again, and settles into a larger orbit.</desc>
+          <g fill="none" stroke-linecap="round">
+            <circle class="o o-in" cx="300" cy="250" r="70" pathLength="1"/>
+            <circle class="o o-out" cx="300" cy="250" r="190" pathLength="1"/>
+            <ellipse class="o-ell" cx="240" cy="250" rx="130" ry="115.3"/>
+            <path class="o o-arc" d="M370 250A130 115.3 0 0 1 110 250" pathLength="1"/>
+          </g>
+          <circle class="earth" cx="300" cy="250" r="20"/>
+          <circle class="burn" cx="370" cy="250" r="6"/>
+          <text class="burn-label" x="384" y="245">burn 1</text>
+          <circle class="burn" cx="110" cy="250" r="6"/>
+          <text class="burn-label" x="98" y="245" text-anchor="end">burn 2</text>
+
+          <circle id="sat" class="sat" r="7" cx="0" cy="0" opacity="0">
+            <animateMotion dur="18s" repeatCount="indefinite" path="M370 250A70 70 0 0 1 230 250A70 70 0 0 1 370 250A130 115.3 0 0 1 110 250A190 190 0 0 1 490 250A190 190 0 0 1 110 250"/>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.02;0.97;1" dur="18s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+        <ul class="legend" aria-hidden="true">
+          <li><i class="sw"></i>Parking orbit</li>
+          <li><i class="sw sw-arc"></i>Transfer path</li>
+          <li><i class="sw"></i>Target orbit</li>
+          <li><i class="sw sw-burn"></i>Engine burn</li>
+        </ul>
+        <figcaption>A Hohmann transfer moves a spacecraft between two circular orbits with two engine burns. I designed and simulated one in NASA's GMAT for a lunar mission.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section" id="about">
+    <div class="wrap">
+      <h2>About</h2>
+      <div class="section-body">
+        <div class="about-grid">
+          <div class="about-text">
+            <p>I want to make space more accessible and more sustainable. That goal pulled me into aerospace engineering, and I try to learn it by building: CubeSat hardware, rockets, flight simulations and a few things that are only loosely aerospace.</p>
+            <p>Before college I led student teams and organized school and community events. It taught me to plan around people as well as parts, and I still lean on it when a project has more than one owner.</p>
+          </div>
+          <figure class="portrait photo">
+            <img src="images/harshil.jpg" alt="Portrait of Harshil Dayal" width="220" height="275" onerror="this.closest('.photo').hidden=true">
+          </figure>
+        </div>
+
+        <dl class="facts">
+          <div>
+            <dt>University</dt>
+            <dd>University of Colorado Boulder</dd>
+          </div>
+          <div>
+            <dt>Degree</dt>
+            <dd>B.S. Aerospace Engineering<small>Computer Science minor, Aug 2025 to May 2029</small></dd>
+          </div>
+          <div>
+            <dt>GPA</dt>
+            <dd>3.922 / 4.0<small>ABET-accredited program</small></dd>
+          </div>
+        </dl>
+
+        <div class="courses">
+          <h3>Relevant courses</h3>
+          <p>Statics, Thermodynamics, Intro to Astronautics, Differential Equations with Linear Algebra, Physics 2, Data Structures, Calculus 2, Engineering Projects</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section class="section" id="experience">
+    <div class="wrap">
+      <h2>Experience</h2>
+      <div class="section-body">
+        <ol class="timeline">
+
+          <li class="role is-current">
+            <h3>CubeSat Structures and Ground Support Member</h3>
+            <p class="org">SWARM-EX CubeSat, Colorado Center for Astrodynamics Research</p>
+            <p class="when">Aug 2026 to present, Boulder, Colorado</p>
+            <ul>
+              <li>Led the CAD design and analysis of hinge mechanisms and deployment systems for the CubeSat's dual deployable solar arrays.</li>
+              <li>Built and tested five 3D-printed prototypes to validate deployment mechanics, iterating through multiple design validations against natural frequency requirements.</li>
+              <li>Engineered and 3D-printed ground support equipment for structural vibration and deployment testing.</li>
+            </ul>
+          </li>
+
+          <li class="role">
+            <h3>Solid Propulsion Team Member</h3>
+            <p class="org">CU Sounding Rocket Club</p>
+            <p class="when">Aug 2025 to present, Boulder, Colorado</p>
+            <ul>
+              <li>Developing and analyzing nozzles for sounding rockets.</li>
+            </ul>
+          </li>
+
+          <li class="role">
+            <h3>Astrodynamics Intern and Team Lead</h3>
+            <p class="org">STAR Surat</p>
+            <p class="when">Mar 2024 to Apr 2024, Surat, India</p>
+            <ul>
+              <li>Led a team implementing orbital and launch trajectories for lunar missions in NASA's General Mission Analysis Tool (GMAT), with Excel for trajectory tracking, cross-checks and reporting.</li>
+              <li>Designed and simulated a Hohmann transfer for lunar missions, and ran three-phase maneuver simulations covering atmosphere exit, trans-lunar injection and lunar landing.</li>
+              <li>Improved mission planning accuracy by verifying GMAT outputs in Excel.</li>
+            </ul>
+          </li>
+
+          <li class="role">
+            <h3>Quality Control and Mechanical Engineering Intern</h3>
+            <p class="org">Associated Manufacturing LLP</p>
+            <p class="when">Jul 2023 to Aug 2023, Pune, India</p>
+            <ul>
+              <li>Measured more than 100 press-metal vehicle parts with CMMs and calipers, checking each against its engineering drawing.</li>
+              <li>Operated quality control equipment and corrected designs in CAD.</li>
+              <li>Completed all required corporate and technical documentation accurately.</li>
+            </ul>
+          </li>
+
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section class="section" id="projects">
+    <div class="wrap">
+      <h2>Projects</h2>
+      <div class="section-body">
+        <div class="sheets">
+
+          <article class="sheet">
+            <figure class="photo">
+              <img src="images/hybrid-engine.jpg" alt="Thrust curve plot from the hybrid rocket engine model" loading="lazy" onerror="this.closest('.photo').hidden=true">
+            </figure>
+            <div class="sheet-body">
+              <h3>Solid-liquid hybrid rocket engine model</h3>
+              <p>Modeled a hybrid engine with a custom propellant formulation and built computational models to predict thrust curves and burn rates. Tuned the oxidizer-to-fuel ratio to maximize specific impulse, then checked thermodynamic and kinematic data for safety and viability before any hardware was built.</p>
+            </div>
+            <dl class="title-block">
+              <div><dt>Tools</dt><dd>MATLAB, Excel</dd></div>
+              <div><dt>Area</dt><dd>Propulsion</dd></div>
+            </dl>
+          </article>
+
+          <article class="sheet">
+            <figure class="photo">
+              <img src="images/l1-rocket.jpg" alt="The L-1 high-power rocket" loading="lazy" onerror="this.closest('.photo').hidden=true">
+            </figure>
+            <div class="sheet-body">
+              <h3>L-1 high-power rocket</h3>
+              <p>Engineered a high-power rocket and analyzed its post-flight barometric telemetry. Built a predictive flight model in Arduino and OpenRocket that matched the measured apogee and trajectory to within 2%.</p>
+            </div>
+            <dl class="title-block">
+              <div><dt>Tools</dt><dd>Arduino, OpenRocket</dd></div>
+              <div><dt>Result</dt><dd>2% apogee error</dd></div>
+            </dl>
+          </article>
+
+          <article class="sheet">
+            <figure class="photo">
+              <img src="images/rc-sukhoi.jpg" alt="The RC Sukhoi-57 fighter jet built from bamboo and foam" loading="lazy" onerror="this.closest('.photo').hidden=true">
+            </figure>
+            <div class="sheet-body">
+              <h3>RC Sukhoi-57 fighter jet</h3>
+              <p>Designed and built the fuselage from bamboo and foam for low weight, then programmed and integrated a gyroscope with Arduino. A hands-on study in lightweight structures and embedded sensor control for aircraft.</p>
+            </div>
+            <dl class="title-block">
+              <div><dt>Tools</dt><dd>Arduino, gyroscope</dd></div>
+              <div><dt>Materials</dt><dd>Bamboo, foam</dd></div>
+            </dl>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section class="section" id="skills">
+    <div class="wrap">
+      <h2>Skills</h2>
+      <div class="section-body">
+        <dl class="skills">
+          <div>
+            <dt>Fabrication and embedded systems</dt>
+            <dd>3D modeling (CAD), 3D printing, laser cutting, model rockets, gyroscopes, soldering, sensors and electronics</dd>
+          </div>
+          <div>
+            <dt>Aerospace analysis</dt>
+            <dd>NASA GMAT, Hohmann transfer design, multiphase maneuver simulation, lunar transfers, ground support equipment, simulation models</dd>
+          </div>
+          <div>
+            <dt>Software</dt>
+            <dd>C++, Arduino, SolidWorks, Onshape, MATLAB, OpenRocket, LaTeX, Microsoft Office, Google Workspace</dd>
+          </div>
+          <div>
+            <dt>Quality control and measurement</dt>
+            <dd>CMM, calipers, CNC machining, engineering drawings, tolerances</dd>
+          </div>
+          <div>
+            <dt>AI tools</dt>
+            <dd>ChatGPT, Gemini, Claude, GitHub Copilot</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section" id="contact">
+    <div class="wrap">
+      <h2>Contact</h2>
+      <div class="section-body">
+        <p class="contact-lede">Working on a CubeSat, a rocket or a trajectory problem? I'd like to hear about it.</p>
+        <p class="contact-note">Based in Boulder, Colorado. Email is the fastest way to reach me.</p>
+        <div class="btn-row">
+          <a class="btn" href="#contact" data-email>Email me</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/harshil-dayal" rel="noopener">LinkedIn</a>
+          <a class="btn btn-ghost" href="Harshil_Dayal_Resume.pdf">Download resume</a>
+        </div>
+        <noscript><p class="contact-note" style="margin-top:20px">Email: harshil.dayal [at] colorado.edu</p></noscript>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>&copy; 2026 Harshil Dayal</span>
+    <a href="#top">Back to top</a>
+  </div>
+</footer>
+
+<script>
+  // Assemble the email address in the browser so it isn't sitting in the HTML for scrapers.
+  (function () {
+    var addr = "harshil.dayal" + "@" + "colorado.edu";
+    document.querySelectorAll("[data-email]").forEach(function (a) {
+      a.href = "mailto:" + addr;
+      a.setAttribute("aria-label", "Email " + addr);
+    });
+  })();
+
+  // Respect reduced-motion: show the satellite parked instead of orbiting.
+  (function () {
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var sat = document.getElementById("sat");
+    if (!sat) return;
+    sat.querySelectorAll("animate, animateMotion").forEach(function (n) { n.remove(); });
+    sat.setAttribute("transform", "translate(370 250)");
+    sat.setAttribute("opacity", "1");
+  })();
+</script>
+</body>
+</html>
